@@ -1,113 +1,147 @@
 import Image from "next/image";
+import Navbar from "@/components/navbar";
+import { Card } from "@/components/ui/card";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Calendar, FileText, Video } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Footer from "@/components/footer";
+import Faq from "@/components/faq";
+import Link from "next/link";
+
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    const recentCourses = [
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+    ];
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+    return (
+        <>
+            <Navbar />
+            <main className="flex-grow">
+                {/* Landing Section */}
+                <section className="relative h-screen flex items-center justify-center text-center">
+                    <video
+                        className="absolute inset-0 w-full h-full object-cover opacity-80 z-10"
+                        autoPlay
+                        loop
+                        muted
+                    >
+                        <source src="/videos/landing-bg.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                    <div className="relative z-10 max-w-2xl mx-auto">
+                        <h1 className="text-5xl font-extrabold mb-6 text-green">Enhance Your Skills with Our E-Learning Platform</h1>
+                        <p className="text-xl mb-8 text-textLightGreen">Join our community and access a wide range of courses, live classes, and resources to boost your knowledge and career.</p>
+                        <Link href="/dashboard">
+                            <Button className="bg-blue hover:bg-blue">Get Started</Button>
+                        </Link>
+                    </div>
+                </section>
+                {/* Recent Courses */}
+                <section className="px-5 py-10">
+                    <h1 className="font-bold text-2xl mb-6 text-center">Recent Courses</h1>
+                    <Carousel className="w-full max-w-screen-lg mx-auto">
+                        <CarouselContent className="">
+                            {recentCourses.map((course, index) => (
+                                <CarouselItem className="basis-1/2 md:basis-1/3" key={index}>
+                                    <Card className="transition-transform transform hover:scale-105">
+                                        <Image src={course.thumbnail} alt={course.title} height={300} width={300} className="h-full w-full object-cover rounded" />
+                                        <p className="text-center py-2 font-medium text-lg">{course.title}</p>
+                                    </Card>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                    </Carousel>
+                </section>
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+                {/* Recent Activities */}
+                <section className="bg-white p-6">
+                    <h2 className="text-2xl font-bold mb-6 text-center">Recent Activities</h2>
+                    <div className="space-y-6">
+                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex items-center">
+                            <div className="text-red mr-4">
+                                <Video size={32} />
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="font-bold text-lg">Upcoming Live Class: Mathematics</h3>
+                                <p className="text-gray-600">Date: July 28, 2024</p>
+                            </div>
+                            <Button className="bg-darkNavy hover:bg-darkNavy">Join Now</Button>
+                        </div>
+                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex items-center">
+                            <div className="text-green mr-4">
+                                <FileText size={32} />
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="font-bold text-lg">New Exam: Physics Assignment</h3>
+                                <p className="text-gray-600">Deadline: August 1, 2024</p>
+                            </div>
+                            <Button className="bg-darkNavy hover:bg-darkNavy">View Details</Button>
+                        </div>
+                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex items-center">
+                            <div className="text-purple-600 mr-4">
+                                <Calendar size={32} />
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="font-bold text-lg">New Material: Chemistry Lecture Notes</h3>
+                                <p className="text-gray-600">Uploaded on: July 25, 2024</p>
+                            </div>
+                            <Button className="bg-darkNavy hover:bg-darkNavy">View Material</Button>
+                        </div>
+                    </div>
+                </section>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+                {/* Why Students Love Us */}
+                <section className="px-5 py-10 bg-blue-100">
+                    <h2 className="font-bold text-2xl mb-6 text-center">Why Students Love Us</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="bg-white border border-lightGreen shadow-lg p-6 rounded-lg text-center">
+                            <Image src="/images/icons/quality.png" alt="Quality Education" width={64} height={64} className="mx-auto mb-4" />
+                            <h3 className="font-bold text-lg mb-2">Quality Education</h3>
+                            <p>We provide top-notch educational resources to ensure you get the best learning experience.</p>
+                        </div>
+                        <div className="bg-white border border-lightGreen shadow-lg p-6 rounded-lg text-center">
+                            <Image src="/images/icons/accessibility.svg" alt="Accessible Anywhere" width={64} height={64} className="mx-auto mb-4" />
+                            <h3 className="font-bold text-lg mb-2">Accessible Anywhere</h3>
+                            <p>Learn from the comfort of your home or on the go. Our platform is accessible on all devices.</p>
+                        </div>
+                        <div className="bg-white border border-lightGreen shadow-lg p-6 rounded-lg text-center">
+                            <Image src="/images/icons/interactive.png" alt="Interactive Learning" width={64} height={64} className="mx-auto mb-4" />
+                            <h3 className="font-bold text-lg mb-2">Interactive Learning</h3>
+                            <p>Engage with interactive lessons, quizzes, and live classes for a better understanding of concepts.</p>
+                        </div>
+                    </div>
+                </section>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+                {/* FAQ */}
+                <section className="px-5 py-10">
+                    <h2 className="font-bold text-2xl mb-6 text-center">Frequently Asked Questions</h2>
+                    <Faq />
+                </section>
+            </main>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+            <Footer />
+        </>
+    );
 }
