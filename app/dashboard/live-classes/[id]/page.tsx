@@ -2,9 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
-// import io from 'socket.io-client';
-
-// const socket = io('http://your-socket-server-url'); // Replace with your socket server URL
 
 export default function LiveClassRoom({ params }: { params: { id: string } }) {
     const { id } = params;
@@ -12,37 +9,54 @@ export default function LiveClassRoom({ params }: { params: { id: string } }) {
     const [isStreaming, setIsStreaming] = useState(false);
     const [messages, setMessages] = useState<string[]>([]);
     const [message, setMessage] = useState('');
+    const [isMuted, setIsMuted] = useState(true); // State to manage mute status
 
     useEffect(() => {
-        // Set up video stream
         const videoElement = videoRef.current;
+        const streamUrl = 'http://localhost/hls/stream.m3u8'; // Update to your actual stream URL
 
         if (videoElement) {
-            // URL of the HLS/DASH stream (replace with actual stream URL)
-            videoElement.src = 'http://your-media-server-url/live/stream.m3u8';
+            videoElement.src = streamUrl;
+            videoElement.muted = isMuted; // Set initial muted status
             videoElement.play()
                 .then(() => {
                     setIsStreaming(true);
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error('Error playing video:', error);
+                    setIsStreaming(false);
+                });
+
+            videoElement.onerror = (e) => {
+                console.error('Video Error:', e);
+                setIsStreaming(false);
+            };
+
+            return () => {
+                videoElement.pause();
+                videoElement.src = '';
+            };
+        }
+    }, [isMuted]); // Re-run effect if mute status changes
+
+    const handlePlayVideo = () => {
+        const videoElement = videoRef.current;
+        if (videoElement) {
+            videoElement.muted = isMuted; // Set muted status based on state
+            videoElement.play()
+                .then(() => {
+                    setIsStreaming(true);
+                })
+                .catch((error) => {
+                    console.error('Error playing video:', error);
+                    setIsStreaming(false);
                 });
         }
-
-        // Handle incoming chat messages
-        // socket.on('chat message', (msg: string) => {
-        //     setMessages(prevMessages => [...prevMessages, msg]);
-        // });
-
-        return () => {
-            // socket.off('chat message');
-        };
-    }, []);
+    };
 
     const handleSendMessage = () => {
         if (message.trim()) {
             setMessages([...messages, message]);
-            // socket.emit('chat message', message);
             setMessage('');
         }
     };
@@ -53,7 +67,12 @@ export default function LiveClassRoom({ params }: { params: { id: string } }) {
             <div className="flex flex-col lg:flex-row w-full gap-6">
                 <div className="w-full lg:w-2/3">
                     {!isStreaming ? (
-                        <p className="text-lg text-darkNavy text-center">Waiting for the teacher to start the stream...</p>
+                        <div>
+                            <p className="text-lg text-darkNavy text-center">Waiting for the teacher to start the stream...</p>
+                            <button onClick={handlePlayVideo} className="mt-4 bg-blue text-white rounded-lg p-2">
+                                Play Video
+                            </button>
+                        </div>
                     ) : (
                         <video ref={videoRef} controls className="w-full bg-black rounded-lg" />
                     )}

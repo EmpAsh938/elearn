@@ -22,9 +22,9 @@ const sidemenuLinks = [
         link: "/admin/users"
     },
     {
-        title: "Packages",
+        title: "Grades",
         icon: <Package2 size={24} />,
-        link: "/admin/packages"
+        link: "/admin/grades"
     },
     {
         title: "Courses",
@@ -69,7 +69,7 @@ const AdminLayout = ({ children }: LayoutProps) => {
                     <ul>
                         {sidemenuLinks.map((item, index) => {
                             const isActive = pathname === item.link;
-                            return <li key={index} className={`px-4 hover:bg-white hover:text-textDarkNavy ${isActive ? 'bg-white text-textDarkNavy hover:bg-white' : 'bg-transparent'}`}>
+                            return <li key={index} className={`px-4 hover:bg-green hover:text-textDarkNavy ${isActive ? 'bg-green text-textDarkNavy hover:bg-green' : 'bg-transparent'}`}>
                                 <Link href={item.link} className='flex py-3 gap-2 w-full'>
                                     {item.icon}
                                     <p className={`${isCollapsed ? 'hidden' : 'block'}`}>{item.title}</p>

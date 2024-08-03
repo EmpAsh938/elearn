@@ -14,21 +14,21 @@ export default function AdminHome() {
                     <h3 className="text-xl font-bold text-darkNavy mb-2">Users</h3>
                     <p className="text-darkNavy mb-4">Manage and view all registered users.</p>
                     <Link href="/admin/users">
-                        <p className="text-blue-500 hover:underline">Go to Users</p>
+                        <p className="text-blue hover:underline">Go to Users</p>
                     </Link>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h3 className="text-xl font-bold text-darkNavy mb-2">Courses</h3>
                     <p className="text-darkNavy mb-4">Create, edit, and manage courses.</p>
                     <Link href="/admin/courses">
-                        <p className="text-blue-500 hover:underline">Go to Courses</p>
+                        <p className="text-blue hover:underline">Go to Courses</p>
                     </Link>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h3 className="text-xl font-bold text-darkNavy mb-2">Exams</h3>
                     <p className="text-darkNavy mb-4">Create, edit, and manage exams.</p>
                     <Link href="/admin/exams">
-                        <p className="text-blue-500 hover:underline">Go to Exams</p>
+                        <p className="text-blue hover:underline">Go to Exams</p>
                     </Link>
                 </div>
             </section>

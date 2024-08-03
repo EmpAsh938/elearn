@@ -15,13 +15,13 @@ export function CreateDialog() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="bg-blue">Create Packages</Button>
+                <Button className="bg-blue">Create Grades</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Package Details</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when you&apos;re done.
+                        You can create new grades.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
@@ -31,19 +31,18 @@ export function CreateDialog() {
                         </Label>
                         <Input
                             id="name"
-                            defaultValue="Pedro Duarte"
+                            defaultValue="Grade A"
                             className="col-span-3"
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="price" className="text-right">
-                            Package Rate
+                        <Label htmlFor="grade" className="text-right">
+                            Description
                         </Label>
                         <Input
-                            id="price"
-                            type="number"
-                            min={0}
-                            defaultValue="500"
+                            id="grade"
+                            type="text"
+                            defaultValue="Default Grade"
                             className="col-span-3"
                         />
                     </div>
