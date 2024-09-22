@@ -59,7 +59,7 @@ export default function Home() {
                 {/* Recent Courses */}
                 <section className="px-5 py-10">
                     <h1 className="font-bold text-2xl mb-6 text-center">Recent Courses</h1>
-                    <Carousel className="w-full max-w-screen-lg mx-auto">
+                    <Carousel className="w-full max-w-screen-lg mx-auto overflow-x-hidden">
                         <CarouselContent className="">
                             {recentCourses.map((course, index) => (
                                 <CarouselItem className="basis-1/2 md:basis-1/3" key={index}>
@@ -79,36 +79,49 @@ export default function Home() {
                 <section className="bg-white p-6">
                     <h2 className="text-2xl font-bold mb-6 text-center">Recent Activities</h2>
                     <div className="space-y-6">
-                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex items-center">
-                            <div className="text-red mr-4">
-                                <Video size={32} />
+                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex flex-col sm:flex-row gap-2 items-center">
+                            <div className="flex-1 flex items-center">
+
+                                <div className="text-red mr-4">
+                                    <Video size={32} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg">Upcoming Live Class: Mathematics</h3>
+                                    <p className="text-gray-600">Date: July 28, 2024</p>
+                                </div>
                             </div>
-                            <div className="flex-1">
-                                <h3 className="font-bold text-lg">Upcoming Live Class: Mathematics</h3>
-                                <p className="text-gray-600">Date: July 28, 2024</p>
-                            </div>
+
                             <Button className="bg-darkNavy hover:bg-darkNavy">Join Now</Button>
                         </div>
-                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex items-center">
-                            <div className="text-green mr-4">
-                                <FileText size={32} />
+                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex flex-col sm:flex-row gap-2 items-center">
+                            <div className="flex-1 flex items-center">
+
+                                <div className="text-green mr-4">
+                                    <FileText size={32} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg">New Exam: Physics Assignment</h3>
+                                    <p className="text-gray-600">Date: July 28, 2024</p>
+                                </div>
                             </div>
-                            <div className="flex-1">
-                                <h3 className="font-bold text-lg">New Exam: Physics Assignment</h3>
-                                <p className="text-gray-600">Deadline: August 1, 2024</p>
-                            </div>
-                            <Button className="bg-darkNavy hover:bg-darkNavy">View Details</Button>
+
+                            <Button className="bg-darkNavy hover:bg-darkNavy">Join Now</Button>
                         </div>
-                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex items-center">
-                            <div className="text-purple-600 mr-4">
-                                <Calendar size={32} />
+                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex flex-col sm:flex-row gap-2 items-center">
+                            <div className="flex-1 flex items-center">
+
+                                <div className="text-purple-600 mr-4">
+                                    <Calendar size={32} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg">New Material: Chemistry Lecture Notes</h3>
+                                    <p className="text-gray-600">Date: July 28, 2024</p>
+                                </div>
                             </div>
-                            <div className="flex-1">
-                                <h3 className="font-bold text-lg">New Material: Chemistry Lecture Notes</h3>
-                                <p className="text-gray-600">Uploaded on: July 25, 2024</p>
-                            </div>
-                            <Button className="bg-darkNavy hover:bg-darkNavy">View Material</Button>
+
+                            <Button className="bg-darkNavy hover:bg-darkNavy">Join Now</Button>
                         </div>
+
                     </div>
                 </section>
 

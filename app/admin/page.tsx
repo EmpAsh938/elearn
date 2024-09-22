@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function AdminHome() {
     return (
-        <div>
+        <div className='p-6'>
             <h2 className="text-3xl font-bold text-darkNavy mb-4">Welcome, Admin</h2>
             <p className="text-lg text-darkNavy mb-4">
                 This is the admin dashboard where you can manage users, courses, and exams.

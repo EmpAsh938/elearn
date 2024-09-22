@@ -12,7 +12,7 @@ export default function Dashboard() {
     const remainingDays = formatDistanceToNow(renewalDate, { addSuffix: true });
 
     return (
-        <div className="p-6">
+        <div className="p-6 min-h-screen">
             <section className="mb-8">
                 <h1 className="text-3xl font-bold text-darkNavy text-left mb-2">Welcome, {userName}!</h1>
             </section>

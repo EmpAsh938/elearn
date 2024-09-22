@@ -7,6 +7,7 @@ import Sidebar from "@/components/dashboard/sidebar";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
     const toggleCollapse = (value: boolean) => {
         setIsCollapsed(value);
@@ -14,16 +15,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     // Check screen size on mount
     useEffect(() => {
-        const mediaQuery = window.matchMedia("(max-width: 768px)"); // Small screen sizes (e.g., mobile or tablet)
+        const mediaQuery = window.matchMedia("(max-width: 640px)"); // Small screen sizes (e.g., mobile or tablet)
 
         // Set initial collapsed state based on screen size
         if (mediaQuery.matches) {
-            setIsCollapsed(true); // Collapse sidebar by default for small screens
+            setIsMobile(true); // Collapse sidebar by default for small screens
         }
 
         // Update collapse state when window resizes
         const handleResize = () => {
-            setIsCollapsed(mediaQuery.matches); // Collapse if matches small screen
+            setIsMobile(mediaQuery.matches); // Collapse if matches small screen
         };
 
         mediaQuery.addEventListener('change', handleResize);
@@ -40,7 +41,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Sidebar isCollapsed={isCollapsed} toggleCollapse={toggleCollapse} />
 
             {/* Main Content */}
-            <main className={`flex-1 p-6 pl-28 bg-gray-100 ${isCollapsed ? "pl-28" : "pl-64"} transition-all`}>
+            <main className={`flex-1 bg-gray-100 ${isCollapsed ? "pl-28" : "pl-64"} ${isMobile ? 'pl-0' : 'pl-64'} transition-all`}>
                 {children}
             </main>
         </div>

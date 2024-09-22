@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${ubuntu.className} antialiased bg-[var(--c-white-1)] overflow-x-hidden text-textDarkNavy`}>{children}</body>
+            <body className={`${ubuntu.className} antialiased bg-[var(--c-white-1)] text-textDarkNavy`}>{children}</body>
         </html>
     );
 }

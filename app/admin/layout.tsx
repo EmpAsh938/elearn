@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, Home, Users, Book, Video, Clipboard, Package2 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
@@ -54,35 +54,14 @@ const sidemenuLinks = [
 ];
 
 const AdminLayout = ({ children }: LayoutProps) => {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(true);
     const pathname = usePathname();
 
-    // Check screen size on mount
-    useEffect(() => {
-        const mediaQuery = window.matchMedia("(max-width: 768px)"); // Small screen sizes (e.g., mobile or tablet)
-
-        // Set initial collapsed state based on screen size
-        if (mediaQuery.matches) {
-            setIsCollapsed(true); // Collapse sidebar by default for small screens
-        }
-
-        // Update collapse state when window resizes
-        const handleResize = () => {
-            setIsCollapsed(mediaQuery.matches); // Collapse if matches small screen
-        };
-
-        mediaQuery.addEventListener('change', handleResize);
-
-        // Cleanup listener on unmount
-        return () => {
-            mediaQuery.removeEventListener('change', handleResize);
-        };
-    }, []);
     return (
         <div className="h-screen bg-gray-100">
             <aside className={`fixed h-screen top-0 left-0 ${isCollapsed ? 'w-20' : 'w-64'} bg-darkNavy text-white flex flex-col transition-all duration-300 z-50`}>
                 <div className={`p-0 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between p-1'} my-4`}>
-                    <h2 className={`text-2xl font-bold ${isCollapsed ? 'hidden' : 'block'}`}>Admin Dashboard</h2>
+                    <h2 className={`text-xl font-bold ${isCollapsed ? 'hidden' : 'block'}`}>Admin Dashboard</h2>
                     <button onClick={() => setIsCollapsed(!isCollapsed)} className="focus:outline-none">
                         <Menu size={24} />
                     </button>
@@ -104,7 +83,7 @@ const AdminLayout = ({ children }: LayoutProps) => {
                     </ul>
                 </nav>
             </aside>
-            <main className={`p-6 relative ${isCollapsed ? 'left-20 w-[calc(100vw-80px)]' : 'left-64 w-[calc(100vw-256px)]'}`}>
+            <main className={`${isCollapsed ? 'pl-20' : 'pl-64'}`}>
                 {/* <header className="bg-white shadow-md p-4 rounded-lg mb-4">
                     <h1 className="text-2xl font-bold text-darkNavy">{pathname}</h1>
                 </header> */}
