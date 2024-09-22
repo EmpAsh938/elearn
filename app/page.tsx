@@ -48,7 +48,7 @@ export default function Home() {
                         <source src="/videos/landing-bg.mp4" type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
-                    <div className="relative z-10 max-w-2xl mx-auto">
+                    <div className="relative z-10 max-w-2xl mx-auto px-5 md:p-0">
                         <h1 className="text-5xl font-extrabold mb-6 text-green">Enhance Your Skills with Our E-Learning Platform</h1>
                         <p className="text-xl mb-8 text-textLightGreen">Join our community and access a wide range of courses, live classes, and resources to boost your knowledge and career.</p>
                         <Link href="/dashboard">

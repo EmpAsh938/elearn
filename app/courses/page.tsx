@@ -70,18 +70,16 @@ export default function Courses() {
                 </section>
 
                 {/* Tags for selecting grade packages */}
-                <section className="flex justify-center mb-8">
-                    <div className="flex space-x-4">
-                        {tags.map(tag => (
-                            <Button
-                                key={tag}
-                                className={`px-4 py-2 ${selectedTag === tag ? 'bg-blue text-white' : 'bg-lightBlue text-textDarkNavy'} hover:${selectedTag === tag ? 'bg-blue' : 'bg-lightBlue'}`}
-                                onClick={() => setSelectedTag(tag)}
-                            >
-                                {tag}
-                            </Button>
-                        ))}
-                    </div>
+                <section className="flex justify-center flex-wrap gap-2 mb-8">
+                    {tags.map(tag => (
+                        <Button
+                            key={tag}
+                            className={`px-4 py-2 ${selectedTag === tag ? 'bg-blue text-white' : 'bg-lightBlue text-textDarkNavy'} hover:${selectedTag === tag ? 'bg-blue' : 'bg-lightBlue'}`}
+                            onClick={() => setSelectedTag(tag)}
+                        >
+                            {tag}
+                        </Button>
+                    ))}
                 </section>
 
                 {/* Display all grade packages */}

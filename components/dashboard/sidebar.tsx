@@ -48,7 +48,7 @@ export default function Sidebar({ isCollapsed, toggleCollapse }: Props) {
     const pathname = usePathname();
     return (
         <aside className={`fixed top-0 left-0 h-screen bg-white text-textDarkNavy flex flex-col ${isCollapsed ? "w-28" : "w-64"} transition-all duration-300`}>
-            <Image src="/images/logo.avif" alt="Company logo" height={300} width={300} className="w-20 object-cover pl-4 pt-2" />
+            <Image src="/images/logo.avif" alt="Company logo" height={300} width={300} className="w-20 object-cover pl-4 pt-2 mx-auto" />
             <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} px-4 py-4 pr-0`}>
                 {isCollapsed || <h2 className="text-2xl font-bold">Dashboard</h2>}
                 <Button variant="ghost" className="hover:bg-transparent" onClick={() => toggleCollapse(!isCollapsed)}>

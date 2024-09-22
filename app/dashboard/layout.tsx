@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Sidebar from "@/components/dashboard/sidebar";
 
@@ -11,6 +11,28 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const toggleCollapse = (value: boolean) => {
         setIsCollapsed(value);
     }
+
+    // Check screen size on mount
+    useEffect(() => {
+        const mediaQuery = window.matchMedia("(max-width: 768px)"); // Small screen sizes (e.g., mobile or tablet)
+
+        // Set initial collapsed state based on screen size
+        if (mediaQuery.matches) {
+            setIsCollapsed(true); // Collapse sidebar by default for small screens
+        }
+
+        // Update collapse state when window resizes
+        const handleResize = () => {
+            setIsCollapsed(mediaQuery.matches); // Collapse if matches small screen
+        };
+
+        mediaQuery.addEventListener('change', handleResize);
+
+        // Cleanup listener on unmount
+        return () => {
+            mediaQuery.removeEventListener('change', handleResize);
+        };
+    }, []);
 
     return (
         <div className="min-h-screen">
