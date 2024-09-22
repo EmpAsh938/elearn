@@ -2,25 +2,24 @@
 
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
-import videojs from "video.js";
-import "video.js/dist/video-js.css";
+import Hls from "hls.js"; // Import hls.js
 
 export default function LiveClassRoom({ params }: { params: { id: string } }) {
     const { id } = params;
-    const videoRef = useRef(null);
-    const playerRef = useRef<videojs.Player | null>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const chatRef = useRef<HTMLDivElement>(null);
     const [isStreaming, setIsStreaming] = useState(false);
     const [messages, setMessages] = useState<string[]>([]);
     const [message, setMessage] = useState('');
+    const [isMuted, setIsMuted] = useState(true);
     const [error, setError] = useState('');
 
-    const streamUrl = 'http://localhost/hls/stream.m3u8'; // Update to your actual stream URL
+    const streamUrl = 'http://localhost/hls/test.m3u8'; // Update to your actual stream URL
 
     useEffect(() => {
         const checkStreamAvailability = async () => {
             try {
-                const response = await fetch(streamUrl, { method: 'HEAD' });
+                const response = await fetch(streamUrl);
                 if (response.ok) {
                     setIsStreaming(true);
                     setError('');
@@ -42,25 +41,28 @@ export default function LiveClassRoom({ params }: { params: { id: string } }) {
     }, [streamUrl]);
 
     useEffect(() => {
-        if (isStreaming) {
-            if (!playerRef.current) {
-                const videoElement = videoRef.current;
-                if (!videoElement) return;
+        const videoElement = videoRef.current;
 
-                playerRef.current = videojs(videoElement, {
-                    autoplay: false,
-                    controls: true,
-                    sources: [{ src: streamUrl, type: 'application/x-mpegURL' }],
+        // If HLS is supported in the browser
+        if (videoElement && isStreaming) {
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(streamUrl);
+                hls.attachMedia(videoElement);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    videoElement.play().catch((error) => {
+                        console.error("Error playing video:", error);
+                        setError("Error playing video");
+                    });
                 });
-
-                playerRef.current.on('error', (error: any) => {
-                    console.error('Video.js Error:', error);
-                    setError('Error playing video');
+            } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+                // For Safari (which natively supports HLS)
+                videoElement.src = streamUrl;
+                videoElement.play().catch((error) => {
+                    console.error("Error playing video:", error);
+                    setError("Error playing video");
                 });
             }
-        } else {
-            playerRef.current?.dispose();
-            playerRef.current = null;
         }
     }, [isStreaming, streamUrl]);
 
@@ -77,6 +79,14 @@ export default function LiveClassRoom({ params }: { params: { id: string } }) {
         }
     };
 
+    const toggleMute = () => {
+        const videoElement = videoRef.current;
+        if (videoElement) {
+            videoElement.muted = !isMuted;
+        }
+        setIsMuted(!isMuted);
+    };
+
     return (
         <div className="p-6 flex flex-col items-center">
             <h1 className="text-3xl font-bold text-darkNavy mb-4">Live Class: {id}</h1>
@@ -90,9 +100,15 @@ export default function LiveClassRoom({ params }: { params: { id: string } }) {
                         </div>
                     ) : (
                         <div>
-                            <div data-vjs-player>
-                                <video ref={videoRef} className="video-js vjs-default-skin w-full bg-black rounded-lg" />
-                            </div>
+                            <video
+                                ref={videoRef}
+                                controls
+                                className="w-full bg-black rounded-lg"
+                                muted={isMuted}
+                            />
+                            <Button onClick={toggleMute} className="mt-2 bg-blue text-white rounded-lg p-2">
+                                {isMuted ? 'Unmute' : 'Mute'}
+                            </Button>
                         </div>
                     )}
                 </div>
@@ -108,7 +124,7 @@ export default function LiveClassRoom({ params }: { params: { id: string } }) {
                             type="text"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-
+                            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                             className="flex-1 border border-gray-300 rounded-lg p-2 text-lg"
                         />
                         <Button

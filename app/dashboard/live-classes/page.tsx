@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Video } from 'lucide-react';
 import Image from 'next/image';
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Sample data for subscribed plans and their live classes
 const liveClassesData = {
@@ -15,31 +16,38 @@ const liveClassesData = {
     classes: [
         {
             id: 1,
-            name: "Mathematics Live Session",
-            description: "Join our expert instructors for a live session on advanced mathematical concepts.",
-            schedule: "Every Monday at 3:00 PM",
-            thumbnail: "/images/live-session.jpg"
+            title: "Mathematics Live",
+            description: "An interactive live session covering algebra and geometry.",
+            startTime: "2024-08-10T14:00:00",
+            duration: 60,
+            thumbnail: "/images/live-session.jpg",
         },
         {
-            id: 2,
-            name: "Science Q&A",
-            description: "Get your science questions answered in real-time.",
-            schedule: "Every Wednesday at 4:00 PM",
-            thumbnail: "/images/live-session.jpg"
+            id: 10,
+            title: "Physics Live",
+            description: "Discussing concepts of motion and energy with live Classples.",
+            startTime: "2024-08-12T16:00:00",
+            duration: 45,
+            thumbnail: "/images/live-session.jpg",
         },
         {
-            id: 3,
-            name: "Computer Science Workshop",
-            description: "Participate in interactive workshops on various computer science topics.",
-            schedule: "Every Friday at 2:00 PM",
-            thumbnail: "/images/live-session.jpg"
-        }
+            id: 100,
+            title: "Chemistry Live",
+            description: "Live Q&A on organic chemistry topics.",
+            startTime: "2024-08-15T10:00:00",
+            duration: 30,
+            thumbnail: "/images/live-session.jpg",
+        },
     ]
 };
 
 export default function LiveClasses() {
     const [plan, setPlan] = useState(liveClassesData);
+    const router = useRouter();
 
+    const handleJoinLiveClass = (liveClass: any) => {
+        router.push(`/dashboard/live-classes/${liveClass.id}`);
+    };
     return (
         <div className="p-6">
             <section className="mb-8">
@@ -53,18 +61,18 @@ export default function LiveClasses() {
                 {plan.classes.map(liveClass => (
                     <Card key={liveClass.id} className="bg-white shadow-lg">
                         <div className="relative w-full h-40">
-                            <Image src={liveClass.thumbnail} alt={liveClass.name} layout="fill" objectFit="cover" className="rounded-t-lg" />
+                            <Image src={liveClass.thumbnail} alt={liveClass.title} layout="fill" objectFit="cover" className="rounded-t-lg" />
                         </div>
                         <CardHeader className="py-2 border-b-2 border-gray-300 mb-1">
                             <CardTitle className="text-2xl font-bold text-darkNavy flex items-center">
-                                <Video className="mr-2 text-green" /> {liveClass.name}
+                                <Video className="mr-2 text-green" /> {liveClass.title}
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <p className="text-lg text-darkNavy mb-4">{liveClass.description}</p>
-                            <p className="text-lg text-darkNavy mb-4"><strong>Schedule:</strong> {liveClass.schedule}</p>
+                            <p className="text-lg text-darkNavy mb-4"><strong>Starts At:</strong> {liveClass.startTime}</p>
                             <Link href={`/dashboard/live-classes/${liveClass.id}`}>
-                                <Button className="bg-red text-white w-full">Join Live Class</Button>
+                                <Button className="bg-red text-white w-full" onClick={() => handleJoinLiveClass(liveClass)}>Join Live Class</Button>
                             </Link>
                         </CardContent>
                     </Card>

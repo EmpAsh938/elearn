@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -8,33 +8,35 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function CreateDialog({ onCreate }: { onCreate: (newClass: LiveClass) => void }) {
-    const [title, setTitle] = useState("")
-    const [streamLink, setStreamLink] = useState("")
-    const [description, setDescription] = useState("")
-    const [startTime, setStartTime] = useState("")
-    const [duration, setDuration] = useState(60)
+    const [title, setTitle] = useState<string>("");
+    const [streamLink, setStreamLink] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [startTime, setStartTime] = useState<string>(new Date().toISOString().slice(0, 16)); // Format the current date-time
+    const [duration, setDuration] = useState<number>(60);
 
     const handleCreate = () => {
-        const newLiveClass = {
+        const newLiveClass: LiveClass = {
             title,
             streamLink,
             description,
-            startTime,
-            duration
-        }
-        onCreate(newLiveClass)
+            startTime, // Keep this as a string because it's in the correct format for ISO datetime
+            duration,
+        };
+
+        onCreate(newLiveClass);
+
         // Reset form fields
-        setTitle("")
-        setStreamLink("")
-        setDescription("")
-        setStartTime("")
-        setDuration(60)
-    }
+        setTitle("");
+        setStreamLink("");
+        setDescription("");
+        setStartTime(new Date().toISOString().slice(0, 16)); // Reset to current date-time
+        setDuration(60);
+    };
 
     return (
         <Dialog>
@@ -112,13 +114,13 @@ export function CreateDialog({ onCreate }: { onCreate: (newClass: LiveClass) => 
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    )
+    );
 }
 
 interface LiveClass {
-    title: string
-    streamLink: string
-    description: string
-    startTime: string
-    duration: number
+    title: string;
+    streamLink: string;
+    description: string;
+    startTime: string; // Keeping startTime as a string for datetime-local input
+    duration: number;
 }
