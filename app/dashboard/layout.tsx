@@ -41,7 +41,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Sidebar isCollapsed={isCollapsed} toggleCollapse={toggleCollapse} />
 
             {/* Main Content */}
-            <main className={`flex-1 bg-gray-100 ${isCollapsed ? "pl-28" : "pl-64"} ${isMobile ? 'pl-0' : 'pl-64'} transition-all`}>
+            <main className={`bg-gray-100 ${isMobile ? 'pl-0 pb-4' : isCollapsed ? 'pl-28' : 'pl-64'} transition-all`}>
                 {children}
             </main>
         </div>
