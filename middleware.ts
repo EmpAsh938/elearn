@@ -15,7 +15,7 @@ export default async function middleware(req: NextRequest) {
     const token = getSession();
 
 
-    // 5. Redirect to /login if the user is not authenticated
+    // 4. Redirect to /login if the user is not authenticated
     if (isProtectedRoute) {
         if (!token) {
             // No token found, redirect to login
@@ -26,7 +26,7 @@ export default async function middleware(req: NextRequest) {
 
 
 
-    // 6. Redirect to /dashboard if the user is authenticated
+    // 5. Redirect to /dashboard if the user is authenticated
     if (
         isPublicRoute &&
         token

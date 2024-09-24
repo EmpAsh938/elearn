@@ -41,7 +41,16 @@ export default function Login() {
 
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
-
+        try {
+            const request = await fetch('api/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(values)
+            })
+            const response = request.json();
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
