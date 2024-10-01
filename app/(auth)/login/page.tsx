@@ -55,6 +55,7 @@ export default function Login() {
             const response = await request.json();
             // console.log(response)
             if (response.status !== 200) throw Error(response.error);
+            form.reset();
             localStorage.setItem("user", JSON.stringify(response.user));
             if (response.user.roles[0].id == 501) {
                 window.location.href = '/admin';
