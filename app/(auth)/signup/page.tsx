@@ -26,7 +26,7 @@ const formSchema = z.object({
     fullname: z.string().min(4, { message: "Fullname must be at least 4 characters." }),
     email: z.string().email({ message: "This is not a valid email." }),
     phonenumber: z.string().length(10, { message: "Phone number must be exactly 10 digits." }), // Handle as string for leading zeroes
-    otp: z.string().length(4, { message: "OTP must be a 4-digit number." }),
+    otp: z.string().length(6, { message: "OTP must be a 4-digit number." }),
     school: z.string().min(10, { message: "School name must be at least 10 characters long." }),
     grade: z.string().min(1, { message: "Grade must be choosen from dropdown." }),
     password: z.string().min(6, { message: "Password must be at least 6 characters." }),
