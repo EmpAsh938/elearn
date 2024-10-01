@@ -1,3 +1,5 @@
+"use client";
+
 import AdminBarChart from '@/components/admin/charts/barchart';
 import AdminPieChart from '@/components/admin/charts/piechart';
 import Link from 'next/link';

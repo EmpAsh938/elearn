@@ -30,7 +30,7 @@ const sidemenuLinks = [
     {
         title: "Courses",
         icon: <Book size={24} />,
-        link: "/admin/courses"
+        link: "/admin/course"
     },
     {
         title: "Live Classes",

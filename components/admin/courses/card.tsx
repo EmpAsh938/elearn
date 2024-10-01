@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 interface Course {
-    id: string;
+    postId: string;
     title: string;
     content: string;
     videoLink: string;
