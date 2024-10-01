@@ -12,7 +12,7 @@ type Props = {
 
 export function DeleteModal({ faculty, open, onClose, onDelete }: Props) {
     const handleDelete = () => {
-        onDelete(faculty.id); // Pass the faculty ID to the delete function
+        onDelete(); // Pass the faculty ID to the delete function
         onClose(); // Close the modal after deleting
     };
 
