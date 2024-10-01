@@ -78,7 +78,7 @@ export default function Signup() {
 
             const response = await request.json();
             console.log(response);
-            if (response.status !== 201) throw new Error(response.error);
+            // if (response.status !== 201) throw new Error(response.error);
             toast({ description: "Registration Successful" });
 
             // Handle successful registration (e.g., set cookie, redirect)
