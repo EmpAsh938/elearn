@@ -4,27 +4,38 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from 'lucide-react';
 import { formatDistanceToNow, isFuture, isPast } from 'date-fns';
+import { useGlobalContext } from "@/hooks/use-globalContext";
+import SpinWheel from "@/components/spinwheel";
 
 export default function Dashboard() {
-    const [userName, setUserName] = useState("John Doe");
-    const [renewalDate] = useState(new Date("2024-08-25"));
-    const [hasPlan, setHasPlan] = useState(true); // Change to false if no plan is purchased
+    const { user } = useGlobalContext();
 
-
-    let planMessage = "";
-    if (!hasPlan) {
-        planMessage = "You have not purchased a plan.";
-    } else if (isFuture(renewalDate)) {
-        const remainingDays = formatDistanceToNow(renewalDate, { addSuffix: true });
-        planMessage = `Your current plan expires ${remainingDays}.`;
-    } else if (isPast(renewalDate)) {
-        planMessage = "Your plan has expired.";
+    if (!user || !user.roles) {
+        return <div className="w-full h-screen grid place-items-center">
+            <div
+                className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                role="status">
+                <span
+                    className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                >Loading...</span>
+            </div>
+        </div>
     }
 
+
+    const roles = user.roles[0];
+
+    let planMessage = "";
+    if (roles.id === 502) {
+        planMessage = "You have not purchased a plan or the plan has expired.";
+    } else if (roles.id === 503) {
+
+        planMessage = `Your plan is active.`;
+    }
     return (
         <div className="p-2">
             <section className="mb-8">
-                <h1 className="text-3xl font-bold text-darkNavy text-left mb-2">Welcome, {userName}!</h1>
+                <h1 className="text-3xl font-bold text-darkNavy text-left mb-2">Welcome, {user.name}!</h1>
             </section>
 
             <section className="mb-8">
@@ -36,10 +47,10 @@ export default function Dashboard() {
                     </CardHeader>
 
                     <CardContent>
-                        {hasPlan ? (
+                        {user ? (
                             <>
-                                <p className="text-lg text-darkNavy">Plan Type: Grade 10 (Basic)</p>
-                                <p className="text-lg text-darkNavy">{planMessage}</p>
+                                <p className="text-lg text-darkNavy capitalize font-medium">Plan Type: {user.faculty}</p>
+                                <p className="text-base text-gray-600">{planMessage}</p>
                             </>
                         ) : (
                             <p className="text-lg text-red-600">{planMessage}</p>
@@ -64,6 +75,7 @@ export default function Dashboard() {
                 </Card>
             </section>
 
+            <SpinWheel />
         </div>
     );
 }

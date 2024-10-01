@@ -1,7 +1,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, BookOpen, Activity, User, Menu, FileText, Video, LogOut } from "lucide-react";
+import { Home, BookOpen, User, Menu, FileText, Video, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -46,6 +46,20 @@ const sidemenuLinks = [
 
 export default function Sidebar({ isCollapsed, toggleCollapse }: Props) {
     const pathname = usePathname();
+
+    const handleLogout = async () => {
+        try {
+            const request = await fetch('/api/auth/logout');
+            const response = await request.json();
+            console.log(response);
+            if (response.status !== 200) throw Error(response.error);
+            localStorage.clear();
+            window.location.href = "/";
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <>
             <aside className={`fixed bottom-0 left-0 w-screen h-fit sm:h-screen bg-white text-textDarkNavy flex flex-col ${isCollapsed ? "sm:w-28" : "sm:w-64"} transition-all duration-300`}>
@@ -76,7 +90,7 @@ export default function Sidebar({ isCollapsed, toggleCollapse }: Props) {
                 </nav>
 
                 <div className="hidden sm:flex items-center justify-start pb-2 pl-4">
-                    <Button variant="ghost" className={`flex gap-2 w-full justify-start ${isCollapsed ? 'justify-center' : 'justify-start'} text-red hover:bg-transparent hover:text-red`}>
+                    <Button onClick={handleLogout} variant="ghost" className={`flex gap-2 w-full justify-start ${isCollapsed ? 'justify-center' : 'justify-start'} text-red hover:bg-transparent hover:text-red`}>
                         <LogOut size={24} />
                         {isCollapsed || <span>Logout</span>}
                     </Button>

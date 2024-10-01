@@ -1,39 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateDialog } from "@/components/admin/live-classes/create";
 import LiveClassCard from "@/components/admin/live-classes/card";
+// import { toast } from "@/hooks/use-toast";
 
 interface LiveClass {
+    id: string;
     title: string;
-    description: string;
-    startTime: string;
-    duration: number;
+    streamlink: string;
+    startingTime: string;
 }
 
-const initialLiveClass: LiveClass[] = [
-    {
-        title: "Mathematics Live",
-        description: "An interactive live session covering algebra and geometry.",
-        startTime: "2024-08-10T14:00:00",
-        duration: 60,
-    },
-    {
-        title: "Physics Live",
-        description: "Discussing concepts of motion and energy with live Classples.",
-        startTime: "2024-08-12T16:00:00",
-        duration: 45,
-    },
-    {
-        title: "Chemistry Live",
-        description: "Live Q&A on organic chemistry topics.",
-        startTime: "2024-08-15T10:00:00",
-        duration: 30,
-    },
-];
+
+
+
 
 export default function LiveClasses() {
-    const [liveClass, setLiveClass] = useState(initialLiveClass);
+    const [liveClass, setLiveClass] = useState<LiveClass[]>([]);
 
     const handleEdit = (index: number, updatedClass: LiveClass) => {
         setLiveClass((prevClass) =>
@@ -45,31 +29,59 @@ export default function LiveClasses() {
         setLiveClass((prevClass) => prevClass.filter((_, i) => i !== index));
     };
 
-    const handleCreate = (newClass: LiveClass) => {
-        setLiveClass((prevClass) => [...prevClass, newClass]);
-    };
+    // const handleCreate = async (newClass: LiveClass) => {
+    //     try {
+    //         const req = await fetch('/api/live', {
+    //             method: 'POST',
+    //             body: JSON.stringify(newClass)
+    //         })
+    //         const res = await req.json();
+    //         if (res.status !== 201) throw new Error(res.error);
+    //         toast({ title: "Live Class", description: "Live class created successfully" })
+    //         setLiveClass((prevClass) => [...prevClass, res]);
+    //     } catch (error) {
+    //         toast({ variant: "destructive", title: "Live Class", description: "Live class creation failed" })
 
+    //     }
+    // };
+
+
+    useEffect(() => {
+        const fetchLiveClass = async () => {
+            try {
+                const req = await fetch('/api/live');
+                const res = await req.json();
+                setLiveClass(res.body);
+            } catch (error) {
+                console.log(error);
+            }
+
+        }
+
+        fetchLiveClass();
+    }, [])
+
+    console.log(liveClass)
     return (
-        <>
+        <div className="p-6">
             <h2 className="text-2xl font-bold text-darkNavy mb-4">Live Class</h2>
             <section>
-                <CreateDialog onCreate={handleCreate} />
+                <CreateDialog />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                    {liveClass.map((Class, index) => (
+                    {!liveClass ? <p>Nothing to show</p> : liveClass.map((item, index) => (
                         <LiveClassCard
                             key={index}
-                            title={Class.title}
-                            description={Class.description}
-                            startTime={new Date(Class.startTime).toLocaleString()}
-                            duration={Class.duration}
-                            onEdit={(title, description, startTime, duration) =>
-                                handleEdit(index, { title, description, startTime, duration })
+                            title={item.title}
+                            startTime={new Date(item.startingTime).toLocaleString()}
+                            streamlink={item.streamlink}
+                            onEdit={(title, startTime) =>
+                                handleEdit(index, item)
                             }
                             onDelete={() => handleDelete(index)}
                         />
                     ))}
                 </div>
             </section>
-        </>
+        </div>
     );
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -10,34 +10,94 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form"; // Correct `useForm` import
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "@/hooks/use-toast";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
-export function CreateDialog({ onCreate }: { onCreate: (newClass: LiveClass) => void }) {
-    const [title, setTitle] = useState<string>("");
-    const [streamLink, setStreamLink] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
-    const [startTime, setStartTime] = useState<string>(new Date().toISOString().slice(0, 16)); // Format the current date-time
-    const [duration, setDuration] = useState<number>(60);
+// Define the schema for form validation
+const formSchema = z.object({
+    title: z.string().min(3, "Title is required").max(50, "Title cannot exceed 50 characters"),
+    grade: z.string().min(1, "Please select a grade"),
+    streamLink: z.string().url("Please enter a valid URL"),
+    startTime: z.string().min(1, "Please enter a valid start time"),
+});
 
-    const handleCreate = () => {
-        const newLiveClass: LiveClass = {
-            title,
-            streamLink,
-            description,
-            startTime, // Keep this as a string because it's in the correct format for ISO datetime
-            duration,
+export function CreateDialog() {
+    const [grades, setGrades] = useState<IGrade[]>([]);
+
+    // Use form hook with Zod validation
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            title: "",
+            grade: "",
+            streamLink: "",
+            startTime: "",
+        },
+    });
+
+    // Submit handler for the form
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        const { title, streamLink, startTime } = values;
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        const categoryId = form.getValues("grade");
+        try {
+            if (Object.entries(user).length === 0) throw Error("User ID not found");
+            const request = await fetch("/api/live", {
+                method: "POST",
+                body: JSON.stringify({
+                    userId: user.id,
+                    categoryId,
+                    title,
+                    streamLink,
+                    startTime,
+                }),
+            });
+            const response = await request.json();
+            if (response.status !== 201) throw Error(response.error);
+            form.reset();
+            toast({ description: "Live Class Created Successfully" });
+        } catch (error: any) {
+            toast({
+                variant: "destructive",
+                title: "Creating Live Class Failed",
+                description: error.toString(),
+            });
+        }
+    }
+
+    // Fetch grades (categories) for the grade dropdown
+    useEffect(() => {
+        const fetchGrades = async () => {
+            try {
+                const request = await fetch("/api/faculty/");
+                const response = await request.json();
+                if (response.status !== 200) throw Error(response.error);
+                setGrades(response.body); // Assuming response has a `data` property containing grades
+            } catch (error: any) {
+                console.log(error);
+            }
         };
 
-        onCreate(newLiveClass);
-
-        // Reset form fields
-        setTitle("");
-        setStreamLink("");
-        setDescription("");
-        setStartTime(new Date().toISOString().slice(0, 16)); // Reset to current date-time
-        setDuration(60);
-    };
-
+        fetchGrades();
+    }, []);
+    console.log(grades)
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -50,77 +110,109 @@ export function CreateDialog({ onCreate }: { onCreate: (newClass: LiveClass) => 
                         Fill in the details to create a new live class.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="title" className="text-right">
-                            Title
-                        </Label>
-                        <Input
-                            id="title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            className="col-span-3"
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
+                        {/* Live Class Title Field */}
+                        <FormField
+                            control={form.control}
+                            name="title"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Live Class Title</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Mathematics" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="stream-link" className="text-right">
-                            Stream Link
-                        </Label>
-                        <Input
-                            id="stream-link"
-                            value={streamLink}
-                            onChange={(e) => setStreamLink(e.target.value)}
-                            className="col-span-3"
+
+                        {/* Stream Link Field */}
+                        <FormField
+                            control={form.control}
+                            name="streamLink"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Stream Link</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="http://stream.com/abc/live"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="description" className="text-right">
-                            Description
-                        </Label>
-                        <Input
-                            id="description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="col-span-3"
+
+                        {/* Grade Dropdown */}
+                        <FormField
+                            control={form.control}
+                            name="grade"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Select Grade</FormLabel>
+                                    <FormControl>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select Grade" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {grades.length > 0 &&
+                                                    grades.map((item) => (
+                                                        <SelectItem
+                                                            key={item.categoryId}
+                                                            value={item.categoryId}
+                                                        >
+                                                            {item.categoryTitle}
+                                                        </SelectItem>
+                                                    ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="start-time" className="text-right">
-                            Start Time
-                        </Label>
-                        <Input
-                            id="start-time"
-                            type="datetime-local"
-                            value={startTime}
-                            onChange={(e) => setStartTime(e.target.value)}
-                            className="col-span-3"
+
+                        {/* Start Time Field */}
+                        <FormField
+                            control={form.control}
+                            name="startTime"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Start Time</FormLabel>
+                                    <FormControl>
+                                        <Input type="datetime-local" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="duration" className="text-right">
-                            Duration (minutes)
-                        </Label>
-                        <Input
-                            id="duration"
-                            type="number"
-                            value={duration}
-                            onChange={(e) => setDuration(parseInt(e.target.value))}
-                            className="col-span-3"
-                        />
-                    </div>
-                </div>
-                <DialogFooter>
-                    <Button type="button" onClick={handleCreate}>Create</Button>
-                </DialogFooter>
+
+                        {/* Submit Button */}
+                        <DialogFooter>
+                            <Button type="submit">Create</Button>
+                        </DialogFooter>
+                    </form>
+                </Form>
             </DialogContent>
         </Dialog>
     );
 }
 
 interface LiveClass {
+    id: string;
     title: string;
     streamLink: string;
-    description: string;
     startTime: string; // Keeping startTime as a string for datetime-local input
-    duration: number;
+}
+
+interface IGrade {
+    categoryId: string;
+    categoryTitle: string;
+    categoryDescription: string;
 }

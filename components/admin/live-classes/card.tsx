@@ -1,60 +1,68 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 interface LiveExamCardProps {
     title: string;
-    description: string;
     startTime: string;
-    duration: number;
-    onEdit: (title: string, description: string, startTime: string, duration: number) => void;
+    streamlink: string;
+    onEdit: (title: string, startTime: string) => void;
     onDelete: () => void;
 }
 
 const LiveExamCard = ({
     title,
-    description,
     startTime,
-    duration,
+    streamlink,
     onEdit,
     onDelete,
 }: LiveExamCardProps) => {
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [editTitle, setEditTitle] = useState(title);
-    const [editDescription, setEditDescription] = useState(description);
     const [editStartTime, setEditStartTime] = useState(startTime);
-    const [editDuration, setEditDuration] = useState(duration);
 
     const handleEditSubmit = () => {
-        onEdit(editTitle, editDescription, editStartTime, editDuration);
+        onEdit(editTitle, editStartTime);
         setIsEditOpen(false);
+    };
+
+    const handleDelete = () => {
+        onDelete();
+        setIsDeleteOpen(false);
     };
 
     return (
         <div className="bg-white shadow-lg rounded-lg p-4 mb-4">
             <h3 className="text-xl font-bold text-darkNavy">{title}</h3>
-            <p className="text-darkNavy mb-2">{description}</p>
             <p className="text-darkNavy mb-2">
                 <strong>Start Time:</strong> {startTime}
             </p>
-            <p className="text-darkNavy">
-                <strong>Duration:</strong> {duration} minutes
+            <p className="text-darkNavy mb-2">
+                <strong>Stream Link:</strong> {streamlink}
             </p>
+
             <div className="flex mt-4">
                 <Button className="mr-2" variant="secondary" onClick={() => setIsEditOpen(true)}>
                     Edit
                 </Button>
-                <Button variant="destructive" onClick={onDelete}>
+                <Button variant="destructive" onClick={() => setIsDeleteOpen(true)}>
                     Delete
                 </Button>
             </div>
 
+            {/* Edit Dialog */}
             <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                 <DialogContent>
-                    <h2 className="text-xl font-bold mb-4">Edit Live Exam</h2>
+                    <DialogHeader>
+                        <DialogTitle>Edit Live Exam</DialogTitle>
+                        <DialogDescription>
+                            Make changes to the exam details below.
+                        </DialogDescription>
+                    </DialogHeader>
                     <form
                         onSubmit={(e) => {
                             e.preventDefault();
@@ -70,14 +78,6 @@ const LiveExamCard = ({
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-darkNavy mb-1">Description</label>
-                            <Input
-                                type="text"
-                                value={editDescription}
-                                onChange={(e) => setEditDescription(e.target.value)}
-                            />
-                        </div>
-                        <div className="mb-4">
                             <label className="block text-darkNavy mb-1">Start Time</label>
                             <Input
                                 type="datetime-local"
@@ -85,20 +85,35 @@ const LiveExamCard = ({
                                 onChange={(e) => setEditStartTime(e.target.value)}
                             />
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-darkNavy mb-1">Duration (minutes)</label>
-                            <Input
-                                type="number"
-                                value={editDuration}
-                                onChange={(e) => setEditDuration(Number(e.target.value))}
-                            />
-                        </div>
-                        <div className="flex justify-end">
+                        <DialogFooter>
                             <Button variant="default" type="submit">
                                 Save Changes
                             </Button>
-                        </div>
+                            <Button variant="ghost" onClick={() => setIsEditOpen(false)}>
+                                Cancel
+                            </Button>
+                        </DialogFooter>
                     </form>
+                </DialogContent>
+            </Dialog>
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Delete Live Exam</DialogTitle>
+                        <DialogDescription>
+                            Are you sure you want to delete this exam? This action cannot be undone.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button variant="destructive" onClick={handleDelete}>
+                            Confirm Delete
+                        </Button>
+                        <Button variant="ghost" onClick={() => setIsDeleteOpen(false)}>
+                            Cancel
+                        </Button>
+                    </DialogFooter>
                 </DialogContent>
             </Dialog>
         </div>

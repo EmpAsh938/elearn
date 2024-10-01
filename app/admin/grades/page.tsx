@@ -1,32 +1,21 @@
 "use client";
 
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { CreateDialog } from "@/components/admin/grades/create";
 import { GradeCard } from "@/components/admin/grades/card";
 import { GradesTable } from "@/components/admin/grades/grades-table";
 
 interface Grade {
-    title: string
-    description: string
+    categoryId: string
+    categoryTitle: string
+    categoryDescription: string
 }
 
-const initialGrades: Grade[] = [
-    {
-        title: "Grade 10",
-        description: "Secondary Level",
-    },
-    {
-        title: "Grade 9",
-        description: "Secondary Level",
-    },
-    {
-        title: "Grade 11",
-        description: "Higher Secondary Level",
-    },
-]
 
 export default function Grades() {
-    const [grades, setGrades] = useState(initialGrades)
+
+    const [grades, setGrades] = useState<Grade[]>([])
+    const [loading, setLoading] = useState(true);
 
 
     const handleEdit = (index: number) => {
@@ -39,9 +28,28 @@ export default function Grades() {
         setGrades(grades.filter((_, i) => i !== index))
     }
 
+    const fetchGrades = useCallback(async () => {
+        setLoading(true);
+        try {
+            const request = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/`);
+            const response = await request.json();
+            // if (response.status !== 200) throw Error(response.error);
+            // console.log(response);
+            setGrades(response);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchGrades();
+    }, [fetchGrades])
+
     return (
-        <>
-            <h2 className="text-2xl font-bold text-darkNavy mb-4">Grades</h2>
+        <div className="p-6">
+            <h2 className="text-2xl font-bold text-darkNavy mb-4">Grades/Faculty</h2>
             <CreateDialog />
             {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                 {grades.map((grade, index) => (
@@ -53,7 +61,7 @@ export default function Grades() {
                     />
                 ))}
             </div> */}
-            <GradesTable />
-        </>
+            <GradesTable grades={grades} loading={loading} />
+        </div>
     )
 }

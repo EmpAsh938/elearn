@@ -44,8 +44,12 @@ export default function Exams() {
         setExams(exams.filter((_, i) => i !== index))
     }
 
+    if (1) {
+        return <p>This feature is under develoment. Please be patient for a while.</p>
+    }
+
     return (
-        <>
+        <div className="p-6">
             <h2 className="text-2xl font-bold text-darkNavy mb-4">Exams</h2>
             <section>
                 <CreateExamDialog onCreate={handleCreate} />
@@ -60,6 +64,6 @@ export default function Exams() {
                     ))}
                 </div>
             </section>
-        </>
+        </div>
     )
 }

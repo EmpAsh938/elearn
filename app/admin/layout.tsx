@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, Home, Users, Book, Video, Clipboard, Package2 } from 'lucide-react';
+import { Menu, Home, Users, Book, Video, Clipboard, Package2, LogOut } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -57,6 +58,19 @@ const AdminLayout = ({ children }: LayoutProps) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const pathname = usePathname();
 
+    const handleLogout = async () => {
+        try {
+            const request = await fetch('/api/auth/logout');
+            const response = await request.json();
+            console.log(response);
+            if (response.status !== 200) throw Error(response.error);
+            localStorage.clear();
+            window.location.href = "/";
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div className="h-screen bg-gray-100">
             <aside className={`fixed h-screen top-0 left-0 ${isCollapsed ? 'w-20' : 'w-64'} bg-darkNavy text-white flex flex-col transition-all duration-300 z-50`}>
@@ -82,6 +96,13 @@ const AdminLayout = ({ children }: LayoutProps) => {
 
                     </ul>
                 </nav>
+
+                <div className="hidden sm:flex items-center justify-start pb-2 pl-4">
+                    <Button onClick={handleLogout} variant="ghost" className={`flex gap-2 w-full justify-start ${isCollapsed ? 'justify-center' : 'justify-start'} text-red hover:bg-transparent hover:text-red`}>
+                        <LogOut size={24} />
+                        {isCollapsed || <span>Logout</span>}
+                    </Button>
+                </div>
             </aside>
             <main className={`${isCollapsed ? 'pl-20' : 'pl-64'}`}>
                 {/* <header className="bg-white shadow-md p-4 rounded-lg mb-4">

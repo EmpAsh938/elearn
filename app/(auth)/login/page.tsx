@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { createSession } from "@/app/lib/session"
+import { useToast } from "@/hooks/use-toast"
 
 
 const formSchema = z.object({
@@ -30,6 +30,8 @@ const formSchema = z.object({
 });
 
 export default function Login() {
+    const { toast } = useToast();
+
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -41,14 +43,30 @@ export default function Login() {
 
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        const { email, password } = values;
         try {
-            const request = await fetch('api/auth/login', {
+            const request = await fetch('/api/auth/login/', {
                 method: 'POST',
-                body: JSON.stringify(values)
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: email, password })
             })
-            const response = request.json();
-            console.log(response);
-        } catch (error) {
+            const response = await request.json();
+            // console.log(response)
+            if (response.status !== 200) throw Error(response.error);
+            localStorage.setItem("user", JSON.stringify(response.user));
+            if (response.user.roles[0].id == 501) {
+                window.location.href = '/admin';
+            } else {
+
+                window.location.href = '/dashboard';
+            }
+            toast({ description: "Login Successful" });
+
+
+        } catch (error: any) {
+            toast({ variant: "destructive", title: "Login Failed", description: error.toString() });
             console.log(error);
         }
     }
@@ -57,13 +75,15 @@ export default function Login() {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="w-[400px] flex flex-col gap-4">
                 <div className="w-full">
-                    <Image
-                        src="/images/big-logo.avif"
-                        alt="Detailed Logo"
-                        height={300}
-                        width={300}
-                        className="w-40 object-cover"
-                    />
+                    <Link href={"/"}>
+                        <Image
+                            src="/images/big-logo.avif"
+                            alt="Detailed Logo"
+                            height={300}
+                            width={300}
+                            className="w-40 object-cover"
+                        />
+                    </Link>
                 </div>
                 <div className="w-full mb-4">
                     <h1 className=" text-2xl font-semibold">Welcome back</h1>
@@ -96,7 +116,7 @@ export default function Login() {
                         <FormItem className="w-full">
                             <FormLabel className="font-semibold text-stone-800">Password</FormLabel>
                             <FormControl>
-                                <Input {...field} />
+                                <Input type="password" {...field} />
                             </FormControl>
 
                             <FormMessage />

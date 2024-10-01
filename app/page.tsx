@@ -40,7 +40,7 @@ export default function Home() {
                 {/* Landing Section */}
                 <section className="relative h-screen flex items-center justify-center text-center">
                     <video
-                        className="absolute inset-0 w-full h-full object-cover opacity-80 z-10"
+                        className="absolute inset-0 w-full h-full object-cover opacity-90 z-10"
                         autoPlay
                         loop
                         muted

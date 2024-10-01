@@ -37,6 +37,11 @@ const examsData = [
 export default function Exams() {
     const [exams, setExams] = useState(examsData);
 
+
+    if (1) {
+        return <div className="p-6 h-screen"><p>This feature is under develoment. Please be patient for a while.</p></div>
+    }
+
     return (
         <div className="p-6">
             <section className="mb-8">

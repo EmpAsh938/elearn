@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Ubuntu } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
+import AppProvider from "./provider";
 
 const ubuntu = Ubuntu({
     weight: ['300', '400', '500', '700'],
@@ -21,7 +23,13 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${ubuntu.className} antialiased bg-[var(--c-white-1)] text-textDarkNavy`}>{children}</body>
+            <body className={`${ubuntu.className} antialiased bg-[var(--c-white-1)] text-textDarkNavy`}>
+                <AppProvider>
+
+                    {children}
+                    <Toaster />
+                </AppProvider>
+            </body>
         </html>
     );
 }
