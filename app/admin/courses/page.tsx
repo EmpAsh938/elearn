@@ -39,10 +39,7 @@ export default function AdminCourses() {
             }
         };
 
-        // Ensure the fetch only runs on the client
-        if (typeof window !== 'undefined') {
-            fetchCourses();
-        }
+        fetchCourses();
     }, []);
 
     return (
