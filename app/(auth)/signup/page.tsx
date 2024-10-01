@@ -68,7 +68,7 @@ export default function Signup() {
         const { fullname, email, phonenumber, otp, grade, school, password } = values;
         // const faculty = grades.filter(item => item.categoryTitle == grade)[0].categoryId;
         try {
-            const request = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}api/auth/register/`, {
+            const request = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}auth/register/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,6 +77,7 @@ export default function Signup() {
             });
 
             const response = await request.json();
+            console.log(response);
             if (response.status !== 201) throw new Error(response.error);
             toast({ description: "Registration Successful" });
 
@@ -106,8 +107,8 @@ export default function Signup() {
                 },
                 body: JSON.stringify({ mobileNo: phonenumber }),
             });
-            const response = await request.json();
-            if (response.status !== 200) throw new Error(response.error);
+            await request.json();
+            // if (response.status !== 200) throw new Error(response.error);
             form.reset();
             toast({ description: "OTP Sent Successfully" });
         } catch (error: any) {
