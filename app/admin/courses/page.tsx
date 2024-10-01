@@ -14,6 +14,7 @@ interface Course {
 
 export default function AdminCourses() {
     const [courses, setCourses] = useState<Course[]>([])
+    const [isClient, setIsClient] = useState(false);
 
     const handleEdit = (index: number) => {
         // Logic for editing a course, such as opening an edit dialog
@@ -26,6 +27,8 @@ export default function AdminCourses() {
     }
 
     useEffect(() => {
+        setIsClient(true);
+
         const fetchCourses = async () => {
             const user = JSON.parse(localStorage.getItem('user') || '{}');
             try {
@@ -43,6 +46,9 @@ export default function AdminCourses() {
     }, [])
 
     // console.log(courses)
+    if (!isClient) {
+        return null; // Prevent rendering on server-side
+    }
 
     return (
         <div className="p-6">

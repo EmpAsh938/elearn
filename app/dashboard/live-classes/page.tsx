@@ -7,7 +7,6 @@ import { Video } from 'lucide-react';
 import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
 
 interface LiveClass {
     liveid: string;
@@ -23,23 +22,15 @@ export default function LiveClasses() {
     const [selectedClass, setSelectedClass] = useState<LiveClass | null>(null);
     const [chatMessage, setChatMessage] = useState<string>('');
     const [chatMessages, setChatMessages] = useState<string[]>([]);
-
-    const handleJoin = (liveClass: LiveClass) => {
-        setSelectedClass(liveClass);
-        setIsModalOpen(true);
-    };
-
-    const handleChatSubmit = () => {
-        setChatMessages([...chatMessages, chatMessage]);
-        setChatMessage('');
-    };
+    const [user, setUser] = useState<{ id: string; faculty: string } | null>(null);
 
     useEffect(() => {
-        const fetchLiveClass = async () => {
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+        setUser(storedUser);
 
+        const fetchLiveClass = async () => {
             try {
-                const req = await fetch('/api/live/user?userId=' + user.id);
+                const req = await fetch(`/api/live/user?userId=${storedUser.id}`);
                 const res = await req.json();
                 if (res.status === 403) {
                     return setIsForbidden(true);
@@ -48,33 +39,54 @@ export default function LiveClasses() {
             } catch (error) {
                 console.log(error);
             }
+        };
 
+        if (storedUser && storedUser.id) {
+            fetchLiveClass();
         }
+    }, []);
 
-        fetchLiveClass();
-    }, [])
+    const handleJoin = (liveClass: LiveClass) => {
+        setSelectedClass(liveClass);
+        setIsModalOpen(true);
+    };
 
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const handleChatSubmit = () => {
+        if (chatMessage.trim()) {
+            setChatMessages([...chatMessages, chatMessage]);
+            setChatMessage('');
+        }
+    };
+
     if (isForbidden) {
         return <div className="p-6 h-screen">
             <p>You are forbidden to access the resource/content with this current plan.</p>
-        </div>
+        </div>;
     }
 
     return (
         <div className="p-6">
             <section className="mb-8">
                 <h1 className="text-3xl font-bold text-darkNavy text-left mb-2">Live Classes</h1>
-                <p className="text-lg text-darkNavy mb-4">
-                    Here are the live classes available for your <span className="text-blue font-medium">{user.faculty} plan</span>.
-                </p>
+                {user && (
+                    <p className="text-lg text-darkNavy mb-4">
+                        Here are the live classes available for your{" "}
+                        <span className="text-blue font-medium">{user.faculty} plan</span>.
+                    </p>
+                )}
             </section>
 
             <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {liveClass.map(item => (
+                {liveClass.map((item) => (
                     <Card key={item.liveid} className="bg-white shadow-lg">
                         <div className="relative w-full h-40">
-                            <Image src="/images/live-session.jpg" alt={item.title} layout="fill" objectFit="cover" className="rounded-t-lg" />
+                            <Image
+                                src="/images/live-session.jpg"
+                                alt={item.title}
+                                layout="fill"
+                                objectFit="cover"
+                                className="rounded-t-lg"
+                            />
                         </div>
                         <CardHeader className="py-2 border-b-2 border-gray-300 mb-1">
                             <CardTitle className="text-2xl font-bold text-darkNavy flex items-center">
@@ -82,8 +94,12 @@ export default function LiveClasses() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-lg text-darkNavy mb-4"><strong>Starts At:</strong> {item.startingTime}</p>
-                            <Button className="bg-red text-white w-full" onClick={() => handleJoin(item)}>Join Live Class</Button>
+                            <p className="text-lg text-darkNavy mb-4">
+                                <strong>Starts At:</strong> {item.startingTime}
+                            </p>
+                            <Button className="bg-red text-white w-full" onClick={() => handleJoin(item)}>
+                                Join Live Class
+                            </Button>
                         </CardContent>
                     </Card>
                 ))}
@@ -91,33 +107,32 @@ export default function LiveClasses() {
 
             {/* Dialog for showing live class */}
             {selectedClass && (
-                <Dialog open={isModalOpen} onOpenChange={undefined}>
+                <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                     <DialogContent className="sm:max-w-4xl max-h-[80vh] overflow-y-auto">
                         <DialogHeader>
                             <DialogTitle className="text-2xl font-bold mb-4">{selectedClass.title}</DialogTitle>
                         </DialogHeader>
 
                         {/* Live stream video */}
-                        {!selectedClass.streamlink ? <p>No stream Available</p> : <div className="mb-4">
-                            {selectedClass.streamlink.endsWith('.mp4') ? (
-                                <video
-                                    className="w-full h-auto"
-                                    controls
-                                    src={selectedClass.streamlink}
-                                // alt={`Live stream for ${selectedClass.title}`}
-                                />
+                        <div className="mb-4">
+                            {selectedClass.streamlink ? (
+                                selectedClass.streamlink.endsWith('.mp4') ? (
+                                    <video className="w-full h-auto" controls src={selectedClass.streamlink} />
+                                ) : (
+                                    <iframe
+                                        className="w-full h-64 md:h-96"
+                                        src={selectedClass.streamlink}
+                                        title={`Live stream for ${selectedClass.title}`}
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                )
                             ) : (
-                                <iframe
-                                    className="w-full h-64 md:h-96"
-                                    src={selectedClass.streamlink}
-                                    title={`Live stream for ${selectedClass.title}`}
-                                    frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                ></iframe>
+                                <p>No stream available</p>
                             )}
                         </div>
-                        }
+
                         {/* Chat section */}
                         <div className="mb-4">
                             <h3 className="text-lg font-bold mb-2">Live Chat</h3>
