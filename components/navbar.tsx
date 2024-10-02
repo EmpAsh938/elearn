@@ -6,7 +6,7 @@ import { Menu } from "lucide-react";
 
 export default function Navbar() {
     return (
-        <div className="fixed top-0 left-0 bg-white z-50 w-screen h-[80px]">
+        <div className="bg-white z-50 w-screen h-[80px]">
             <nav className="max-w-screen-xl mx-auto flex items-center justify-between px-5 py-4">
                 {/* Logo */}
                 <Link href="/">

@@ -1,19 +1,94 @@
+"use client";
+
 import Image from "next/image";
 import Navbar from "@/components/navbar";
-import { Card } from "@/components/ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Calendar, FileText, Video } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Footer from "@/components/footer";
-import Faq from "@/components/faq";
 import Link from "next/link";
+import { useState } from "react";
+import Carousel from "@/components/carousel";
+import CourseCarousel from "@/components/courseCarousel";
+import Faq from "@/components/faq";
 
 
 export default function Home() {
+    const [showPopup, setShowPopup] = useState(true);
+
     const recentCourses = [
         {
             thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management or some random long text description",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
             title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management or some random long text description",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management or some random long text description",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management or some random long text description",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management or some random long text description",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management or some random long text description",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management or some random long text description",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management or some random long text description",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management or some random long text description",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management",
+        },
+        {
+            thumbnail: "/images/courses/course2.webp",
+            title: "NEB 12 Management or some random long text description",
         },
         {
             thumbnail: "/images/courses/course2.webp",
@@ -33,101 +108,47 @@ export default function Home() {
         },
     ];
 
+
+
     return (
-        <>
+        <div className="overflow-x-hidden">
             <Navbar />
-            <main className="flex-grow">
-                {/* Landing Section */}
-                <section className="relative h-screen flex items-center justify-center text-center">
-                    <video
-                        className="absolute inset-0 w-full h-full object-cover opacity-90 z-10"
-                        autoPlay
-                        loop
-                        muted
-                    >
-                        <source src="/videos/landing-bg.mp4" type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video>
-                    <div className="relative z-10 max-w-2xl mx-auto px-5 md:px-0">
-                        <h1 className="text-3xl sm:text-5xl font-extrabold mb-6 text-green">Enhance Your Skills with Our E-Learning Platform</h1>
-                        <p className="text-lg sm:text-xl mb-8 text-textLightGreen">Join our community and access a wide range of courses, live classes, and resources to boost your knowledge and career.</p>
-                        <Link href="/dashboard">
-                            <Button className="bg-blue hover:bg-blue">Get Started</Button>
-                        </Link>
-                    </div>
-                </section>
-                {/* Recent Courses */}
-                <section className="px-5 py-10">
-                    <h1 className="font-bold text-2xl mb-6 text-center">Recent Courses</h1>
-                    <Carousel className="w-full max-w-screen-lg mx-auto overflow-x-hidden">
-                        <CarouselContent className="">
+            <main className="flex flex-col gap-8">
+                <section className="grid grid-cols-1 md:grid-cols-[300px_1fr] border-y border-gray-300">
+                    {/* Left: Vertically Scrollable Courses Links */}
+                    <div className="hidden md:block overflow-y-auto h-[calc(100vh-80px)] border-r border-gray-300 px-3 py-5 pl-10">
+                        {/* Sticky title */}
+                        <h1 className="absolute top-[81px] bg-white font-bold text-3xl pt-3 z-10">
+                            Browse Courses
+                        </h1>
+                        {/* Scrollable list of courses */}
+                        <ul className="space-y-4 pt-10">
                             {recentCourses.map((course, index) => (
-                                <CarouselItem className="basis-1/2 md:basis-1/3" key={index}>
-                                    <Card className="transition-transform transform hover:scale-105">
-                                        <Image src={course.thumbnail} alt={course.title} height={300} width={300} className="h-full w-full object-cover rounded" />
-                                        <p className="text-center py-2 font-medium text-lg">{course.title}</p>
-                                    </Card>
-                                </CarouselItem>
+                                <li key={index}>
+                                    <Link href={`/courses/${index}`}>
+                                        <span className="text-md text-darkBlue hover:underline tracking-wide">{course.title}</span>
+                                    </Link>
+                                </li>
                             ))}
-                        </CarouselContent>
-                        <CarouselPrevious />
-                        <CarouselNext />
-                    </Carousel>
+                        </ul>
+                    </div>
+
+                    {/* Right: Carousel of Images */}
+                    <div className="relative w-screen md:w-[calc(100vw-300px)] h-[calc(100vh-80px)] p-4 pr-6">
+                        {/* Ensure the height is properly defined */}
+                        <Carousel />
+                    </div>
                 </section>
 
-                {/* Recent Activities */}
-                <section className="bg-white p-6">
-                    <h2 className="text-2xl font-bold mb-6 text-center">Recent Activities</h2>
-                    <div className="space-y-6">
-                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex flex-col sm:flex-row gap-2 items-center">
-                            <div className="flex-1 flex items-center">
-
-                                <div className="text-red mr-4">
-                                    <Video size={32} />
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-lg">Upcoming Live Class: Mathematics</h3>
-                                    <p className="text-gray-600">Date: July 28, 2024</p>
-                                </div>
-                            </div>
-
-                            <Button className="bg-darkNavy hover:bg-darkNavy">Join Now</Button>
-                        </div>
-                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex flex-col sm:flex-row gap-2 items-center">
-                            <div className="flex-1 flex items-center">
-
-                                <div className="text-green mr-4">
-                                    <FileText size={32} />
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-lg">New Exam: Physics Assignment</h3>
-                                    <p className="text-gray-600">Date: July 28, 2024</p>
-                                </div>
-                            </div>
-
-                            <Button className="bg-darkNavy hover:bg-darkNavy">Join Now</Button>
-                        </div>
-                        <div className="bg-lightBlue p-6 rounded transition-shadow hover:shadow-lg flex flex-col sm:flex-row gap-2 items-center">
-                            <div className="flex-1 flex items-center">
-
-                                <div className="text-purple-600 mr-4">
-                                    <Calendar size={32} />
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-lg">New Material: Chemistry Lecture Notes</h3>
-                                    <p className="text-gray-600">Date: July 28, 2024</p>
-                                </div>
-                            </div>
-
-                            <Button className="bg-darkNavy hover:bg-darkNavy">Join Now</Button>
-                        </div>
-
-                    </div>
+                <section>
+                    <h2 className="text-center text-2xl font-semibold py-4">Popular Courses</h2>
+                    <p className="max-w-lg px-4 lg:px-0 mx-auto mb-8 text-gray-600 tracking-wide text-justify">Our most popular and top quality courses are designed to enhance and build the lacking knowledge of students by top quality instructors</p>
+                    <CourseCarousel />
                 </section>
 
                 {/* Why Students Love Us */}
                 <section className="px-5 py-10 bg-blue-100">
-                    <h2 className="font-bold text-2xl mb-6 text-center">Why Students Love Us</h2>
+                    <h2 className="font-bold text-2xl text-center">Why Students Love Us</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="bg-white border border-lightGreen shadow-lg p-6 rounded-lg text-center">
                             <Image src="/images/icons/quality.png" alt="Quality Education" width={64} height={64} className="mx-auto mb-4" />
@@ -148,13 +169,36 @@ export default function Home() {
                 </section>
 
                 {/* FAQ */}
-                <section className="px-5 py-10">
+                <section className="px-5 py-10 mb-8">
                     <h2 className="font-bold text-2xl mb-6 text-center">Frequently Asked Questions</h2>
                     <Faq />
                 </section>
             </main>
 
+
+
             <Footer />
-        </>
+
+            {showPopup && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-6 md:p-0">
+                    <div className="relative bg-white overflow-hidden rounded shadow-lg max-w-3xl w-full"> {/* Increased max width */}
+                        <button
+                            onClick={() => setShowPopup(false)}
+                            className="absolute top-2 right-2 text-gray-600 hover:text-black"
+                        >
+                            ✕
+                        </button>
+                        <Image
+                            src="/images/notice.jpg" // Replace with your notice image path
+                            alt="Notice"
+                            width={1000} // Increased width
+                            height={800} // Increased height
+                            className="w-full h-auto"
+                        />
+                    </div>
+                </div>
+            )}
+
+        </div>
     );
 }
