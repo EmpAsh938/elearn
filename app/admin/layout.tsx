@@ -25,7 +25,7 @@ const sidemenuLinks = [
     {
         title: "Grades",
         icon: <Package2 size={24} />,
-        link: "/admin/grades"
+        link: "/admin/packages"
     },
     {
         title: "Courses",

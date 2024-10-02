@@ -31,7 +31,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import dynamic from "next/dynamic"; // Dynamic import for SimpleMDE
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 // SimpleMDE dynamically loaded to avoid SSR issues
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), { ssr: false });
@@ -54,7 +54,6 @@ interface IGrade {
 export function CreateDialog() {
     const [grades, setGrades] = useState<IGrade[]>([]);
     const [isClient, setIsClient] = useState(false); // Track if component is on client
-    const simpleMdeRef = useRef<any>(null); // Use ref to track SimpleMDE instance
 
     // Form hook for handling form submission and validation
     const form = useForm<z.infer<typeof formSchema>>({
@@ -73,6 +72,7 @@ export function CreateDialog() {
 
         // Ensure localStorage is only accessed in the browser
         const user = isClient ? JSON.parse(localStorage.getItem("user") || "{}") : {};
+        const categoryId = grades.find(item => item.categoryTitle == grade)?.categoryId
         try {
             if (Object.entries(user).length === 0) throw Error("User ID not found");
             const request = await fetch("/api/subject", {
@@ -80,7 +80,7 @@ export function CreateDialog() {
                 body: JSON.stringify({
                     title,
                     userId: user.id,
-                    categoryId: grade,
+                    categoryId,
                     videoLink,
                     content,
                 }),
@@ -89,6 +89,7 @@ export function CreateDialog() {
             if (response.status !== 201) throw Error(response.error);
             toast({ description: "Course Created Successfully" });
             form.reset();
+            window.location.href = "/admin/course";
         } catch (error: any) {
             toast({
                 variant: "destructive",
@@ -115,6 +116,21 @@ export function CreateDialog() {
         // Set isClient to true once the component mounts
         setIsClient(true);
     }, []);
+
+    // Memoized SimpleMDE component to prevent unnecessary re-renders
+    const simpleMDEEditor = useMemo(
+        () => (
+            <SimpleMDE
+                value={form.watch("content")}
+                onChange={(value) => form.setValue("content", value)}
+                options={{
+                    placeholder: "Write your course contents here in markdown...",
+                    spellChecker: false,
+                }}
+            />
+        ),
+        [form] // Dependencies ensure this is only re-rendered when necessary
+    );
 
     return (
         <Sheet>
@@ -153,16 +169,16 @@ export function CreateDialog() {
                             name="grade"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Select Grade</FormLabel>
+                                    <FormLabel>Select Package</FormLabel>
                                     <FormControl>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select Grade" />
+                                                <SelectValue placeholder="Select Package" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {grades.length > 0 &&
                                                     grades.map((item) => (
-                                                        <SelectItem key={item.categoryId} value={item.categoryId}>
+                                                        <SelectItem key={item.categoryId} value={item.categoryTitle}>
                                                             {item.categoryTitle}
                                                         </SelectItem>
                                                     ))}
@@ -193,25 +209,10 @@ export function CreateDialog() {
                         <FormField
                             control={form.control}
                             name="content"
-                            render={({ field }) => (
+                            render={() => (
                                 <FormItem>
                                     <FormLabel>Content (Markdown)</FormLabel>
-                                    <FormControl>
-                                        {/* Render SimpleMDE only on the client */}
-                                        {isClient && (
-                                            <SimpleMDE
-                                                value={field.value}
-                                                onChange={field.onChange}
-                                                getMdeInstance={(instance) => {
-                                                    simpleMdeRef.current = instance; // Store the instance in ref
-                                                }}
-                                                options={{
-                                                    placeholder: "Write your course contents here in markdown...",
-                                                    spellChecker: false,
-                                                }}
-                                            />
-                                        )}
-                                    </FormControl>
+                                    <FormControl>{simpleMDEEditor}</FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}

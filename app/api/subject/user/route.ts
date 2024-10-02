@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
         });
 
         const data = await apiResponse.json();
-        console.log(data)
+        // console.log(data)
         if (apiResponse.status !== 200) {
             return NextResponse.json({ error: data.error, status: apiResponse.status });
         }

@@ -151,14 +151,14 @@ export function CreateDialog() {
                             name="grade"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Select Grade</FormLabel>
+                                    <FormLabel>Select Package</FormLabel>
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
                                             value={field.value}
                                         >
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select Grade" />
+                                                <SelectValue placeholder="Select Package" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {grades.length > 0 &&

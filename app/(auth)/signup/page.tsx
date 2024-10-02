@@ -23,11 +23,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 // Define form schema
 const formSchema = z.object({
-    fullname: z.string().min(4, { message: "Fullname must be at least 4 characters." }),
+    firstName: z.string().min(2, { message: "Fullname must be at least 2 characters." }),
+    lastName: z.string().min(2, { message: "Fullname must be at least 2 characters." }),
     email: z.string().email({ message: "This is not a valid email." }),
     phonenumber: z.string().length(10, { message: "Phone number must be exactly 10 digits." }), // Handle as string for leading zeroes
-    otp: z.string().length(6, { message: "OTP must be a 4-digit number." }),
-    school: z.string().min(10, { message: "School name must be at least 10 characters long." }),
+    otp: z.string().length(6, { message: "OTP must be a 6-digit number." }),
     grade: z.string().min(1, { message: "Grade must be choosen from dropdown." }),
     password: z.string().min(6, { message: "Password must be at least 6 characters." }),
     confirmPassword: z.string().min(6, { message: "Password must be at least 6 characters." }),
@@ -52,11 +52,11 @@ export default function Signup() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            fullname: "",
+            firstName: "",
+            lastName: "",
             email: "",
             phonenumber: "",
             otp: "",
-            school: "",
             grade: "",
             password: "",
             confirmPassword: "",
@@ -65,7 +65,7 @@ export default function Signup() {
 
     // Submit handler
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const { fullname, email, phonenumber, otp, grade, school, password } = values;
+        const { firstName, lastName, email, phonenumber, otp, grade, password } = values;
         // const faculty = grades.filter(item => item.categoryTitle == grade)[0].categoryId;
         try {
             const request = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}auth/register/`, {
@@ -73,7 +73,7 @@ export default function Signup() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: fullname, email, phonenumber, otp, faculty: grade, collegename: school, password }),
+                body: JSON.stringify({ name: firstName + " " + lastName, email, phonenumber, otp, faculty: grade, collegename: "abc", password }),
             });
 
             const response = await request.json();
@@ -109,7 +109,6 @@ export default function Signup() {
             });
             await request.json();
             // if (response.status !== 200) throw new Error(response.error);
-            form.reset();
             toast({ description: "OTP Sent Successfully" });
         } catch (error: any) {
             toast({ variant: "destructive", title: "Sending OTP Failed", description: error.message });
@@ -155,19 +154,35 @@ export default function Signup() {
                     </p>
                 </div>
 
-                <FormField
-                    control={form.control}
-                    name="fullname"
-                    render={({ field }) => (
-                        <FormItem className="w-full">
-                            <FormLabel className="font-semibold text-stone-800">Fullname</FormLabel>
-                            <FormControl>
-                                <Input placeholder="John Doe" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className="flex items-center w-full gap-4">
+
+                    <FormField
+                        control={form.control}
+                        name="firstName"
+                        render={({ field }) => (
+                            <FormItem className="w-full">
+                                <FormLabel className="font-semibold text-stone-800">FirstName</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="John" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="lastName"
+                        render={({ field }) => (
+                            <FormItem className="w-full">
+                                <FormLabel className="font-semibold text-stone-800">LastName</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Doe" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
 
                 <div className="flex items-center w-full gap-4">
                     <FormField
@@ -216,7 +231,7 @@ export default function Signup() {
                     )}
                 />
 
-                <div className="flex items-center w-full gap-4">
+                {/* <div className="flex items-center w-full gap-4">
                     <FormField
                         control={form.control}
                         name="school"
@@ -229,46 +244,46 @@ export default function Signup() {
                                 <FormMessage />
                             </FormItem>
                         )}
-                    />
+                    /> */}
 
-                    {/* Grade Dropdown */}
-                    <FormField
-                        control={form.control}
-                        name="grade"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Select Grade</FormLabel>
-                                <FormControl>
-                                    <Select
-                                        onValueChange={(value) => field.onChange(value)} // Ensure form state is updated
-                                        value={field.value || undefined} // Ensure the value is controlled and undefined if not selected
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select Grade" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {grades.length > 0 ? (
-                                                grades.map((item) => (
-                                                    <SelectItem key={item.categoryTitle} value={item.categoryTitle}>
-                                                        {item.categoryTitle}
-                                                    </SelectItem>
-                                                ))
-                                            ) : (
-                                                <SelectItem value="0" disabled>
-                                                    Loading grades...
+                {/* Grade Dropdown */}
+                <FormField
+                    control={form.control}
+                    name="grade"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Select Package</FormLabel>
+                            <FormControl>
+                                <Select
+                                    onValueChange={(value) => field.onChange(value)} // Ensure form state is updated
+                                    value={field.value || undefined} // Ensure the value is controlled and undefined if not selected
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Package" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {grades.length > 0 ? (
+                                            grades.map((item) => (
+                                                <SelectItem key={item.categoryTitle} value={item.categoryTitle}>
+                                                    {item.categoryTitle}
                                                 </SelectItem>
-                                            )}
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                                            ))
+                                        ) : (
+                                            <SelectItem value="0" disabled>
+                                                Loading packages...
+                                            </SelectItem>
+                                        )}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
 
-
-                </div>
+                {/* 
+            </div> */}
 
                 <div className="flex items-center w-full gap-4">
                     <FormField
@@ -307,6 +322,6 @@ export default function Signup() {
                     <Link className="text-gray-900 font-semibold hover:underline" href="/login">Login</Link>
                 </div>
             </form>
-        </Form>
+        </Form >
     );
 }

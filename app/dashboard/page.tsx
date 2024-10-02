@@ -24,6 +24,7 @@ export default function Dashboard() {
 
 
     const roles = user.roles[0];
+    const discount = user.discount;
 
     let planMessage = "";
     if (roles.id === 502) {
@@ -32,6 +33,7 @@ export default function Dashboard() {
 
         planMessage = `Your plan is active.`;
     }
+
     return (
         <div className="p-2">
             <section className="mb-8">
@@ -75,7 +77,8 @@ export default function Dashboard() {
                 </Card>
             </section>
 
-            <SpinWheel />
+            {(discount || roles.id == 503) ? null : <SpinWheel />}
+            {/* <SpinWheel /> */}
         </div>
     );
 }

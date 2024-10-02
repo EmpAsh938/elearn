@@ -114,8 +114,8 @@ export function GradesTable({ grades, loading }: { grades: Grade[], loading: boo
                                 Copy User ID
                             </DropdownMenuItem> */}
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => handleOpenModal(user)}>Update Faculty</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleDeleteModal(user)}>Delete Faculty</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleOpenModal(user)}>Update Package</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleDeleteModal(user)}>Delete Package</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );

@@ -39,6 +39,7 @@ import { UpdateUserModal } from "./update";
 import { DeleteUserModal } from "./delete";
 import { UpdateRoleModal } from "./role";
 import { toast } from "@/hooks/use-toast";
+import { UpdatePackageModal } from "./package";
 
 export type User = {
     collegename: string;
@@ -61,6 +62,7 @@ export function UsersTable() {
     const [selectedUser, setSelectedUser] = React.useState<User | null>(null); // Modal state
     const [isModalOpen, setIsModalOpen] = React.useState(false); // Modal state
     const [isRoleModalOpen, setIsRoleModalOpen] = React.useState(false); // Modal state
+    const [isPackageModalOpen, setIsPackageModalOpen] = React.useState(false); // Modal state
     const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false); // Modal state
 
     const columns: ColumnDef<User>[] = [
@@ -105,7 +107,7 @@ export function UsersTable() {
         },
         {
             accessorKey: "faculty",
-            header: () => <div className="text-right">Faculty</div>,
+            header: () => <div className="text-right">Package</div>,
             cell: ({ row }) => <div className="text-right font-medium capitalize">{row.getValue("faculty")}</div>,
         },
         {
@@ -138,6 +140,7 @@ export function UsersTable() {
                                 Copy User ID
                             </DropdownMenuItem> */}
                             <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => handlePackageModal(user)}>Update Package</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleOpenRoleModal(user)}>Update Role</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleOpenModal(user)}>Update user</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleDeleteModal(user)}>Delete user</DropdownMenuItem>
@@ -152,6 +155,10 @@ export function UsersTable() {
         setSelectedUser(user);
         setIsModalOpen(true);
     };
+    const handlePackageModal = (user: User) => {
+        setSelectedUser(user);
+        setIsPackageModalOpen(true);
+    };
     const handleOpenRoleModal = (user: User) => {
         setSelectedUser(user);
         setIsRoleModalOpen(true);
@@ -163,7 +170,6 @@ export function UsersTable() {
 
     const handleRole = async (email: string, role: string) => {
 
-
         try {
             const req = await fetch('/api/role', {
                 method: 'POST',
@@ -172,8 +178,25 @@ export function UsersTable() {
             const res = await req.json();
             if (res.status !== 200) throw Error(res.error);
             toast({ title: "Role Change Operation", description: "Role Changed Successfully" })
+            window.location.href = "/admin/users";
         } catch (error: any) {
             toast({ variant: "destructive", title: "Role Change Operation", description: error.toString() });
+            console.log(error);
+        }
+    }
+
+    const handlePackage = async (userId: string, faculty: string) => {
+        try {
+            const req = await fetch('/api/user/faculty', {
+                method: 'PUT',
+                body: JSON.stringify({ userId, faculty })
+            })
+            const res = await req.json();
+            if (res.status !== 200) throw Error(res.error);
+            toast({ title: "Faculty Change Operation", description: "Faculty Changed Successfully" })
+            window.location.href = "/admin/users";
+        } catch (error: any) {
+            toast({ variant: "destructive", title: "Faculty Change Operation", description: error.toString() });
             console.log(error);
         }
     }
@@ -198,9 +221,10 @@ export function UsersTable() {
         async function fetchUsers() {
             setLoading(true);
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}users/`);
-                const users: User[] = await response.json();
-                setData(users); // Set the data from API
+                const response = await fetch('/api/user');
+                const result = await response.json();
+                if (result.status !== 200) throw Error(result.error);
+                setData(result.body); // Set the data from API
             } catch (error) {
                 console.error("Error fetching users:", error);
             } finally {
@@ -348,6 +372,14 @@ export function UsersTable() {
                     open={isRoleModalOpen}
                     onClose={() => setIsRoleModalOpen(false)}
                     onSave={handleRole}
+                />
+            )}
+            {(selectedUser && isPackageModalOpen) && (
+                <UpdatePackageModal
+                    user={selectedUser}
+                    open={isPackageModalOpen}
+                    onClose={() => setIsPackageModalOpen(false)}
+                    onSave={handlePackage}
                 />
             )}
             {(selectedUser && isModalOpen) && (

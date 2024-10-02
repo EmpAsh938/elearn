@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react"
 import { CreateDialog } from "@/components/admin/grades/create";
-import { GradeCard } from "@/components/admin/grades/card";
 import { GradesTable } from "@/components/admin/grades/grades-table";
 
 interface Grade {
@@ -17,16 +16,6 @@ export default function Grades() {
     const [grades, setGrades] = useState<Grade[]>([])
     const [loading, setLoading] = useState(true);
 
-
-    const handleEdit = (index: number) => {
-        // Logic for editing a grade, such as opening an edit dialog
-        console.log(`Edit grade at index: ${index}`)
-    }
-
-    const handleDelete = (index: number) => {
-        // Logic for deleting a grade
-        setGrades(grades.filter((_, i) => i !== index))
-    }
 
     const fetchGrades = useCallback(async () => {
         setLoading(true);
@@ -49,7 +38,7 @@ export default function Grades() {
 
     return (
         <div className="p-6">
-            <h2 className="text-2xl font-bold text-darkNavy mb-4">Grades/Faculty</h2>
+            <h2 className="text-2xl font-bold text-darkNavy mb-4">Packages</h2>
             <CreateDialog />
             {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                 {grades.map((grade, index) => (

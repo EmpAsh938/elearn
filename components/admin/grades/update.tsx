@@ -25,9 +25,9 @@ export function UpdateModal({ faculty, open, onClose, onSave }: Props) {
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Update faculty/grade</DialogTitle>
+                    <DialogTitle>Update Package</DialogTitle>
                     <DialogDescription>
-                        Make changes to the faculty&apos;s information below.
+                        Make changes to the package&apos;s information below.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">

@@ -60,11 +60,11 @@ export function CreateDialog() {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button className="bg-blue">Create Faculty/Grade</Button>
+                <Button className="bg-blue">Create Package</Button>
             </SheetTrigger>
             <SheetContent>
                 <SheetHeader>
-                    <SheetTitle>Create Faculty/Grade</SheetTitle>
+                    <SheetTitle>Create Package</SheetTitle>
                     <SheetDescription>
                         Fill all the input fields and click save when you&apos;re done.
                     </SheetDescription>
@@ -80,7 +80,7 @@ export function CreateDialog() {
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Class 11 Science" {...field} />
+                                        <Input placeholder="HTML Course" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -94,7 +94,7 @@ export function CreateDialog() {
                                 <FormItem>
                                     <FormLabel>Description</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Grade Description" {...field} />
+                                        <Input placeholder="Package Description" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

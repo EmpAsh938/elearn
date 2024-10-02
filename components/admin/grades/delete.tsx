@@ -20,7 +20,7 @@ export function DeleteModal({ faculty, open, onClose, onDelete }: Props) {
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Delete Faculty/Grade</DialogTitle>
+                    <DialogTitle>Delete Package</DialogTitle>
                     <DialogDescription>
                         Are you sure you want to delete the user <strong>{faculty?.categoryTitle}</strong>? This action cannot be undone.
                     </DialogDescription>

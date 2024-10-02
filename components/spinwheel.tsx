@@ -1,13 +1,25 @@
 import { generateRandomDiscounts } from '@/app/lib/utils';
-import { useState } from 'react';
+import { toast } from '@/hooks/use-toast';
+import { useState, useEffect } from 'react';
 
 export default function SpinWheel() {
     const [isSpinning, setIsSpinning] = useState<boolean>(false);
     const [spinResult, setSpinResult] = useState<number | null>(null);
     const [rotation, setRotation] = useState<number>(0); // Track the current rotation
+    const [user, setUser] = useState<any>(null); // Track user data
 
     // Discount options for the wheel
     const wheelItems = [5, 6, 7, 8, 9, 10];
+
+    // Get user data from localStorage on component mount
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        } else {
+            toast({ variant: 'destructive', description: 'User not found. Please log in.' });
+        }
+    }, []);
 
     const handleSpin = () => {
         if (!isSpinning) {
@@ -40,7 +52,33 @@ export default function SpinWheel() {
                 setIsSpinning(false);
                 setSpinResult(discount); // Set the result after the spin
                 setRotation(totalRotation % 360); // Store the final rotation value
+                sendDiscountToServer(discount); // Send the discount to the server
             }, 4000); // Animation duration of 4 seconds
+        }
+    };
+
+    // Function to send the discount to the server
+    const sendDiscountToServer = async (discount: number) => {
+        try {
+
+            if (!user || !user.id) throw new Error('User not found');
+
+            const response = await fetch('/api/discount', {
+                method: 'PUT',
+                body: JSON.stringify({ userId: user.id, discount: discount + "%" }), // Send the discount in the body
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Failed to send the discount to the server');
+            }
+
+            toast({ description: 'Discount saved successfully!' });
+            window.location.href = "/dashboard";
+        } catch (error: any) {
+            toast({ variant: 'destructive', description: error.message || 'Error sending discount to the server' });
+            console.error('Error sending discount to the server:', error);
         }
     };
 
@@ -48,11 +86,6 @@ export default function SpinWheel() {
 
     return (
         <div className="fixed bottom-4 right-8 z-50 flex flex-col items-center">
-            {/* Arrow indicator */}
-            {/* <div className="relative">
-                <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-red"></div>
-            </div> */}
-
             {/* Spin Wheel */}
             <div className="relative w-32 h-32 border-4 border-gray-800 rounded-full">
                 <div
