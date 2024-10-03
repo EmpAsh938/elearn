@@ -23,9 +23,8 @@ import { Label } from "@/components/ui/label";
 const formSchema = z.object({
     name: z.string()
         .min(4, { message: "This field has to be filled." }),
-    email: z.string()
-        .min(1, { message: "This field has to be filled." })
-        .email("This is not a valid email"),
+    phonenumber: z.string()
+        .min(10, { message: "This field has to be filled." }),
     message: z.string().min(15, {
         message: "Message must be at least 15 characters.",
     })
@@ -38,7 +37,7 @@ export default function Contact() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            email: "",
+            phonenumber: "",
             message: "",
         },
     })
@@ -49,10 +48,10 @@ export default function Contact() {
         console.log(values)
     }
     return (
-        <>
+        <div className="overflow-x-hidden">
             <Navbar />
             <main className="flex-grow">
-                <section className="py-16 pt-28">
+                <section className="p-6">
                     <div className="max-w-2xl mx-auto text-center">
                         <h1 className="text-4xl font-bold mb-8">Contact Us</h1>
                         <p className="text-lg mb-6">
@@ -83,12 +82,12 @@ export default function Contact() {
 
                             <FormField
                                 control={form.control}
-                                name="email"
+                                name="phonenumber"
                                 render={({ field }) => (
                                     <FormItem className="w-full">
-                                        <FormLabel className="font-semibold">Email</FormLabel>
+                                        <FormLabel className="font-semibold">PhoneNumber</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="abc@example.com" {...field} />
+                                            <Input placeholder="980000000" {...field} />
                                         </FormControl>
 
                                         <FormMessage />
@@ -104,7 +103,7 @@ export default function Contact() {
                             </div>
 
 
-                            <Button className="w-[300px] mx-auto bg-darkNavy hover:bg-darkNavy" type="submit">Login</Button>
+                            <Button className="w-[300px] mx-auto bg-darkNavy hover:bg-darkNavy" type="submit">Submit</Button>
 
 
                         </form>
@@ -154,6 +153,6 @@ export default function Contact() {
                 </section>
             </main>
             <Footer />
-        </>
+        </div>
     );
 }

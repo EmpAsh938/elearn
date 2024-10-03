@@ -17,8 +17,14 @@ export default function Navbar() {
                 <div className="hidden md:flex items-center gap-4">
                     <ul className="flex items-center gap-4">
                         <li className="hover:cursor-pointer"><Link href="/courses">Courses</Link></li>
-                        <li className="hover:cursor-pointer"><Link href="/live-class">Live Classes</Link></li>
-                        <li className="hover:cursor-pointer"><Link href="/exams">Exams</Link></li>
+                        {/* <li className="hover:cursor-pointer"><Link href="/live-class">Live Classes</Link></li>
+                        <li className="hover:cursor-pointer"><Link href="/exams">Exams</Link></li> */}
+                        <li className="hover:cursor-pointer">
+                            <Link href="/about-us">About us</Link>
+                        </li>
+                        <li className="hover:cursor-pointer">
+                            <Link href="/articles">Articles</Link>
+                        </li>
                         <li className="hover:cursor-pointer"><Link href="/contact">Contact</Link></li>
                     </ul>
                     <Link href="/signup">
@@ -43,11 +49,17 @@ export default function Navbar() {
                                 <li className="hover:cursor-pointer">
                                     <Link href="/courses">Courses</Link>
                                 </li>
-                                <li className="hover:cursor-pointer">
+                                {/* <li className="hover:cursor-pointer">
                                     <Link href="/live-class">Live Classes</Link>
                                 </li>
                                 <li className="hover:cursor-pointer">
                                     <Link href="/exams">Exams</Link>
+                                </li> */}
+                                <li className="hover:cursor-pointer">
+                                    <Link href="/about-us">About us</Link>
+                                </li>
+                                <li className="hover:cursor-pointer">
+                                    <Link href="/articles">Articles</Link>
                                 </li>
                                 <li className="hover:cursor-pointer">
                                     <Link href="/contact">Contact</Link>

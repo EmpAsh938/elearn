@@ -124,8 +124,8 @@ export default function Home() {
                         {/* Scrollable list of courses */}
                         <ul className="space-y-4 pt-10">
                             {recentCourses.map((course, index) => (
-                                <li key={index}>
-                                    <Link href={`/courses/${index}`}>
+                                <li key={index + 1}>
+                                    <Link href={`/courses/${index + 1}`}>
                                         <span className="text-md text-darkBlue hover:underline tracking-wide">{course.title}</span>
                                     </Link>
                                 </li>
@@ -148,7 +148,7 @@ export default function Home() {
 
                 {/* Why Students Love Us */}
                 <section className="px-5 py-10 bg-blue-100">
-                    <h2 className="font-bold text-2xl text-center">Why Students Love Us</h2>
+                    <h2 className="font-bold text-2xl text-center mb-6">Why Students Love Us</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="bg-white border border-lightGreen shadow-lg p-6 rounded-lg text-center">
                             <Image src="/images/icons/quality.png" alt="Quality Education" width={64} height={64} className="mx-auto mb-4" />

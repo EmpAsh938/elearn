@@ -7,7 +7,7 @@ import Image from "next/image";
 const gradePackages = [
     {
         id: 1,
-        title: "Grade 8 Package",
+        title: "Grade 8 Course",
         description: "Comprehensive courses for Grade 8 students, including Mathematics and Science.",
         thumbnail: "/images/courses/course2.webp",
         courses: [
@@ -26,8 +26,8 @@ const gradePackages = [
     },
     {
         id: 2,
-        title: "Grade 9 Package",
-        description: "All-in-one package for Grade 9, covering Science and Social Studies.",
+        title: "Grade 9 Course",
+        description: "All-in-one Course for Grade 9, covering Science and Social Studies.",
         thumbnail: "/images/courses/course2.webp",
         courses: [
             {
@@ -45,8 +45,8 @@ const gradePackages = [
     },
     {
         id: 3,
-        title: "Grade 10 Package",
-        description: "Full course package for Grade 10, including Physics, Chemistry, and Mathematics.",
+        title: "Grade 10 Course",
+        description: "Full course Course for Grade 10, including Physics, Chemistry, and Mathematics.",
         thumbnail: "/images/courses/course2.webp",
         courses: [
             {
@@ -69,8 +69,8 @@ const gradePackages = [
     },
     {
         id: 4,
-        title: "Grade 11 Package",
-        description: "Extensive course package for Grade 11 students, with Geography and Biology.",
+        title: "Grade 11 Course",
+        description: "Extensive course Course for Grade 11 students, with Geography and Biology.",
         thumbnail: "/images/courses/course2.webp",
         courses: [
             {
@@ -88,7 +88,7 @@ const gradePackages = [
     },
     {
         id: 5,
-        title: "Grade 12 Package",
+        title: "Grade 12 Course",
         description: "Advanced courses for Grade 12, focusing on Accounting and Economics.",
         thumbnail: "/images/courses/course2.webp",
         courses: [
@@ -117,22 +117,21 @@ export default function PackageDetails({ params }: { params: { id: string } }) {
     }
 
     return (
-        <>
+        <div className="overflow-x-hidden">
             <Navbar />
-            <main className="pt-24 px-4">
-                <section className="max-w-4xl mx-auto">
-                    <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-                        <Image
-                            src={pkg.thumbnail}
-                            alt={pkg.title}
-                            width={500}
-                            height={500}
-                            className="w-full h-52 object-cover"
-                        />
-                        <div className="p-6">
-                            <h1 className="text-4xl font-bold mb-4">{pkg.title}</h1>
-                            <p className="text-lg mb-6">{pkg.description}</p>
-                            <p className="text-lg font-semibold mb-2">Courses included:</p>
+            <main className="px-6 pb-8">
+                <section className="max-w-4xl mx-auto flex flex-col gap-4">
+                    <h1 className="text-2xl sm:text-4xl font-bold">{pkg.title}</h1>
+                    <Image
+                        src={pkg.thumbnail}
+                        alt={pkg.title}
+                        width={900}
+                        height={900}
+                        className="w-full h-52 object-cover"
+                    />
+                    <p className="text-red text-xl font-semibold ">NRS.{pkg.price}</p>
+                    <p className="text-lg">{pkg.description}</p>
+                    {/* <p className="text-lg font-semibold mb-2">Courses included:</p>
                             <ul className="mb-6">
                                 {pkg.courses.map((course, index) => (
                                     <li key={index} className="mb-4">
@@ -141,14 +140,38 @@ export default function PackageDetails({ params }: { params: { id: string } }) {
                                         <p className="text-md text-gray-600">Duration: {course.duration}</p>
                                     </li>
                                 ))}
-                            </ul>
-                            <p className="text-red text-xl font-semibold mb-6">NRS.{pkg.price}</p>
-                            <Button className="w-[300px] bg-blue">Enroll Now</Button>
+                            </ul> */}
+
+                    <h3 className="font-semibold text-xl"> Includes</h3>
+                    <div>
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center">
+                                <div className="w-4 h-4 bg-darkNavy mr-2"></div>
+                                <p>Comprehensive Notes</p>
+                            </div>
+                            <div className="flex items-center">
+                                <div className="w-4 h-4 bg-darkNavy mr-2"></div>
+                                <p>Recorded Videos</p>
+                            </div>
+                            <div className="flex items-center">
+                                <div className="w-4 h-4 bg-darkNavy mr-2"></div>
+                                <p>Upcoming Live Classes</p>
+                            </div>
                         </div>
+
                     </div>
+                    <h3 className="font-semibold text-xl"> Instructors</h3>
+                    <div className="flex flex-wrap gap-4 justify-left">
+                        <Image src="/images/profile/user.jpeg" alt="Instructor A" width={600} height={600} className="cover w-20 h-20 rounded-full" />
+                        <Image src="/images/profile/user.jpeg" alt="Instructor A" width={600} height={600} className="cover w-20 h-20 rounded-full" />
+                        <Image src="/images/profile/user.jpeg" alt="Instructor A" width={600} height={600} className="cover w-20 h-20 rounded-full" />
+                        <Image src="/images/profile/user.jpeg" alt="Instructor A" width={600} height={600} className="cover w-20 h-20 rounded-full" />
+                    </div>
+
+                    <Button className="w-[300px] mx-auto bg-blue">Book Now</Button>
                 </section>
             </main>
             <Footer />
-        </>
+        </div>
     );
 }

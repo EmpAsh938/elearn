@@ -50,7 +50,7 @@ const gradePackages = [
     },
 ];
 
-const tags = ["All", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"];
+const tags = ["All", "SEE (Grade 10)", "Medical", "CTEVT", "Grade 11", "Grade 12"];
 
 export default function Courses() {
     const [selectedTag, setSelectedTag] = useState("All");
@@ -60,13 +60,13 @@ export default function Courses() {
         : gradePackages.filter(pkg => pkg.title.includes(selectedTag));
 
     return (
-        <>
+        <div className="overflow-x-hidden">
             {/* Navbar positioned fixed */}
             <Navbar />
-            <main className="pt-24 px-4">
-                <section className="text-center py-8">
-                    <h1 className="text-4xl font-bold mb-4">Grade Packages</h1>
-                    <p className="text-lg mb-6">Explore our comprehensive grade packages designed to boost your knowledge and career.</p>
+            <main className="p-6">
+                <section className="text-center">
+                    <h1 className="text-4xl font-bold mb-4">Our Courses</h1>
+                    <p className="text-lg mb-6 text-gray-500">Explore our comprehensive courses designed to boost your knowledge and career from our diverse range of courses.</p>
                 </section>
 
                 {/* Tags for selecting grade packages */}
@@ -97,13 +97,13 @@ export default function Courses() {
                                 <div className="p-6">
                                     <h2 className="text-2xl font-bold mb-2">{pkg.title}</h2>
                                     <p className="text-textDarkNavy mb-4">{pkg.description}</p>
-                                    <p className="text-lg font-semibold mb-2">Courses included:</p>
+                                    {/* <p className="text-lg font-semibold mb-2">Courses included:</p>
                                     <ul className="list-disc list-inside mb-4">
                                         {pkg.courses.map((course, index) => (
                                             <li key={index}>{course}</li>
                                         ))}
-                                    </ul>
-                                    <p className="text-red text-lg font-semibold mb-4">NRS.{pkg.price}</p>
+                                    </ul> */}
+                                    {/* <p className="text-red text-lg font-semibold mb-4">NRS.{pkg.price}</p> */}
                                     <Button className="w-full bg-green">View Package</Button>
                                 </div>
                             </div>
@@ -112,6 +112,6 @@ export default function Courses() {
                 </section>
             </main>
             <Footer />
-        </>
+        </div>
     );
 }
