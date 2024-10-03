@@ -1,177 +1,138 @@
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+"use client";
 
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import Navbar from '@/components/navbar';
+import Footer from '@/components/footer';
 
-const gradePackages = [
-    {
-        id: 1,
-        title: "Grade 8 Course",
-        description: "Comprehensive courses for Grade 8 students, including Mathematics and Science.",
-        thumbnail: "/images/courses/course2.webp",
-        courses: [
-            {
-                title: "Mathematics",
-                description: "Fundamentals of Mathematics covering algebra, geometry, and basic calculus.",
-                duration: "3 months"
-            },
-            {
-                title: "Science",
-                description: "Introduction to general science concepts, including biology and physics.",
-                duration: "3 months"
-            }
-        ],
-        price: "700"
-    },
-    {
-        id: 2,
-        title: "Grade 9 Course",
-        description: "All-in-one Course for Grade 9, covering Science and Social Studies.",
-        thumbnail: "/images/courses/course2.webp",
-        courses: [
-            {
-                title: "Science",
-                description: "Advanced science topics including chemistry and earth science.",
-                duration: "4 months"
-            },
-            {
-                title: "Social Studies",
-                description: "History and geography of the modern world.",
-                duration: "3 months"
-            }
-        ],
-        price: "800"
-    },
-    {
-        id: 3,
-        title: "Grade 10 Course",
-        description: "Full course Course for Grade 10, including Physics, Chemistry, and Mathematics.",
-        thumbnail: "/images/courses/course2.webp",
-        courses: [
-            {
-                title: "Physics",
-                description: "Detailed study of mechanics, waves, and thermodynamics.",
-                duration: "4 months"
-            },
-            {
-                title: "Chemistry",
-                description: "In-depth understanding of chemical reactions and periodic table.",
-                duration: "4 months"
-            },
-            {
-                title: "Mathematics",
-                description: "Advanced algebra, trigonometry, and calculus.",
-                duration: "4 months"
-            }
-        ],
-        price: "900"
-    },
-    {
-        id: 4,
-        title: "Grade 11 Course",
-        description: "Extensive course Course for Grade 11 students, with Geography and Biology.",
-        thumbnail: "/images/courses/course2.webp",
-        courses: [
-            {
-                title: "Geography",
-                description: "Study of physical landscapes and human interactions.",
-                duration: "3 months"
-            },
-            {
-                title: "Biology",
-                description: "Cell biology, genetics, and ecological principles.",
-                duration: "4 months"
-            }
-        ],
-        price: "850"
-    },
-    {
-        id: 5,
-        title: "Grade 12 Course",
-        description: "Advanced courses for Grade 12, focusing on Accounting and Economics.",
-        thumbnail: "/images/courses/course2.webp",
-        courses: [
-            {
-                title: "Accounting",
-                description: "Financial accounting principles and practices.",
-                duration: "5 months"
-            },
-            {
-                title: "Economics",
-                description: "Microeconomics and macroeconomics fundamentals.",
-                duration: "4 months"
-            }
-        ],
-        price: "950"
-    },
-];
+// Sample Course Data (replace with API calls in production)
+const courseData = {
+    title: "Physical Class CEE Repeater's Batch - 2082",
+    bestseller: true,
+    overview: "This course is designed for students who have previously taken the Common Entrance Examination (CEE) and are aiming to improve their scores. It helps them strengthen their understanding and strategies to achieve a higher rank and secure admission to top medical colleges.",
+    curriculum: [
+        "Introduction to CEE Exam Structure",
+        "Daily Practice Sessions for MCQs",
+        "Advanced Problem-Solving Techniques",
+        "Mock Tests and Strategy Sessions",
+        "Review Sessions with Experts"
+    ],
+    instructors: [
+        { name: "Dr. John Doe", bio: "An experienced educator with over 15 years of teaching CEE courses.", image: "/images/profile/user.jpeg" },
+        { name: "Prof. Jane Smith", bio: "Expert in Biology and Chemistry with a track record of producing top-ranked students.", image: "/images/profile/user.jpeg" }
+    ],
+    price: "Rs. 25000",
+    features: [
+        "Free Online Class Worth Rs.4499",
+        "Live classes",
+        "Ask Teachers any time",
+        "Group Discussion",
+        "Quality Content",
+        "Curated Notes and Videos"
+    ],
+    image: "/images/courses/course1.png",
+    isEnrolled: false,
+};
 
+const CourseDetails = ({ params }: { params: { id: string } }) => {
+    const [activeTab, setActiveTab] = useState('overview');  // Tab state
+    const { id } = params;
 
-export default function PackageDetails({ params }: { params: { id: string } }) {
-
-    const pkg = gradePackages.find(pkg => pkg.id === parseInt(params.id));
-
-    if (!pkg) {
-        return <div>Package not found</div>;
-    }
+    // Tab Data
+    const tabs = ['Overview', 'Curriculum', 'Instructor'];
 
     return (
         <div className="overflow-x-hidden">
             <Navbar />
-            <main className="px-6 pb-8">
-                <section className="max-w-4xl mx-auto flex flex-col gap-4">
-                    <h1 className="text-2xl sm:text-4xl font-bold">{pkg.title}</h1>
-                    <Image
-                        src={pkg.thumbnail}
-                        alt={pkg.title}
-                        width={900}
-                        height={900}
-                        className="w-full h-52 object-cover"
-                    />
-                    <p className="text-red text-xl font-semibold ">NRS.{pkg.price}</p>
-                    <p className="text-lg">{pkg.description}</p>
-                    {/* <p className="text-lg font-semibold mb-2">Courses included:</p>
-                            <ul className="mb-6">
-                                {pkg.courses.map((course, index) => (
-                                    <li key={index} className="mb-4">
-                                        <h3 className="text-2xl font-semibold">{course.title}</h3>
-                                        <p className="text-md mb-2">{course.description}</p>
-                                        <p className="text-md text-gray-600">Duration: {course.duration}</p>
-                                    </li>
+            <div className="border-t border-gray-200 p-6 flex flex-col lg:flex-row gap-6">
+                {/* Main Content */}
+                <div className="lg:w-2/3">
+                    {/* Header */}
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-2xl md:text-3xl font-bold">{courseData.title}</h1>
+                        {courseData.bestseller && (
+                            <span className="px-3 py-1 bg-red-500 text-white text-sm rounded">Best Seller</span>
+                        )}
+                        <button className="ml-2 text-gray-500 hover:text-gray-700">
+                            &#128279; {/* Icon representing share */}
+                        </button>
+                    </div>
+
+                    {/* Tabs */}
+                    <div className="flex mt-4 gap-4 flex-wrap">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab.toLowerCase())}
+                                className={`px-4 py-2 rounded ${activeTab === tab.toLowerCase() ? 'bg-black text-white' : 'bg-gray-200 text-gray-700'}`}
+                            >
+                                {tab}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Tab Content */}
+                    <div className="mt-6">
+                        {activeTab === 'overview' && (
+                            <p className="text-gray-700 leading-relaxed">
+                                {courseData.overview}
+                            </p>
+                        )}
+                        {activeTab === 'curriculum' && (
+                            <ul className="list-disc ml-5 text-gray-700">
+                                {courseData.curriculum.map((item, index) => (
+                                    <li key={index} className="mb-2">{item}</li>
                                 ))}
-                            </ul> */}
-
-                    <h3 className="font-semibold text-xl"> Includes</h3>
-                    <div>
-                        <div className="flex flex-col gap-4">
-                            <div className="flex items-center">
-                                <div className="w-4 h-4 bg-darkNavy mr-2"></div>
-                                <p>Comprehensive Notes</p>
+                            </ul>
+                        )}
+                        {activeTab === 'instructor' && (
+                            <div className="space-y-6">
+                                {courseData.instructors.map((instructor, index) => (
+                                    <div key={index} className="flex items-center space-x-4">
+                                        <Image
+                                            src={instructor.image}
+                                            alt={instructor.name}
+                                            width={50}
+                                            height={50}
+                                            className="rounded-full"
+                                        />
+                                        <div>
+                                            <h4 className="text-lg font-semibold">{instructor.name}</h4>
+                                            <p className="text-sm text-gray-600">{instructor.bio}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                            <div className="flex items-center">
-                                <div className="w-4 h-4 bg-darkNavy mr-2"></div>
-                                <p>Recorded Videos</p>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="w-4 h-4 bg-darkNavy mr-2"></div>
-                                <p>Upcoming Live Classes</p>
-                            </div>
-                        </div>
-
+                        )}
                     </div>
-                    <h3 className="font-semibold text-xl"> Instructors</h3>
-                    <div className="flex flex-wrap gap-4 justify-left">
-                        <Image src="/images/profile/user.jpeg" alt="Instructor A" width={600} height={600} className="cover w-20 h-20 rounded-full" />
-                        <Image src="/images/profile/user.jpeg" alt="Instructor A" width={600} height={600} className="cover w-20 h-20 rounded-full" />
-                        <Image src="/images/profile/user.jpeg" alt="Instructor A" width={600} height={600} className="cover w-20 h-20 rounded-full" />
-                        <Image src="/images/profile/user.jpeg" alt="Instructor A" width={600} height={600} className="cover w-20 h-20 rounded-full" />
-                    </div>
+                </div>
 
-                    <Button className="w-[300px] mx-auto bg-blue">Book Now</Button>
-                </section>
-            </main>
+                {/* Right Sidebar */}
+                <div className="lg:w-1/3">
+                    <div className="p-4 border rounded-lg shadow-lg">
+                        <Image
+                            src={courseData.image}
+                            alt={courseData.title}
+                            width={400}
+                            height={200}
+                            className="rounded-lg"
+                        />
+                        <h2 className="text-2xl font-semibold mt-4">{courseData.price}</h2>
+                        <ul className="mt-4 space-y-2 text-gray-600">
+                            {courseData.features.map((feature, index) => (
+                                <li key={index}>✓ {feature}</li>
+                            ))}
+                        </ul>
+
+                        <Button className="mt-6 w-full bg-blue hover:bg-blue text-white">Book Now</Button>
+                    </div>
+                </div>
+            </div>
             <Footer />
         </div>
+
     );
-}
+};
+
+export default CourseDetails;

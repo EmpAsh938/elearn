@@ -1,13 +1,13 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import Image from "next/image";
-import { Target, Lightbulb, Users, Book, GraduationCap } from "lucide-react";
+import { Target, Lightbulb, Users, Book } from "lucide-react";
 
 export default function Aboutus() {
     return (
         <div className="overflow-x-hidden">
             <Navbar />
-            <main className="p-6 px-16 flex flex-col gap-14">
+            <main className="border-t border-gray-300 p-6 px-16 flex flex-col gap-14">
                 {/* Intro Section */}
                 <section className="flex flex-col md:flex-row items-center gap-4">
                     <h1 className="text-2xl md:text-4xl font-bold mb-4">

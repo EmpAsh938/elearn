@@ -37,7 +37,7 @@ export default function Article({ params }: { params: { id: string } }) {
     return (
         <div className="overflow-x-hidden">
             <Navbar />
-            <main className="p-6 px-16">
+            <main className="border-t border-gray-300 p-6 px-16">
                 <h1 className="text-3xl font-bold mb-4 text-center">{article.title}</h1>
                 <Image
                     src={article.image}

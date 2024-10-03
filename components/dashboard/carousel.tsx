@@ -1,14 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card } from "@/components/ui/card";
-
-// import {
-//     Carousel,
-//     CarouselContent,
-//     CarouselItem,
-//     CarouselNext,
-//     CarouselPrevious,
-// } from "@/components/ui/carousel"
 import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
@@ -51,7 +43,7 @@ const CourseCarousel = () => {
     ];
 
     return (
-        <div className='w-full px-10'>
+        <div className='w-full'>
 
             <Swiper
                 spaceBetween={30}
@@ -77,7 +69,7 @@ const CourseCarousel = () => {
                 {recentCourses.map((course, index) => (
                     <SwiperSlide key={index}>
                         <Card className="transition-transform transform hover:scale-105">
-                            <Link href={"courses/" + (index + 1)}>
+                            <Link href={"/dashboard/browse/" + (index + 1)}>
                                 <Image src={course.thumbnail} alt={course.title} height={600} width={600} className="h-full w-full object-cover rounded" />
                                 <p className="text-center py-2 font-medium text-lg">{course.title}</p>
                             </Link>
@@ -86,6 +78,7 @@ const CourseCarousel = () => {
                 ))}
 
             </Swiper>
+
         </div>
 
     );

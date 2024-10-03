@@ -1,102 +1,72 @@
+"use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Home, BookOpen, User, Menu, FileText, Video, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { LucideHome, LucideBookOpen, LucideMessageSquare, LucideBookCopy } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
+const Sidebar = () => {
+    const pathname = usePathname(); // Get current path
 
-type Props = {
-    isCollapsed: boolean;
-    toggleCollapse: (value: boolean) => void;
-}
-
-const sidemenuLinks = [
-    {
-        title: "Home",
-        icon: <Home size={24} />,
-        link: "/dashboard"
-    },
-    {
-        title: "Courses",
-        icon: <BookOpen size={24} />,
-        link: "/dashboard/courses"
-    },
-    {
-        title: "Live Classes",
-        icon: <Video size={24} />,
-        link: "/dashboard/live-classes"
-    },
-    {
-        title: "Exams",
-        icon: <FileText size={24} />,
-        link: "/dashboard/exams"
-    },
-    // {
-    //     title: "Recent Activities",
-    //     icon: <Activity size={24} />,
-    //     link: "/dashboard/activities"
-    // },
-    {
-        title: "Profile",
-        icon: <User size={24} />,
-        link: "/dashboard/profile"
-    }
-];
-
-export default function Sidebar({ isCollapsed, toggleCollapse }: Props) {
-    const pathname = usePathname();
-
-    const handleLogout = async () => {
-        try {
-            const request = await fetch('/api/auth/logout');
-            const response = await request.json();
-            console.log(response);
-            if (response.status !== 200) throw Error(response.error);
-            localStorage.clear();
-            window.location.href = "/";
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
     return (
-        <>
-            <aside className={`fixed bottom-0 left-0 w-screen h-fit sm:h-screen bg-white text-textDarkNavy flex flex-col ${isCollapsed ? "sm:w-28" : "sm:w-64"} transition-all duration-300`}>
-                <Image src="/images/logo.avif" alt="Company logo" height={300} width={300} className="hidden sm:block w-20 object-cover pl-4 pt-2 mx-auto" />
-                <div className={`hidden sm:flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} px-4 py-4 pr-0`}>
-                    {isCollapsed || <h2 className="text-2xl font-bold">Dashboard</h2>}
-                    <Button variant="ghost" className="hover:bg-transparent" onClick={() => toggleCollapse(!isCollapsed)}>
-                        <Menu size={24} />
-                    </Button>
-                </div>
-                <nav className="flex-1 px-1 sm:px-4">
-                    <ul className="space-y-0 sm:space-y-4 w-full flex justify-between items-center border-t pt-2 border-indigo-200 sm:border-t-0 sm:pt-0 sm:block">
-                        {sidemenuLinks.map((item, index) => {
-                            const isActive = pathname === item.link;
+        <aside className="fixed top-0 left-0 h-screen bg-white border-r border-gray-200 p-4 pr-0 w-20 transition-all duration-300 md:w-52">
+            {/* Logo and Utkrista Shiksha in Nepali */}
+            <div className="mb-8 flex items-center justify-start">
+                <Image
+                    src="/images/utkrista.png"
+                    alt="Logo"
+                    width={600}
+                    height={600}
+                    className="w-14 h-14 md:ml-[-5px]"
+                />
+                <h1 className="text-xl font-semibold text-gray-700 hidden md:block">
+                    उत्कृष्ट शिक्षा
+                </h1>
+            </div>
 
-                            return (
-                                <li key={index}>
-                                    <Link href={item.link}>
-                                        <p className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-start gap-2'} py-2.5 px-4 rounded transition duration-200 ${isActive ? 'bg-blue text-lightBlue' : 'hover:bg-blue hover:text-lightBlue'}`}>
-                                            {item.icon}
-                                            {isCollapsed || <span className="hidden sm:inline">{item.title}</span>}
-                                        </p>
-                                    </Link>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </nav>
-
-                <div className="hidden sm:flex items-center justify-start pb-2 pl-4">
-                    <Button onClick={handleLogout} variant="ghost" className={`flex gap-2 w-full justify-start ${isCollapsed ? 'justify-center' : 'justify-start'} text-red hover:bg-transparent hover:text-red`}>
-                        <LogOut size={24} />
-                        {isCollapsed || <span>Logout</span>}
-                    </Button>
-                </div>
-            </aside>
-
-        </>
+            {/* Navigation Links */}
+            <nav>
+                <ul className="">
+                    <li>
+                        <Link
+                            className={`flex gap-4 justify-center md:justify-start items-end text-base tracking-wide hover:cursor-pointer py-2 ${pathname === '/dashboard' ? 'bg-gray-100' : 'bg-white'}`}
+                            href="/dashboard"
+                        >
+                            <LucideHome className="inline-block sm:w-6 sm:h-6" />
+                            <span className="hidden md:inline">Dashboard</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            className={`flex gap-4 justify-center md:justify-start items-end text-base tracking-wide hover:cursor-pointer py-2 ${pathname === '/dashboard/browse' ? 'bg-gray-100' : 'bg-white'}`}
+                            href="/dashboard/browse"
+                        >
+                            <LucideBookOpen className="inline-block sm:w-6 sm:h-6" />
+                            <span className="hidden md:inline">Browse Courses</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            className={`flex gap-4 justify-center md:justify-start items-end text-base tracking-wide hover:cursor-pointer py-2 ${pathname === '/dashboard/courses' ? 'bg-gray-100' : 'bg-white'}`}
+                            href="/dashboard/courses"
+                        >
+                            <LucideBookCopy className="inline-block sm:w-6 sm:h-6" />
+                            <span className="hidden md:inline">My Courses</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            className={`flex gap-4 justify-center md:justify-start items-end text-base tracking-wide hover:cursor-pointer py-2 ${pathname === '/faq' ? 'bg-gray-100' : 'bg-white'}`}
+                            href="/faq"
+                        >
+                            <LucideMessageSquare className="inline-block sm:w-6 sm:h-6" />
+                            <span className="hidden md:inline">FAQs</span>
+                        </Link>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
     );
-}
+};
+
+export default Sidebar;

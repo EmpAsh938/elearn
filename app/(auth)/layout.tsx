@@ -41,7 +41,7 @@ export default function AuthLayout({
                     </div>
 
                     {/* Right: Carousel Section */}
-                    <aside className="hidden bg-darkNavy md:flex justify-center items-center">
+                    <aside className="hidden bg-gray-400 md:flex justify-center items-center">
                         <div className="w-full px-4">
                             <Swiper
                                 spaceBetween={30}
