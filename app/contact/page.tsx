@@ -60,7 +60,7 @@ export default function Contact() {
                     </div>
                 </section>
 
-                <section className="bg-white py-12">
+                <section className="bg-white py-12 px-6">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="w-[400px] mx-auto flex flex-col gap-4">
 
@@ -103,7 +103,7 @@ export default function Contact() {
                             </div>
 
 
-                            <Button className="w-[300px] mx-auto bg-darkNavy hover:bg-darkNavy" type="submit">Submit</Button>
+                            <Button className="w-[200px] md:w-[300px] mx-auto bg-darkNavy hover:bg-darkNavy" type="submit">Submit</Button>
 
 
                         </form>
@@ -127,7 +127,7 @@ export default function Contact() {
                         <div className="flex justify-center space-x-6 mb-8 items-center flex-col md:flex-row">
                             <div className="flex items-center space-x-2">
                                 <MapPin className="w-6 h-6 text-gray-500" />
-                                <p>123 Main Street, Anytown, USA</p>
+                                <p>MM5G+4XQ, Damak 57217</p>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <Phone className="w-6 h-6 text-gray-500" />
@@ -139,15 +139,13 @@ export default function Contact() {
                             </div>
                         </div>
                         <div className="flex justify-center">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345093774!2d144.95373531584445!3d-37.81720974202125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf5774feda95a9e0!2sEureka%20Skydeck!5e0!3m2!1sen!2sus!4v1600653496294!5m2!1sen!2sus"
-                                width="600"
+
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3565.707805078271!2d87.67489747446353!3d26.6578363709991!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39e58f0076fd5507%3A0xe74a9298e30d41ce!2zVXRrcmlzdGEgU2hpa3NoeWEtIOCkieCkpOCljeCkleClg-Ckt-CljeCknyDgpLbgpL_gpJXgpY3gpLfgpL4!5e0!3m2!1sen!2snp!4v1727932793592!5m2!1sen!2snp" width="600"
                                 height="450"
                                 style={{ border: 0 }}
                                 allowFullScreen={true}
                                 loading="lazy"
-                                className="w-full rounded-lg"
-                            ></iframe>
+                                className="w-full rounded-lg"></iframe>
                         </div>
                     </div>
                 </section>

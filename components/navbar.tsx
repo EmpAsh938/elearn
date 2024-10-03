@@ -9,8 +9,9 @@ export default function Navbar() {
         <div className="bg-white z-50 w-screen h-[80px]">
             <nav className="max-w-screen-xl mx-auto flex items-center justify-between px-5 py-4">
                 {/* Logo */}
-                <Link href="/">
+                <Link href="/" className="flex items-center gap-2">
                     <Image src="/images/logo.avif" alt="logo" height={300} width={300} className="w-14 object-cover" />
+                    <span className="font-bold text-blue">उत्कृष्ट शिक्षा</span>
                 </Link>
 
                 {/* Desktop Navigation */}

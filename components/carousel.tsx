@@ -24,31 +24,6 @@ const Carousel = () => {
     ];
 
     return (
-        // <Swiper
-        //     spaceBetween={10}
-        //     centeredSlides={true}
-        //     autoplay={{
-        //         delay: 2500,
-        //         disableOnInteraction: false,
-        //     }}
-        //     pagination={{
-        //         clickable: true,
-        //     }}
-        //     modules={[Autoplay, Pagination]}
-        // >
-        //     {images.map((image, index) => (
-        //         <SwiperSlide key={index}>
-        //             <div className="">
-        //                 <Image
-        //                     src={image.src}
-        //                     alt={image.alt}
-        //                     height={900} width={900} className="h-10 w-10 object-cover rounded"
-        //                 />
-        //             </div>
-        //         </SwiperSlide>
-        //     ))}
-        // </Swiper>
-
         <Swiper
             spaceBetween={30}
             centeredSlides={true}
@@ -56,6 +31,7 @@ const Carousel = () => {
                 delay: 2500,
                 disableOnInteraction: false,
             }}
+            loop={true}
             pagination={{
                 clickable: true,
             }}
