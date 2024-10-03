@@ -134,7 +134,7 @@ export default function Home() {
                     </div>
 
                     {/* Right: Carousel of Images */}
-                    <div className="relative w-screen md:w-[calc(100vw-300px)] h-[calc(100vh-80px)] p-4 pr-6">
+                    <div className="relative w-screen md:w-[calc(100vw-300px)] md:h-[calc(100vh-80px)] p-4 pr-6">
                         {/* Ensure the height is properly defined */}
                         <Carousel />
                     </div>
