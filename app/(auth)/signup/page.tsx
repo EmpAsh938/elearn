@@ -132,7 +132,7 @@ export default function Signup() {
     return (
         <Form {...form}>
             <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4">
-                <div className="w-full">
+                {/* <div className="w-full">
                     <Link href="/">
                         <Image
                             src="/images/big-logo.avif"
@@ -142,64 +142,70 @@ export default function Signup() {
                             className="w-40 object-cover"
                         />
                     </Link>
+                </div> */}
+
+                <div className="w-full mb-4">
+                    <h1 className=" text-2xl font-semibold">Register</h1>
+                    <p className="text-sm text-gray-500">Please fill the details with correct credentials and complete all the steps to create a new account</p>
                 </div>
 
                 {step === 1 && (
-                    <div>
-                        <div className="flex items-center w-full gap-4">
-                            <FormField
-                                control={form.control}
-                                name="firstName"
-                                render={({ field }) => (
-                                    <FormItem className="w-full">
-                                        <FormLabel>First Name</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="John" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                    <>
+                        <div>
+                            <div className="flex items-center w-full gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="firstName"
+                                    render={({ field }) => (
+                                        <FormItem className="w-full">
+                                            <FormLabel>First Name</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="John" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="lastName"
+                                    render={({ field }) => (
+                                        <FormItem className="w-full">
+                                            <FormLabel>Last Name</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Doe" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
 
                             <FormField
                                 control={form.control}
-                                name="lastName"
+                                name="phonenumber"
                                 render={({ field }) => (
-                                    <FormItem className="w-full">
-                                        <FormLabel>Last Name</FormLabel>
+                                    <FormItem className="w-full mt-4">
+                                        <FormLabel>Phone Number</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Doe" {...field} />
+                                            <Input placeholder="9800019201" {...field} />
+
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
                         </div>
-
-                        <FormField
-                            control={form.control}
-                            name="phonenumber"
-                            render={({ field }) => (
-                                <FormItem className="w-full">
-                                    <FormLabel>Phone Number</FormLabel>
-                                    <FormControl>
-                                        <div className="flex items-center gap-2">
-                                            <Input placeholder="9800019201" {...field} />
-                                            <Button
-                                                type="button"
-                                                onClick={handleSendOTP}
-                                                disabled={isOtpSent || isSendingOtp} // Disable during OTP sending
-                                                className="bg-blue hover:bg-blue"
-                                            >
-                                                {isOtpSent ? "OTP Sent" : isSendingOtp ? "Sending..." : "Send OTP"}
-                                            </Button>
-                                        </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
+                        <Button
+                            type="button"
+                            onClick={handleSendOTP}
+                            disabled={isOtpSent || isSendingOtp} // Disable during OTP sending
+                            className="bg-darkNavy hover:bg-darkNavy"
+                        >
+                            Register
+                        </Button>
+                    </>
                 )}
 
                 {step === 2 && (
@@ -266,11 +272,14 @@ export default function Signup() {
                     </div>
                 )}
 
-                {step > 1 && (
+                {step > 1 ? (
                     <Button onClick={handleNextStep}>
                         {step === 2 ? "Verify OTP" : step === 3 ? "Register" : "Next"}
                     </Button>
-                )}
+                ) : <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+                    <p>Already have an account</p>
+                    <Link className="text-gray-900 font-semibold hover:underline" href="/login">Login</Link>
+                </div>}
             </form>
         </Form>
     );

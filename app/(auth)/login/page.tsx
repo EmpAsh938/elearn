@@ -74,8 +74,8 @@ export default function Login() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-[400px] flex flex-col gap-4">
-                <div className="w-full">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
+                {/* <div className="w-full">
                     <Link href={"/"}>
                         <Image
                             src="/images/big-logo.avif"
@@ -85,7 +85,7 @@ export default function Login() {
                             className="w-40 object-cover"
                         />
                     </Link>
-                </div>
+                </div> */}
                 <div className="w-full mb-4">
                     <h1 className=" text-2xl font-semibold">Welcome back</h1>
                     <p className="text-sm text-gray-500">Please fill the details with correct credentials</p>

@@ -169,10 +169,10 @@ export default function Home() {
                 </section>
 
                 {/* FAQ */}
-                <section className="px-5 py-10 mb-8">
+                {/* <section className="px-5 py-10 mb-8">
                     <h2 className="font-bold text-2xl mb-6 text-center">Frequently Asked Questions</h2>
                     <Faq />
-                </section>
+                </section> */}
             </main>
 
 

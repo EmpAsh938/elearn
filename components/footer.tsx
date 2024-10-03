@@ -9,25 +9,26 @@ export default function Footer() {
                 <div className="flex gap-2">
 
                     {/* logo */}
-                    <div className="">
-                        <Image src="/images/logo.avif" width={600} height={600} alt="elearning platform" className="w-20 object-cover" />
+                    <div className="flex flex-col items-start">
+                        <Image src="/images/logo.avif" width={600} height={600} alt="Utkrista Shiksha logo" className="w-20 object-cover" />
+                        <span className="font-bold text-white text-xl mt-2">उत्कृष्ट शिक्षा</span> {/* Nepali name */}
                     </div>
+
                     {/* About Section */}
                     <div>
-                        <h3 className="text-lg font-bold mb-2">About Us</h3>
+                        <h3 className="text-lg font-bold mb-2">About Utkrista Shiksha</h3>
                         <p className="text-gray-400 mb-4">
-                            Our e-learning platform provides comprehensive resources to help you enhance your skills and knowledge.
+                            Utkrista Shiksha provides comprehensive resources to help you enhance your skills and knowledge through quality e-learning.
                         </p>
-                        <Link href="/about" className="text-blue-400 hover:underline">Learn more</Link>
+                        <Link href="/about" className="text-blue-400 hover:underline">Learn more about us</Link>
                     </div>
                 </div>
-
 
                 {/* Quick Links */}
                 <div>
                     <h3 className="text-lg font-bold mb-2">Quick Links</h3>
                     <div className="flex gap-2">
-                        <Link href="/contact" className="hover:underline">Contact Us</Link>
+                        <Link href="/faq" className="hover:underline">FAQ</Link>
                         <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
                         <Link href="/terms" className="hover:underline">Terms of Service</Link>
                     </div>
@@ -36,7 +37,7 @@ export default function Footer() {
 
             <div className="border-t border-gray-700 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <div className="text-center md:text-left">
-                    <p className="text-gray-400">&copy; 2024 E-Learning Platform. All rights reserved.</p>
+                    <p className="text-gray-400">&copy; 2024 Utkrista Shiksha. All rights reserved.</p>
                 </div>
                 <div className="flex space-x-4">
                     <a href="#" className="hover:underline"><Facebook className="w-6 h-6 text-blue-600" /></a>
