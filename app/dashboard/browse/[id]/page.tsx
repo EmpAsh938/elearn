@@ -72,7 +72,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
     }
 
     return (
-        <div className="ml-20 md:ml-52 mt-16 p-6 flex flex-col lg:flex-row gap-6">
+        <div className="md:ml-52 mt-16 p-6 flex flex-col lg:flex-row gap-6">
             {courseData && (
                 <div className="w-full flex flex-col lg:flex-row gap-6">
                     {/* Main Content */}

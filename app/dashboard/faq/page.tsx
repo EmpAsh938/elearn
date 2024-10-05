@@ -80,7 +80,7 @@ const Faq: React.FC = () => {
 
     return (
 
-        <div className="ml-20 md:ml-52 mt-16 p-6">
+        <div className="md:ml-52 mt-16 p-6">
             <div className="flex flex-col text-center gap-2 mb-6">
                 <h2 className="text-2xl md:text-4xl font-semibold ">FAQ</h2>
                 <p className="text-gray-500">You can resolve your doubts and queries from here. Feel free to reach our <Link href="/contact" className="text-darkNavy font-semibold">contact page</Link> for more information.</p>

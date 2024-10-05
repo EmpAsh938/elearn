@@ -1,6 +1,6 @@
 export default function PrivacyPolicy() {
     return (
-        <div className="ml-20 md:ml-52 mt-16 p-6">
+        <div className="md:ml-52 mt-16 p-6">
             <div className="">
                 <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Privacy Policy of Utkrista Shikshya</h1>
                 <p className="text-lg text-gray-600 mb-6 text-center">

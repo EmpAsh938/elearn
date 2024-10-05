@@ -31,7 +31,7 @@ export default function AuthLayout({
     return (
         <div className="overflow-x-hidden">
             <Navbar />
-            <main className="min-h-[calc(100vh-80px)] bg-[#f4f6fa] flex items-center justify-center">
+            <main className="min-h-[calc(100vh-80px)] bg-[#f4f6fa] flex items-center justify-center px-4 md:px-0">
                 <section className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 shadow-lg rounded-lg overflow-hidden">
                     {/* Left: Main Content (Login Form) */}
                     <div className="flex flex-col justify-center items-center bg-white py-8 px-10 md:px-16">

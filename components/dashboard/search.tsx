@@ -40,9 +40,9 @@ const SearchBar = () => {
     }, [searchTerm]);
 
     return (
-        <div className="relative w-96">
+        <div className="hidden md:block relative w-96">
             {/* Search Input */}
-            <div className="hidden md:flex items-center space-x-2 border border-gray-300 px-2 rounded">
+            <div className="flex items-center space-x-2 border border-gray-300 px-2 rounded">
                 <Input
                     placeholder="Search..."
                     value={searchTerm}

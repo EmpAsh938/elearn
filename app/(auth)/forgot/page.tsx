@@ -118,8 +118,8 @@ export default function Forgot() {
     };
 
     return (
-        <div className="w-[400px] flex flex-col gap-4 mx-auto">
-            <div className="w-full">
+        <div className="flex flex-col gap-4 mx-auto">
+            {/* <div className="w-full">
                 <Image
                     src="/images/big-logo.avif"
                     alt="Detailed Logo"
@@ -127,7 +127,7 @@ export default function Forgot() {
                     width={300}
                     className="w-40 object-cover"
                 />
-            </div>
+            </div> */}
 
 
             {!otpSent && <Form {...phoneForm}>
@@ -158,7 +158,7 @@ export default function Forgot() {
                         )}
                     />
 
-                    <Button className="w-[300px] mx-auto" type="submit">
+                    <Button className="w-[250px] md:w-[300px] mx-auto" type="submit">
                         Send OTP
                     </Button>
                 </form>
@@ -204,7 +204,7 @@ export default function Forgot() {
                             )}
                         />
 
-                        <Button className="w-[300px] mx-auto" type="submit">
+                        <Button className="w-[250px] md:w-[300px] mx-auto" type="submit">
                             Reset Password
                         </Button>
                     </form>

@@ -36,7 +36,7 @@ export default function Courses() {
 
     console.log(courses)
     return (
-        <div className="ml-20 md:ml-52 mt-16 p-6">
+        <div className="md:ml-52 mt-16 p-6">
             <section className="mb-4">
                 <h2 className="text-left text-2xl font-semibold mb-4">My Courses</h2>
 

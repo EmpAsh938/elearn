@@ -24,7 +24,7 @@ export default function Dashboard() {
     const roles = user.roles[0];
     const discount = user.discount;
     return (
-        <div className="mr-0 md:mr-64 ml-20 md:ml-52 mt-16 p-6">
+        <div className="mr-0 md:mr-64 ml-0 md:ml-52 mt-16 p-6">
             <RightSidebar />
 
             <section>

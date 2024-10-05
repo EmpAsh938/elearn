@@ -112,7 +112,7 @@ export default function Login() {
                 </div>
 
                 {/* Login Button */}
-                <Button className="w-[300px] mx-auto" type="submit" disabled={isSubmitting}>
+                <Button className="w-[250px] md:w-[300px] mx-auto" type="submit" disabled={isSubmitting}>
                     {isSubmitting ? "Logging in..." : "Login"}
                 </Button>
 

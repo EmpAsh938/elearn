@@ -120,7 +120,7 @@ export default function UserProfile() {
 
     if (loading) {
         return (
-            <div className="ml-20 md:ml-52 mt-16 p-6">
+            <div className="md:ml-52 mt-16 p-6">
 
                 <p>Loading...</p>
             </div>
@@ -129,14 +129,14 @@ export default function UserProfile() {
 
     if (!user) {
         return (
-            <div className="ml-20 md:ml-52 mt-16 p-6">
+            <div className="md:ml-52 mt-16 p-6">
 
                 <p>User data not found.</p>
             </div>)
     }
 
     return (
-        <div className="ml-20 md:ml-52 mt-16 p-6">
+        <div className="md:ml-52 mt-16 p-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Left Section - Profile Picture and Info */}
                 <div className="text-center lg:text-left">
@@ -183,15 +183,15 @@ export default function UserProfile() {
 
                         {/* Email */}
                         <div>
-                            <label className="block mb-1 text-sm font-semibold">Mobile Number/Email</label>
+                            <label className="block mb-1 text-sm font-semibold">Mobile Number</label>
                             <p className="text-lg">{user.email || "Loading..."}</p>
                         </div>
 
                         {/* College Name */}
-                        <div>
+                        {/* <div>
                             <label className="block mb-1 text-sm font-semibold">College Name</label>
                             <p className="text-lg">{user.collegename || "Loading..."}</p>
-                        </div>
+                        </div> */}
 
                         {/* State (Static) */}
                         <div>

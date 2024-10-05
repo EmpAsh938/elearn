@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { LucideUser, FileText, LogOut, Shield, User } from 'lucide-react';
+import { LucideUser, FileText, LogOut, Shield, User, LucideCross, LucideMenu } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import Notifications from './notifications';
 import Link from 'next/link';
@@ -9,7 +9,12 @@ import SearchBar from './search';
 import { useGlobalContext } from '@/hooks/use-globalContext';
 import Image from 'next/image';
 
-const Topbar = () => {
+type Props = {
+    isOpen: boolean;
+    handleOpen: (value: boolean) => void;
+}
+
+const Topbar = ({ isOpen, handleOpen }: Props) => {
     const { user } = useGlobalContext();
     const [isDropdownOpen, setDropdownOpen] = useState(false);
 
@@ -33,11 +38,19 @@ const Topbar = () => {
     };
 
     return (
-        <header className="fixed top-0 left-20 md:left-52 w-[calc(100vw-80px)] md:w-[calc(100vw-208px)] h-16 bg-white shadow-md flex justify-between items-center px-6 z-50 sm:left-20 sm:w-[calc(100%-5rem)]">
-            {/* Search Input and Icon */}
-            <SearchBar />
+        <header className="fixed top-0 left-0 md:left-52 w-full md:w-[calc(100vw-208px)] h-16 bg-white shadow-md flex justify-between items-center px-4 md:px-6 z-50">
 
-            <div className="block md:hidden"></div>
+            {/* Mobile Menu Button */}
+            <div className="md:hidden ml-2">
+                <button onClick={() => handleOpen(!isOpen)}>
+                    <LucideMenu className="w-6 h-6" />
+                </button>
+            </div>
+
+            {/* Search Input */}
+            <div className="flex-1 ml-4 md:ml-0">
+                <SearchBar />
+            </div>
 
             {/* Notification and User Icons */}
             <div className="flex items-center space-x-4">
@@ -45,7 +58,7 @@ const Topbar = () => {
 
                 <DropdownMenu open={isDropdownOpen} onOpenChange={setDropdownOpen}>
                     <DropdownMenuTrigger className="ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none">
-                        <div className="">
+                        <div>
                             {user && user.imageName ? (
                                 <Image
                                     src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}users/image/${user.imageName}`}
@@ -55,7 +68,7 @@ const Topbar = () => {
                                     className="w-10 h-10 object-cover rounded-full cursor-pointer"
                                 />
                             ) : (
-                                <LucideUser className="w-6 h-6 text-gray-600 cursor-pointer" />
+                                <LucideUser className="w-10 h-10 text-gray-600 cursor-pointer" />
                             )}
                         </div>
                     </DropdownMenuTrigger>
@@ -101,12 +114,11 @@ const Topbar = () => {
                                 <Shield className="w-6 h-6 mr-2" /> Privacy
                             </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleLogout} className='cursor-pointer'>
+                        <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                             <LogOut className="w-6 h-6 mr-2" /> Logout
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-
             </div>
         </header>
     );

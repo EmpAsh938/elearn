@@ -1,15 +1,22 @@
 "use client";
 
-import { LucideHome, LucideBookOpen, LucideMessageSquare, LucideBookCopy } from 'lucide-react';
+import { LucideHome, LucideBookOpen, LucideMessageSquare, LucideBookCopy, LucideCross } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const Sidebar = () => {
+type Props = {
+    isOpen: boolean;
+};
+
+const Sidebar = ({ isOpen }: Props) => {
     const pathname = usePathname(); // Get current path
 
     return (
-        <aside className="fixed top-0 left-0 h-screen bg-white border-r border-gray-200 p-4 pr-0 w-20 transition-all duration-300 md:w-52">
+        <aside
+            className={`fixed top-0 left-0 h-screen bg-white border-r border-gray-200 z-[50] md:p-4 w-20 transition-all duration-300 md:w-52 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+        >
+
             {/* Logo and Utkrista Shiksha in Nepali */}
             <div className="mb-8 flex items-center justify-start">
                 <Image
@@ -26,7 +33,7 @@ const Sidebar = () => {
 
             {/* Navigation Links */}
             <nav>
-                <ul className="">
+                <ul>
                     <li>
                         <Link
                             className={`flex gap-4 justify-center md:justify-start items-end text-base tracking-wide hover:cursor-pointer py-2 ${pathname === '/dashboard' ? 'bg-gray-100' : 'bg-white'}`}

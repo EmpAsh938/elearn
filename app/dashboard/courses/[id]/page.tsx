@@ -73,9 +73,9 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
     if (!course) return <p>Loading...</p>;
 
     return (
-        <div className="relative ml-20 md:ml-52 mt-16 p-6">
+        <div className="relative md:ml-52 mt-16 p-6">
             {/* Course Image */}
-            <div className="flex flex-row items-center mb-6 space-x-6">
+            <div className="flex flex-col md:flex-row gap-4 items-center mb-6">
                 {/* Course Image */}
                 <Image
                     src={course.imageUrl}

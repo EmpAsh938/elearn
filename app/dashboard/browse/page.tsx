@@ -44,7 +44,7 @@ export default function Courses() {
         fetchCourses();
     }, []);
     return (
-        <div className="ml-20 md:ml-52 mt-16 p-6">
+        <div className="md:ml-52 mt-16 p-6">
             <section>
                 <h2 className="text-left text-2xl font-semibold mb-4">Browse Courses</h2>
                 {/* 
