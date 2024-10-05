@@ -67,7 +67,6 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
     // Fetch course data by ID and posts within that course
     useEffect(() => {
         const fetchCourseData = async () => {
-            setLoading(true);
             setError(null);
 
             try {
@@ -93,8 +92,10 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
         fetchCourseData();
     }, [id]);
 
-    if (!courseData) return <p>Loading...</p>;
+    if (!loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>
+
+    if (!courseData) return <p>Courses were not found</p>
 
     return (
         <div className="relative md:ml-52 mt-16 p-6">
