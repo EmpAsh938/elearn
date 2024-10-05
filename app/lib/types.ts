@@ -27,5 +27,7 @@ export type TUser = {
     collegename: string;
     email: string;
     imageName: string;
-    role: TRole[];
+    roles: TRole[];
+    discount: string;
+
 }
