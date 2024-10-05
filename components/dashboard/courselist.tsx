@@ -36,7 +36,7 @@ const CoursesList = ({ courses }: { courses: TCourses[] }) => {
                         <div className="flex justify-between items-center mt-4">
                             <span className="text-lg font-medium text-blue-600">NRs.3000</span>
                             <Link href={"browse/" + course.categoryId} className="bg-blue text-white hover:bg-blue px-4 py-2 rounded">
-                                Book
+                                View & Book
                             </Link>
                         </div>
                     </div>

@@ -22,7 +22,6 @@ export default function Home() {
             try {
                 const req = await fetch(`/api/courses/all`);
                 const res = await req.json();
-                console.log(res)
                 setBrowseCourses(res.body);
             } catch (error) {
                 console.log(error);
@@ -40,7 +39,7 @@ export default function Home() {
             <main className="flex flex-col gap-8">
                 <section className="grid grid-cols-1 md:grid-cols-[300px_1fr] border-y border-gray-300">
                     {/* Left: Vertically Scrollable Courses Links */}
-                    <div className="hidden md:block overflow-y-auto h-[calc(100vh-80px)] border-r border-gray-300 px-3 py-5 pl-10">
+                    <div className="hidden md:block overflow-y-auto max-h-[calc(100vh-80px)] border-r border-gray-300 px-3 py-5 pl-10">
                         {/* Sticky title */}
                         <h1 className="absolute top-[81px] bg-white font-bold text-3xl pt-3 z-10">
                             Browse Courses
@@ -58,7 +57,7 @@ export default function Home() {
                     </div>
 
                     {/* Right: Carousel of Images */}
-                    <div className="relative w-screen md:w-[calc(100vw-300px)] md:h-[calc(100vh-80px)] p-4 pr-6">
+                    <div className="relative w-screen md:w-[calc(100vw-300px)] max-h-[calc(100vh-80px)] p-4 pr-6">
                         {/* Ensure the height is properly defined */}
                         <Carousel />
                     </div>

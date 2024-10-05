@@ -25,6 +25,7 @@ export default function Courses() {
                 const res = await req.json();
                 const courses: TCourses[] = res.body;  // Ensure body is typed as Courses[]
                 setCourses(courses);
+                console.log(res)
 
                 // Filter out empty or invalid categories
                 const validCategories = courses
@@ -43,6 +44,7 @@ export default function Courses() {
 
         fetchCourses();
     }, []);
+
     return (
         <div className="md:ml-52 mt-16 p-6">
             <section>

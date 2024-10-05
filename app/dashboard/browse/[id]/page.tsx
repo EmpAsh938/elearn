@@ -2,47 +2,85 @@
 
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
-import Navbar from '@/components/navbar';
-import Footer from '@/components/footer';
+import { useCallback, useEffect, useState } from 'react';
 import { TCourses, TPosts } from '@/app/lib/types';
+import { toast } from '@/hooks/use-toast';
+import { useGlobalContext } from '@/hooks/use-globalContext';
 
 const CourseDetails = ({ params }: { params: { id: string } }) => {
     const [activeTab, setActiveTab] = useState('overview');
     const [courseData, setCourseData] = useState<TCourses | null>(null); // State to hold course data
     const [posts, setPosts] = useState<TPosts[]>([]); // State to hold posts within the course
     const [loading, setLoading] = useState<boolean>(true);
+    const [booking, setBooking] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const { id } = params;
+    const { user } = useGlobalContext();
 
-    // Fetch course data by ID and posts within that course
-    useEffect(() => {
-        const fetchCourseData = async () => {
-            setLoading(true);
-            setError(null);
+    const handleBookNow = async (categoryId: string) => {
+        if (!user) return;
+        const userConfirmed = window.confirm("Are you sure you want to book this course?");
+        if (!userConfirmed) return;
 
-            try {
-                // Fetch course by ID
-                const courseRes = await fetch(`/api/courses/single/?categoryId=${id}`);
-                const courseData = await courseRes.json();
+        setBooking(true);
 
-                // Fetch posts within the course
-                const postsRes = await fetch(`/api/posts/category/?categoryId=${id}`);
-                const postsData = await postsRes.json();
+        try {
+            const response = await fetch('/api/courses/booked', {
+                method: 'POST',
+                body: JSON.stringify({ userId: user.id, categoryId }),
+            });
 
-                // Set the fetched data
-                setCourseData(courseData.body);
-                setPosts(postsData.body);
-            } catch (error) {
-                console.error("Error fetching course or posts:", error);
-                setError("Failed to load course data. Please try again.");
-            } finally {
-                setLoading(false);
+            const data = await response.json();
+            console.log(data);
+            if (data.status !== 201) throw Error(data.error);
+            toast({ description: 'Course booked successfully!. Now, we will contact you back soon.' });
+
+        } catch (err: any) {
+            console.error("Booking error:", err);
+            toast({ variant: 'destructive', description: err });
+        } finally {
+            setBooking(false);
+        }
+    };
+
+    const fetchCourseData = useCallback(async () => {
+        console.log(`Fetching course data for id: ${id}`);
+        setLoading(true);
+        setError(null);
+
+        try {
+            // Fetch course by ID
+            const courseRes = await fetch(`/api/courses/single/?categoryId=${id}`);
+            if (!courseRes.ok) {
+                const errorData = await courseRes.json();
+                throw new Error(errorData.error || 'Failed to fetch course data.');
             }
-        };
+            const courseData = await courseRes.json();
 
-        fetchCourseData();
+            // Fetch posts within the course
+            const postsRes = await fetch(`/api/posts/category/?categoryId=${id}`);
+            if (!postsRes.ok) {
+                const postsErrorData = await postsRes.json();
+                throw new Error(postsErrorData.error || 'Failed to fetch posts data.');
+            }
+            const postsData = await postsRes.json();
+
+            // Set the fetched data
+            setCourseData(courseData.body);
+            setPosts(postsData.body);
+            console.log("Course Data and Posts fetched successfully.");
+
+        } catch (error: any) {
+            console.error("Error fetching course or posts:", error);
+            setError(error.message || "Failed to load course data. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     }, [id]);
+
+    useEffect(() => {
+        fetchCourseData();
+    }, [fetchCourseData]);
 
     // Custom Loading Component
     if (loading) {
@@ -158,8 +196,13 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 <li>✓ 24/7 Support</li>
                             </ul>
 
-                            <Button className="mt-6 w-full bg-blue hover:bg-blue text-white">Book Now</Button>
-                        </div>
+                            <Button
+                                onClick={() => handleBookNow(courseData.categoryId)}
+                                className={`mt-6 w-full ${booking ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue hover:bg-blue-700'} text-white`}
+                                disabled={booking}
+                            >
+                                {booking ? 'Booking...' : 'Book Now'}
+                            </Button>                        </div>
                     </div>
                 </div>
             )}

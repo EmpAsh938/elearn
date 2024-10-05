@@ -220,7 +220,7 @@ export default function Signup() {
 
                 {step === 3 && (
                     <div>
-                        <FormField
+                        {/* <FormField
                             control={form.control}
                             name="email"
                             render={({ field }) => (
@@ -232,7 +232,7 @@ export default function Signup() {
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        />
+                        /> */}
 
                         <FormField
                             control={form.control}
