@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { TCourses } from "../lib/types";
+import { Badge } from "@/components/ui/badge";
 
 export default function Courses() {
     const [tags, setTags] = useState<string[]>([]);
@@ -81,7 +82,7 @@ export default function Courses() {
                         <p className="text-xl text-red-500">{error}</p>
                     </div>
                 ) : (
-                    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4">
+                    <section className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8 px-4">
                         {courses.map(pkg => (
                             <Link key={pkg.categoryId} href={`/courses/${pkg.categoryId}`} className="block">
                                 <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
@@ -102,6 +103,8 @@ export default function Courses() {
                                         <p className="text-textDarkNavy line-clamp-2 overflow-hidden text-ellipsis">
                                             {pkg.categoryDescription}
                                         </p>
+
+                                        <Badge variant="default" className={(!pkg.courseType || pkg.courseType.toLowerCase() == "upcoming") ? "bg-green" : "bg-blue"}>{pkg.courseType || "Upcoming"}</Badge>
                                     </div>
 
                                 </div>

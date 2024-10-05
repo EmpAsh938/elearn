@@ -7,6 +7,7 @@ import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import { TCourses, TPosts } from '@/app/lib/types';
 import WheelSpin from '@/components/wheelspin';
+import { Badge } from '@/components/ui/badge';
 
 const CourseDetails = ({ params }: { params: { id: string } }) => {
     const [activeTab, setActiveTab] = useState('overview');
@@ -86,7 +87,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                         {/* Header */}
                         <div className="flex items-center justify-between">
                             <h1 className="text-2xl md:text-3xl font-bold">{courseData.categoryTitle}</h1>
-
+                            <Badge variant="default" className={(!courseData.courseType || courseData.courseType.toLowerCase() == "upcoming") ? "bg-green" : "bg-blue"}>{courseData.courseType || "Upcoming"}</Badge>
                             <span className="px-3 py-1 bg-red-600 text-white text-sm rounded">Best Seller</span>
                             <button className="ml-2 text-gray-500 hover:text-gray-700">
                                 &#128279; {/* Icon representing share */}

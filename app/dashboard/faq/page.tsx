@@ -22,39 +22,31 @@ interface FaqItemProps {
 // Define the FAQ data with types
 const faqData: FaqItemType[] = [
     {
-        question: "What is Utrkistra Shiksa?",
-        answer: "Utrkistra Shiksa is an innovative e-learning platform that offers a variety of courses and resources to help learners of all ages improve their skills and knowledge in various subjects."
+        question: "What is Utkrista Shikshya?",
+        answer: "Utkrista Shikshya is a pioneering e-learning platform that seamlessly blends education with technology, providing an innovative space where dreams meet knowledge and learning opportunities."
     },
     {
         question: "How do I create an account?",
-        answer: "To create an account, click on the 'Sign Up' button on the homepage. Fill in your details, verify your email, and you'll be ready to start learning!"
+        answer: "Creating an account on Utkrista Shikshya is easy! Just follow these steps: Visit the Sign Up page, enter your details in the form, click 'Register,' and you’ll receive an OTP on your phone. Enter it to verify, set your password, and you’re ready to start your learning journey!"
     },
     {
         question: "What types of courses are available?",
-        answer: "Utrkistra Shiksa offers courses in various categories, including technology, arts, business, and personal development. You can browse our course catalog for more details."
+        answer: "Utkrista Shikshya offers a diverse range of courses, including academic subjects, skill development, personal growth, and language proficiency classes, catering to various interests and learning goals."
     },
     {
         question: "Are the courses free?",
-        answer: "We offer both free and paid courses. Free courses can be accessed without payment, while paid courses provide additional content and resources."
+        answer: "Some courses are available free of charge. You can find these offerings listed in the 'Free Courses' section of the platform."
     },
     {
-        question: "How can I access my purchased courses?",
-        answer: "Once you've purchased a course, it will be available in your account dashboard under the 'My Courses' section. You can access it anytime."
+        question: "Is there a mobile app for Utkrista Shikshya?",
+        answer: "We don’t have a mobile app yet, but we’re working hard to launch one soon. Stay tuned!"
     },
     {
-        question: "What if I have questions about a course?",
-        answer: "You can reach out to the course instructor through the platform's messaging system, or check the course's discussion forum for assistance from fellow learners."
-    },
-    {
-        question: "How do I track my progress?",
-        answer: "You can track your progress through your account dashboard, where you'll see completed lessons, scores on quizzes, and overall progress in each course."
-    },
-    {
-        question: "Is there a mobile app for Utrkistra Shiksa?",
-        answer: "Not, we do not offer a mobile app for both iOS and Android devices, allowing you to learn on the go. So, You cannot download it from the respective app stores."
-    },
-    // Add more FAQ items here as needed
+        question: "What are the offers during Dashain and Tihar?",
+        answer: "During Dashain and Tihar, we’re excited to offer a Spin Wheel! Check your luck, and the percentage you land on will be your discount on your first course purchase. This offer runs from Fulpati to the last day of Kartik."
+    }
 ];
+
 
 const FaqItem: React.FC<FaqItemProps> = ({ faq, index, toggleFaq, isOpen }) => (
     <div className="border-b-2 border-gray-200 py-4">

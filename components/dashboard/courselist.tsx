@@ -1,6 +1,7 @@
 import { TCourses } from "@/app/lib/types";
 import Image from "next/image";                  // Next.js Image component
 import Link from "next/link";
+import { Badge } from "../ui/badge";
 
 const CoursesList = ({ courses }: { courses: TCourses[] }) => {
 
@@ -39,6 +40,8 @@ const CoursesList = ({ courses }: { courses: TCourses[] }) => {
                                 View & Book
                             </Link>
                         </div>
+
+                        <Badge variant="default" className={(!course.courseType || course.courseType.toLowerCase() == "upcoming") ? "bg-green" : "bg-blue"}>{course.courseType || "Upcoming"}</Badge>
                     </div>
                 </div>
             ))}

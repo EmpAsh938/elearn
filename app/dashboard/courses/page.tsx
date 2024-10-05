@@ -34,7 +34,6 @@ export default function Courses() {
         fetchCourses();
     }, []);
 
-    console.log(courses)
     return (
         <div className="md:ml-52 mt-16 p-6">
             <section className="mb-4">

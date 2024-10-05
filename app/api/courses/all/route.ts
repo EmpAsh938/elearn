@@ -6,10 +6,11 @@ export async function GET() {
         const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/`);
 
         const data = await apiResponse.json();
+
+
         if (apiResponse.status !== 200) {
             return NextResponse.json({ error: data.error, status: apiResponse.status });
         }
-
 
         return NextResponse.json({
             message: 'Courses Retreiving successful',

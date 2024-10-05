@@ -3,8 +3,6 @@
 import { TCourses } from "@/app/lib/types";
 import CoursesList from "@/components/dashboard/courselist";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Courses() {
@@ -25,7 +23,6 @@ export default function Courses() {
                 const res = await req.json();
                 const courses: TCourses[] = res.body;  // Ensure body is typed as Courses[]
                 setCourses(courses);
-                console.log(res)
 
                 // Filter out empty or invalid categories
                 const validCategories = courses
