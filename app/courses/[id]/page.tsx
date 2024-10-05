@@ -8,6 +8,7 @@ import Footer from '@/components/footer';
 import { TCourses, TPosts } from '@/app/lib/types';
 import WheelSpin from '@/components/wheelspin';
 import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
 const CourseDetails = ({ params }: { params: { id: string } }) => {
     const [activeTab, setActiveTab] = useState('overview');
@@ -165,7 +166,9 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 <li>✓ 24/7 Support</li>
                             </ul>
 
-                            <Button className="mt-6 w-full bg-blue hover:bg-blue text-white">Book Now</Button>
+                            <Button className="mt-6 w-full bg-blue hover:bg-blue text-white">
+                                <Link href="/login">Book Now</Link>
+                            </Button>
                         </div>
                     </div>
                 </div>

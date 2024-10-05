@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import Image from "next/image";
 
 // Define form schema for validation
 const formSchema = z.object({
@@ -48,7 +47,7 @@ export default function Signup() {
             lastName: "",
             phonenumber: "",
             otp: "",
-            email: "",
+            email: "a@a.com",
             password: "",
             confirmPassword: "",
         },
@@ -76,8 +75,7 @@ export default function Signup() {
 
     // Submit handler
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const { firstName, lastName, phonenumber, email, password } = values;
-
+        const { firstName, lastName, phonenumber, password } = values;
         setIsSubmitting(true); // Disable the button
 
         try {
@@ -90,6 +88,7 @@ export default function Signup() {
             });
 
             const response = await request.json();
+            if (!response.id) throw Error(response.error);
             // if (!response.ok) throw Error(response.error);
             toast({ description: "Registration Successful. Redirecting..." });
             form.reset();
@@ -118,7 +117,7 @@ export default function Signup() {
                     body: JSON.stringify({ mobileNo: phonenumber }),
                 });
                 const result = await request.json();
-
+                if (!result.otp) throw Error(result.error);
                 toast({ description: "OTP Sent Successfully" });
                 setValidOtp(result.otp); // Store OTP from the server
                 setIsOtpSent(true); // Mark OTP as sent
