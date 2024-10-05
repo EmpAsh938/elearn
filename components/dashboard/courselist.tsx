@@ -19,7 +19,7 @@ const CoursesList = ({ courses }: { courses: TCourses[] }) => {
                     {/* Thumbnail */}
                     <div className="w-full md:w-1/4">
                         <Image
-                            src={course.imageLink || "/images/courses/default.png"}
+                            src={course.imageName || "/images/courses/default.png"}
                             alt={course.categoryTitle}
                             width={300}
                             height={200}
