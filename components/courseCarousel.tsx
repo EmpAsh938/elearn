@@ -62,7 +62,7 @@ const CourseCarousel = () => {
                     <SwiperSlide key={index}>
                         <Card className="transition-transform transform hover:scale-105">
                             <Link href={"courses/" + course.categoryId}>
-                                <Image src={course.imageLink || "/images/courses/default.png"} alt={course.categoryTitle} height={600} width={600} className="h-full w-full object-cover rounded" />
+                                <Image src={course.imageName || "/images/courses/default.png"} alt={course.categoryTitle} height={600} width={600} className="h-full w-full object-cover rounded" />
                                 <p className="text-center py-2 font-medium text-lg line-clamp-2 overflow-hidden text-ellipsis">{course.categoryTitle}</p>
                             </Link>
                         </Card>
