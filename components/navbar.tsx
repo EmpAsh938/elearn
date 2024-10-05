@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"; // shadcn button
 import { Input } from "@/components/ui/input"; // shadcn input
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"; // shadcn sheet components
 import { Menu, Search } from "lucide-react"; // Lucide React Icons
+import { TCourses } from "@/app/lib/types";
 
 interface SearchResult {
     id: number;
@@ -15,21 +16,27 @@ interface SearchResult {
 
 export default function Navbar() {
     const [searchQuery, setSearchQuery] = useState<string>("");
-    const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<TCourses[]>([]);
     const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
+
+    // Fetch search results from API
+    const fetchSearchResults = async (query: string) => {
+        try {
+            const response = await fetch(`/api/courses/search?query=${query}`);
+            const data = await response.json();
+            setSearchResults(data.body);
+            setIsSearchVisible(true);
+        } catch (error) {
+            console.error("Error fetching search results:", error);
+        }
+    };
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value;
         setSearchQuery(query);
 
-        // Replace with your actual search logic or API call
         if (query.length > 0) {
-            setSearchResults([
-                { id: 1, name: "Result 1" },
-                { id: 2, name: "Result 2" },
-                { id: 3, name: "Result 3" },
-            ]);
-            setIsSearchVisible(true);
+            fetchSearchResults(query); // Call API when query is not empty
         } else {
             setIsSearchVisible(false);
         }
@@ -69,10 +76,12 @@ export default function Navbar() {
                             <ul className="flex flex-col">
                                 {searchResults.map((result) => (
                                     <li
-                                        key={result.id}
+                                        key={result.categoryId}
                                         className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
                                     >
-                                        {result.name}
+                                        <Link href={`/courses/${result.categoryId}`}>
+                                            {result.categoryTitle}
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -171,10 +180,12 @@ export default function Navbar() {
                         <ul className="flex flex-col">
                             {searchResults.map((result) => (
                                 <li
-                                    key={result.id}
+                                    key={result.categoryId}
                                     className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
                                 >
-                                    {result.name}
+                                    <Link href={`/courses/${result.categoryId}`}>
+                                        {result.categoryTitle}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

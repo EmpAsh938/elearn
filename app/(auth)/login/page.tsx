@@ -22,8 +22,7 @@ import { useToast } from "@/hooks/use-toast"
 
 const formSchema = z.object({
     email: z.string()
-        .min(1, { message: "This field has to be filled." })
-        .email("This is not a valid email"),
+        .min(10, { message: "This field has to be filled." }),
     password: z.string().min(6, {
         message: "Password must be at least 6 characters.",
     })
@@ -97,9 +96,9 @@ export default function Login() {
                     name="email"
                     render={({ field }) => (
                         <FormItem className="w-full">
-                            <FormLabel className="font-semibold text-stone-800">Email</FormLabel>
+                            <FormLabel className="font-semibold text-stone-800">Phone</FormLabel>
                             <FormControl>
-                                <Input placeholder="abc@example.com" {...field} />
+                                <Input placeholder="9800000000" {...field} />
                             </FormControl>
 
                             <FormMessage />

@@ -11,6 +11,7 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ error: 'No session cookie found' }, { status: 401 });
         }
 
+        console.log(sessionCookie)
 
         // Make the request to your authentication API to get the token
         const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}users/${userId}/discount`, {

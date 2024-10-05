@@ -61,11 +61,11 @@ const Booked = () => {
     };
 
     return (
-        <div className="flex flex-wrap gap-10 justify-between">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">
             {courses.map((course, index) => (
                 <div
                     key={index}
-                    className="w-full sm:w-80 flex flex-col items-start border rounded-lg shadow-md overflow-hidden"
+                    className="flex flex-col items-start border rounded-lg shadow-md overflow-hidden"
                 >
                     {/* Thumbnail */}
                     <Image
@@ -83,7 +83,7 @@ const Booked = () => {
 
                         {/* Price and Enroll Button in a row */}
                         <div className="flex justify-between items-center mt-4">
-                            <Link href={"courses/" + (index + 1)} className="text-lg font-medium text-blue-600 underline">
+                            <Link href={`courses/${index + 1}`} className="text-lg font-medium text-blue-600 underline">
                                 View Details
                             </Link>
                             <span className="bg-green text-white px-4 py-1 rounded-full text-sm font-semibold">
@@ -94,6 +94,7 @@ const Booked = () => {
                 </div>
             ))}
         </div>
+
     );
 };
 

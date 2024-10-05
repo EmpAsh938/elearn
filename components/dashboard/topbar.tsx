@@ -5,6 +5,7 @@ import { Input } from '../ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import Notifications from './notifications';
 import Link from 'next/link';
+import SearchBar from './search';
 
 const Topbar = () => {
     const handleLogout = async () => {
@@ -23,10 +24,7 @@ const Topbar = () => {
     return (
         <header className="fixed top-0 left-20 md:left-52 w-[calc(100vw-80px)] md:w-[calc(100vw-208px)] h-16 bg-white shadow-md flex justify-between items-center px-6 z-50 sm:left-20 sm:w-[calc(100%-5rem)]">
             {/* Search Input and Icon */}
-            <div className="hidden md:flex items-center space-x-2 border border-gray-300 px-2 rounded">
-                <Input placeholder="Search..." className="w-64 border-none outline-none ring-0 focus:ring-0 focus-visible:ring-offset-0 focus-visible:ring-0" />
-                <LucideSearch className="w-6 h-6 text-gray-600 cursor-pointer" />
-            </div>
+            <SearchBar />
 
             <div className="block md:hidden"></div>
 

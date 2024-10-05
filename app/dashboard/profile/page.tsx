@@ -1,119 +1,220 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import Image from 'next/image';
+import { toast } from "@/hooks/use-toast";
 
-export default function Profile() {
-    const [userName, setUserName] = useState("John Doe");
-    const [userEmail, setUserEmail] = useState("john.doe@example.com");
-    const [userRole, setUserRole] = useState("Student");
-    const [newEmail, setNewEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+interface UserProfile {
+    id: string;
+    name: string;
+    collegename: string;
+    email: string;
+    imageName: string;
+}
 
-    const handleEmailUpdate = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Logic to update email (e.g., API call)
-        setUserEmail(newEmail);
-        setNewEmail("");
+export default function UserProfile() {
+    const [user, setUser] = useState<UserProfile | null>(null); // Initialize user as null
+    const [isEditing, setIsEditing] = useState(false);
+    const [profilePicture, setProfilePicture] = useState<string>("/images/profile/user.jpeg"); // Default profile picture
+    const [selectedFile, setSelectedFile] = useState<File | null>(null); // To hold the selected file
+    const [loading, setLoading] = useState(true); // Loading state
+
+    // Fetch fresh user data from API
+    useEffect(() => {
+        const userData = JSON.parse(localStorage.getItem("user") || "{}");
+        if (Object.entries(userData).length === 0) {
+            console.log("User not found");
+            setLoading(false);
+            return;
+        }
+
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch(`/api/user/id?userId=${userData.id}`); // Replace with actual API URL
+                const data = await response.json();
+                setUser(data.body);
+
+                // Update profile picture after user data is fetched
+                if (data.body?.imageName) {
+                    setProfilePicture(process.env.NEXT_PUBLIC_API_ENDPOINT + "users/image/" + data.body.imageName);
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            } finally {
+                setLoading(false); // Stop loading once data is fetched
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setUser((prevUser) => (prevUser ? { ...prevUser, [name]: value } : null)); // Handle null state
     };
 
-    const handlePasswordUpdate = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (password === confirmPassword) {
-            // Logic to update password (e.g., API call)
-            setPassword("");
-            setConfirmPassword("");
-        } else {
-            alert("Passwords do not match!");
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setSelectedFile(file); // Set the selected file
+            const reader = new FileReader();
+            reader.onload = () => {
+                setProfilePicture(reader.result as string); // Update the profile picture preview
+            };
+            reader.readAsDataURL(file);
         }
     };
 
+    const uploadProfilePicture = async () => {
+        if (!selectedFile || !user) return null; // If no file is selected, skip upload
+
+        const formData = new FormData();
+        formData.append("file", selectedFile); // Append the file to FormData
+        formData.append("userId", user.id); // Append the userId to FormData
+
+        try {
+            const response = await fetch("/api/user/image", {
+                method: "POST",
+                body: formData, // Send FormData
+            });
+
+            const data = await response.json();
+            return;
+        } catch (error: any) {
+            console.error("Error uploading profile picture:", error);
+            toast({ variant: "destructive", description: error.message });
+            return null;
+        }
+    };
+
+    const saveProfile = async () => {
+        if (!user) return; // Check if user is defined
+        setIsEditing(false);
+
+        try {
+            // Upload profile picture if a new one is selected
+            await uploadProfilePicture();
+
+            // Make the PUT request to save the profile data
+            const response = await fetch("/api/user", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    email: user.email,
+                    name: user.name,
+                    collegename: user.collegename
+                }),
+            });
+
+            await response.json();
+            toast({ description: "Profile updated successfully" });
+        } catch (error: any) {
+            console.error("Error updating profile:", error);
+            toast({ variant: "destructive", description: error.message });
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="ml-20 md:ml-52 mt-16 p-6">
+
+                <p>Loading...</p>
+            </div>
+        )
+    }
+
+    if (!user) {
+        return (
+            <div className="ml-20 md:ml-52 mt-16 p-6">
+
+                <p>User data not found.</p>
+            </div>)
+    }
+
     return (
-        <div className="p-6">
-            <section className="mb-8">
-                <h1 className="text-3xl font-bold text-darkNavy text-left mb-2">Profile</h1>
-                <p className="text-lg text-darkNavy mb-4">View and update your profile information.</p>
-            </section>
-
-            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Profile Information Card */}
-                <Card className="bg-white shadow-lg rounded-lg overflow-hidden py-2">
-                    <div className="">
-                        <Image src="/images/profile/user.jpeg" alt="Profile Picture"
-                            width={600} height={600} className="h-36 w-36 object-cover rounded-full mx-auto" />
+        <div className="ml-20 md:ml-52 mt-16 p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left Section - Profile Picture and Info */}
+                <div className="text-center lg:text-left">
+                    <div className="relative mx-auto lg:mx-0 w-32 h-32 rounded-full overflow-hidden">
+                        <Image
+                            src={profilePicture}
+                            alt={user.name || "User Profile Picture"} // Fallback alt text
+                            layout="fill"
+                            className="object-cover"
+                        />
                     </div>
-                    <CardHeader className="border-b border-gray-200">
-                        <CardTitle className="text-2xl font-bold text-darkNavy text-center">
-                            {userName}
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="px-4">
-                        <p className="text-lg text-darkNavy mb-2"><strong>Email:</strong> {userEmail}</p>
-                        <p className="text-lg text-darkNavy mb-4"><strong>Role:</strong> {userRole}</p>
-                    </CardContent>
-                </Card>
+                    <h2 className="text-2xl font-bold mt-4">{user.name || "Loading..."}</h2>
+                    <p className="text-gray-500">
+                        <span className="inline-block mr-2">&#128197;</span>Member since 2024
+                    </p>
 
-                {/* Update Basic Information Card */}
-                <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
-                    <CardHeader className="py-4 px-4 border-b border-gray-200">
-                        <CardTitle className="text-2xl font-bold text-darkNavy">
-                            Update Basic Information
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="py-4 px-4">
-                        <form>
-                            <div className="mb-4">
-                                <label htmlFor="name" className="block text-lg text-darkNavy mb-2">Name</label>
-                                <input type="text" id="name" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue" value={userName} onChange={(e) => setUserName(e.target.value)} />
-                            </div>
-                            <Button type="submit" className="bg-green text-white w-full">Save Changes</Button>
-                        </form>
-                    </CardContent>
-                </Card>
+                    {!isEditing && (
+                        <Button onClick={() => setIsEditing(true)} className="bg-gray-800 mt-4 w-48 lg:w-full">
+                            Edit Profile
+                        </Button>
+                    )}
+                </div>
 
-                {/* Update Email Card */}
-                <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
-                    <CardHeader className="py-4 px-4 border-b border-gray-200">
-                        <CardTitle className="text-2xl font-bold text-darkNavy">
-                            Update Email
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="py-4 px-4">
-                        <form onSubmit={handleEmailUpdate}>
-                            <div className="mb-4">
-                                <label htmlFor="new-email" className="block text-lg text-darkNavy mb-2">New Email</label>
-                                <input type="email" id="new-email" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
-                            </div>
-                            <Button type="submit" className="bg-blue text-white w-full">Update Email</Button>
-                        </form>
-                    </CardContent>
-                </Card>
+                {/* Right Section - Basic Info */}
+                <div className="col-span-2">
+                    <h3 className="text-xl font-semibold mb-6">Basic Info</h3>
 
-                {/* Update Password Card */}
-                <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
-                    <CardHeader className="py-4 px-4 border-b border-gray-200">
-                        <CardTitle className="text-2xl font-bold text-darkNavy">
-                            Update Password
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="py-4 px-4">
-                        <form onSubmit={handlePasswordUpdate}>
-                            <div className="mb-4">
-                                <label htmlFor="password" className="block text-lg text-darkNavy mb-2">New Password</label>
-                                <input type="password" id="password" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue" value={password} onChange={(e) => setPassword(e.target.value)} />
-                            </div>
-                            <div className="mb-4">
-                                <label htmlFor="confirm-password" className="block text-lg text-darkNavy mb-2">Confirm Password</label>
-                                <input type="password" id="confirm-password" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-                            </div>
-                            <Button type="submit" className="bg-red text-white w-full">Update Password</Button>
-                        </form>
-                    </CardContent>
-                </Card>
-            </section>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Name */}
+                        <div>
+                            <label className="block mb-1 text-sm font-semibold">Name</label>
+                            {!isEditing ? (
+                                <p className="text-lg">{user.name || "Loading..."}</p>
+                            ) : (
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={user.name}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                />
+                            )}
+                        </div>
+
+                        {/* Email */}
+                        <div>
+                            <label className="block mb-1 text-sm font-semibold">Mobile Number/Email</label>
+                            <p className="text-lg">{user.email || "Loading..."}</p>
+                        </div>
+
+                        {/* College Name */}
+                        <div>
+                            <label className="block mb-1 text-sm font-semibold">College Name</label>
+                            <p className="text-lg">{user.collegename || "Loading..."}</p>
+                        </div>
+
+                        {/* State (Static) */}
+                        <div>
+                            <label className="block mb-1 text-sm font-semibold">State</label>
+                            <p className="text-lg">Nepal</p>
+                        </div>
+                    </div>
+
+                    {isEditing && (
+                        <div className="mt-6">
+                            <label className="block mb-1 text-sm font-semibold">Upload Profile Picture</label>
+                            <input
+                                type="file"
+                                onChange={handleFileChange}
+                                className="mb-4"
+                            />
+                            <Button onClick={saveProfile} className="bg-green text-white">
+                                Save Changes
+                            </Button>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }

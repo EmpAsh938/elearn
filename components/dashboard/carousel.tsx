@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card } from "@/components/ui/card";
@@ -7,45 +10,36 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 
 import { Navigation } from 'swiper/modules';
+import { TCourses } from '@/app/lib/types';
 
 
 const CourseCarousel = () => {
-    const recentCourses = [
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-            description: "Management course is the best one"
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-            description: "Management course is the best one"
 
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-            description: "Management course is the best one"
+    const [isLoading, setIsLoading] = useState(true);
+    const [browseCourses, setBrowseCourses] = useState<TCourses[]>([]);
 
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-            description: "Management course is the best one"
 
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-            description: "Management course is the best one"
+    useEffect(() => {
+        const fetchCourses = async () => {
 
-        },
-    ];
+            try {
+                const req = await fetch(`/api/courses/recent`);
+                const res = await req.json();
+                setBrowseCourses(res.body);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchCourses();
+    }, [])
 
     return (
         <div className='w-full'>
 
-            <Swiper
+            {isLoading ? <p>Loading...</p> : <Swiper
                 spaceBetween={30}
                 slidesPerView={3}
                 navigation={true}
@@ -66,19 +60,19 @@ const CourseCarousel = () => {
                 }}
                 className="w-full"
             >
-                {recentCourses.map((course, index) => (
-                    <SwiperSlide key={index}>
+                {browseCourses.map((course) => (
+                    <SwiperSlide key={course.categoryId}>
                         <Card className="transition-transform transform hover:scale-105">
-                            <Link href={"/dashboard/browse/" + (index + 1)}>
-                                <Image src={course.thumbnail} alt={course.title} height={600} width={600} className="h-full w-full object-cover rounded" />
-                                <p className="text-center py-2 font-medium text-lg">{course.title}</p>
+                            <Link href={"/dashboard/browse/" + course.categoryId}>
+                                <Image src={course.imageName || "/images/courses/default.png"} alt={course.categoryTitle} height={600} width={600} className="h-full w-full object-cover rounded" />
+                                <p className="text-center py-2 font-medium text-lg line-clamp-2 overflow-hidden text-ellipsis">{course.categoryTitle}</p>
                             </Link>
                         </Card>
                     </SwiperSlide>
                 ))}
 
             </Swiper>
-
+            }
         </div>
 
     );

@@ -56,8 +56,8 @@ const Sidebar = () => {
                     </li>
                     <li>
                         <Link
-                            className={`flex gap-4 justify-center md:justify-start items-end text-base tracking-wide hover:cursor-pointer py-2 ${pathname === '/faq' ? 'bg-gray-100' : 'bg-white'}`}
-                            href="/faq"
+                            className={`flex gap-4 justify-center md:justify-start items-end text-base tracking-wide hover:cursor-pointer py-2 ${pathname === '/dashboard/faq' ? 'bg-gray-100' : 'bg-white'}`}
+                            href="/dashboard/faq"
                         >
                             <LucideMessageSquare className="inline-block sm:w-6 sm:h-6" />
                             <span className="hidden md:inline">FAQs</span>

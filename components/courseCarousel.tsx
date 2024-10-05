@@ -1,55 +1,39 @@
+"use client";
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card } from "@/components/ui/card";
-
-// import {
-//     Carousel,
-//     CarouselContent,
-//     CarouselItem,
-//     CarouselNext,
-//     CarouselPrevious,
-// } from "@/components/ui/carousel"
 import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 
 import { Navigation } from 'swiper/modules';
+import { useEffect, useState } from 'react';
+import { TCourses } from '@/app/lib/types';
 
 
 const CourseCarousel = () => {
-    const recentCourses = [
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-            description: "Management course is the best one"
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-            description: "Management course is the best one"
+    const [recentCourses, setRecentCourses] = useState<TCourses[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-            description: "Management course is the best one"
+    useEffect(() => {
+        const fetchCourses = async () => {
 
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-            description: "Management course is the best one"
+            try {
+                const req = await fetch(`/api/courses/recent`);
+                const res = await req.json();
+                console.log(res)
+                setRecentCourses(res.body);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-            description: "Management course is the best one"
-
-        },
-    ];
-
+        fetchCourses();
+    }, [])
     return (
         <div className='w-full px-10'>
 
@@ -77,9 +61,9 @@ const CourseCarousel = () => {
                 {recentCourses.map((course, index) => (
                     <SwiperSlide key={index}>
                         <Card className="transition-transform transform hover:scale-105">
-                            <Link href={"courses/" + (index + 1)}>
-                                <Image src={course.thumbnail} alt={course.title} height={600} width={600} className="h-full w-full object-cover rounded" />
-                                <p className="text-center py-2 font-medium text-lg">{course.title}</p>
+                            <Link href={"courses/" + course.categoryId}>
+                                <Image src={course.imageLink || "/images/courses/default.png"} alt={course.categoryTitle} height={600} width={600} className="h-full w-full object-cover rounded" />
+                                <p className="text-center py-2 font-medium text-lg line-clamp-2 overflow-hidden text-ellipsis">{course.categoryTitle}</p>
                             </Link>
                         </Card>
                     </SwiperSlide>

@@ -48,7 +48,9 @@ const RightSidebar: React.FC = () => {
                     <Calendar
                         onChange={setDate}
                         value={date}
-                        className="rounded-lg shadow-sm"
+                        className="shadow-sm"
+                        showNavigation={false}
+                        activeStartDate={new Date()}
                     />
                 )}
             </div>
@@ -58,8 +60,8 @@ const RightSidebar: React.FC = () => {
                 <h2 className="text-lg font-semibold mb-2 text-gray-700">Notices & News</h2>
                 <div className="flex-1 overflow-y-auto"> {/* Allow scrolling */}
                     <ul className="space-y-4">
-                        {notices.map((notice) => (
-                            <li key={notice.id} className="p-2 border-b text-gray-600">
+                        {notices.map((notice, index) => (
+                            <li key={index} className="p-2 border-b text-gray-600">
                                 <h3 className="font-semibold text-sm">{notice.title}</h3>
                                 <p className="text-xs text-gray-500">{notice.date}</p>
                             </li>

@@ -1,19 +1,53 @@
 "use client";
 
+import { TCourses } from "@/app/lib/types";
 import CoursesList from "@/components/dashboard/courselist";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const tags = ['All', 'JavaScript', 'React', 'CSS', 'Next.js', 'Node.js', 'TypeScript'];
 export default function Courses() {
-    const [selectedTag, setSelectedTag] = useState(tags[0]);
+    const [tags, setTags] = useState<string[]>([]);
+    const [courses, setCourses] = useState<TCourses[]>([]);
+    const [selectedTag, setSelectedTag] = useState<string>("All");
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const req = await fetch(`/api/courses/all`);
+                const res = await req.json();
+                const courses: TCourses[] = res.body;  // Ensure body is typed as Courses[]
+                setCourses(courses);
+
+                // Filter out empty or invalid categories
+                const validCategories = courses
+                    .map(item => item.mainCategory)
+                    .filter(category => category && category.trim() !== "");
+
+                // Convert to a Set and add "All" as the default option
+                setTags(() => ["All", ...new Set<string>(validCategories)]);
+            } catch (error) {
+                console.error("Error fetching courses:", error);
+                setError("Failed to load courses. Please try again later.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCourses();
+    }, []);
     return (
         <div className="ml-20 md:ml-52 mt-16 p-6">
             <section>
                 <h2 className="text-left text-2xl font-semibold mb-4">Browse Courses</h2>
-
+                {/* 
                 <div className="flex items-center justify-end ">
                     <div className="flex items-center border border-gray-300 rounded px-2">
 
@@ -28,7 +62,7 @@ export default function Courses() {
                     </div>
 
 
-                </div>
+                </div> */}
                 {/* Tags for selecting grade packages */}
                 <div className="flex items-center flex-wrap gap-2 my-4">
                     {tags.map(tag => (
@@ -42,7 +76,18 @@ export default function Courses() {
                     ))}
                 </div>
 
-                <CoursesList />
+                {/* Display loading indicator, error, or courses */}
+                {loading ? (
+                    <div className="flex justify-center">
+                        <p className="text-xl text-gray-500">Loading courses...</p>
+                    </div>
+                ) : error ? (
+                    <div className="flex justify-center">
+                        <p className="text-xl text-red-500">{error}</p>
+                    </div>
+                ) : (
+                    <CoursesList courses={courses} />
+                )}
             </section>
         </div>
     )

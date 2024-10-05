@@ -77,7 +77,7 @@ export default function Signup() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const { firstName, lastName, phonenumber, email, password } = values;
 
-        console.log('1')
+
         try {
             const request = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}auth/register/`, {
                 method: "POST",

@@ -4,111 +4,35 @@ import Image from "next/image";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Carousel from "@/components/carousel";
 import CourseCarousel from "@/components/courseCarousel";
-import Faq from "@/components/faq";
+import { TCourses } from "./lib/types";
 
 
 export default function Home() {
     const [showPopup, setShowPopup] = useState(true);
-
-    const recentCourses = [
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management or some random long text description",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management or some random long text description",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management or some random long text description",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management or some random long text description",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management or some random long text description",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management or some random long text description",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management or some random long text description",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management or some random long text description",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management or some random long text description",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management or some random long text description",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-        {
-            thumbnail: "/images/courses/course2.webp",
-            title: "NEB 12 Management",
-        },
-    ];
+    const [isLoading, setIsLoading] = useState(true);
+    const [browseCourses, setBrowseCourses] = useState<TCourses[]>([]);
 
 
+    useEffect(() => {
+        const fetchCourses = async () => {
+
+            try {
+                const req = await fetch(`/api/courses/all`);
+                const res = await req.json();
+                console.log(res)
+                setBrowseCourses(res.body);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchCourses();
+    }, [])
 
     return (
         <div className="overflow-x-hidden">
@@ -123,10 +47,10 @@ export default function Home() {
                         </h1>
                         {/* Scrollable list of courses */}
                         <ul className="space-y-4 pt-10">
-                            {recentCourses.map((course, index) => (
-                                <li key={index + 1}>
-                                    <Link href={`/courses/${index + 1}`}>
-                                        <span className="text-md text-darkBlue hover:underline tracking-wide">{course.title}</span>
+                            {browseCourses.map((course) => (
+                                <li key={course.categoryId}>
+                                    <Link href={`/courses/${course.categoryId}`}>
+                                        <span className="text-md text-darkBlue hover:underline tracking-wide">{course.categoryTitle}</span>
                                     </Link>
                                 </li>
                             ))}
@@ -142,7 +66,7 @@ export default function Home() {
 
                 <section>
                     <h2 className="text-center text-2xl font-semibold py-4">Popular Courses</h2>
-                    <p className="max-w-lg px-4 lg:px-0 mx-auto mb-8 text-gray-600 tracking-wide text-justify">Our most popular and top quality courses are designed to enhance and build the lacking knowledge of students by top quality instructors</p>
+                    <p className="max-w-lg w-full px-4 lg:px-0 mx-auto mb-8 text-gray-600 tracking-wide text-justify">Our most popular and top quality courses are designed to enhance and build the lacking knowledge of students by top quality instructors</p>
                     <CourseCarousel />
                 </section>
 

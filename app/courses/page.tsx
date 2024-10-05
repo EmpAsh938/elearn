@@ -2,62 +2,49 @@
 
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-
-const gradePackages = [
-    {
-        id: 1,
-        title: "Grade 8 Package",
-        description: "Comprehensive courses for Grade 8 students, including Mathematics and Science.",
-        thumbnail: "/images/courses/course2.webp",
-        courses: ["Mathematics", "Science"],
-        price: "700"
-    },
-    {
-        id: 2,
-        title: "Grade 9 Package",
-        description: "All-in-one package for Grade 9, covering Science and Social Studies.",
-        thumbnail: "/images/courses/course2.webp",
-        courses: ["Science", "Social Studies"],
-        price: "800"
-    },
-    {
-        id: 3,
-        title: "Grade 10 Package",
-        description: "Full course package for Grade 10, including Physics, Chemistry, and Mathematics.",
-        thumbnail: "/images/courses/course2.webp",
-        courses: ["Physics", "Chemistry", "Mathematics"],
-        price: "900"
-    },
-    {
-        id: 4,
-        title: "Grade 11 Package",
-        description: "Extensive course package for Grade 11 students, with Geography and Biology.",
-        thumbnail: "/images/courses/course2.webp",
-        courses: ["Geography", "Biology"],
-        price: "850"
-    },
-    {
-        id: 5,
-        title: "Grade 12 Package",
-        description: "Advanced courses for Grade 12, focusing on Accounting and Economics.",
-        thumbnail: "/images/courses/course2.webp",
-        courses: ["Accounting", "Economics"],
-        price: "950"
-    },
-];
-
-const tags = ["All", "SEE (Grade 10)", "Medical", "CTEVT", "Grade 11", "Grade 12"];
+import { TCourses } from "../lib/types";
 
 export default function Courses() {
-    const [selectedTag, setSelectedTag] = useState("All");
+    const [tags, setTags] = useState<string[]>([]);
+    const [courses, setCourses] = useState<TCourses[]>([]);
+    const [selectedTag, setSelectedTag] = useState<string>("All");
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const filteredPackages = selectedTag === "All"
-        ? gradePackages
-        : gradePackages.filter(pkg => pkg.title.includes(selectedTag));
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const req = await fetch(`/api/courses/all`);
+                const res = await req.json();
+                const courses: TCourses[] = res.body;  // Ensure body is typed as Courses[]
+                setCourses(courses);
+
+                // Filter out empty or invalid categories
+                const validCategories = courses
+                    .map(item => item.mainCategory)
+                    .filter(category => category && category.trim() !== "");
+
+                // Convert to a Set and add "All" as the default option
+                setTags(() => ["All", ...new Set<string>(validCategories)]);
+            } catch (error) {
+                console.error("Error fetching courses:", error);
+                setError("Failed to load courses. Please try again later.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCourses();
+    }, []);
+
 
     return (
         <div className="overflow-x-hidden">
@@ -66,7 +53,9 @@ export default function Courses() {
             <main className="p-6">
                 <section className="text-center">
                     <h1 className="text-4xl font-bold mb-4">Our Courses</h1>
-                    <p className="text-lg mb-6 text-gray-500">Explore our comprehensive courses designed to boost your knowledge and career from our diverse range of courses.</p>
+                    <p className="text-lg mb-6 text-gray-500">
+                        Explore our comprehensive courses designed to boost your knowledge and career from our diverse range of topics.
+                    </p>
                 </section>
 
                 {/* Tags for selecting grade packages */}
@@ -82,34 +71,44 @@ export default function Courses() {
                     ))}
                 </section>
 
-                {/* Display all grade packages */}
-                <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4">
-                    {filteredPackages.map(pkg => (
-                        <Link key={pkg.id} href={`/courses/${pkg.id}`} className="block">
-                            <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
-                                <Image
-                                    src={pkg.thumbnail}
-                                    alt={pkg.title}
-                                    width={400}
-                                    height={250}
-                                    className="w-full h-56 object-cover"
-                                />
-                                <div className="p-6">
-                                    <h2 className="text-2xl font-bold mb-2">{pkg.title}</h2>
-                                    <p className="text-textDarkNavy mb-4">{pkg.description}</p>
-                                    {/* <p className="text-lg font-semibold mb-2">Courses included:</p>
-                                    <ul className="list-disc list-inside mb-4">
-                                        {pkg.courses.map((course, index) => (
-                                            <li key={index}>{course}</li>
-                                        ))}
-                                    </ul> */}
-                                    {/* <p className="text-red text-lg font-semibold mb-4">NRS.{pkg.price}</p> */}
-                                    <Button className="w-full bg-green">View Package</Button>
+                {/* Display loading indicator, error, or courses */}
+                {loading ? (
+                    <div className="flex justify-center">
+                        <p className="text-xl text-gray-500">Loading courses...</p>
+                    </div>
+                ) : error ? (
+                    <div className="flex justify-center">
+                        <p className="text-xl text-red-500">{error}</p>
+                    </div>
+                ) : (
+                    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4">
+                        {courses.map(pkg => (
+                            <Link key={pkg.categoryId} href={`/courses/${pkg.categoryId}`} className="block">
+                                <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
+                                    <Image
+                                        src={pkg.imageName || "/images/courses/default.png"}
+                                        alt={pkg.categoryTitle}
+                                        width={400}
+                                        height={250}
+                                        className="w-full h-56 object-cover"
+                                    />
+                                    <div className="p-6">
+                                        {/* Limit the title to 2 lines and add ellipsis for overflow */}
+                                        <h2 className="text-2xl font-bold mb-2 line-clamp-2 overflow-hidden text-ellipsis">
+                                            {pkg.categoryTitle}
+                                        </h2>
+
+                                        {/* Description can remain as is */}
+                                        <p className="text-textDarkNavy line-clamp-2 overflow-hidden text-ellipsis">
+                                            {pkg.categoryDescription}
+                                        </p>
+                                    </div>
+
                                 </div>
-                            </div>
-                        </Link>
-                    ))}
-                </section>
+                            </Link>
+                        ))}
+                    </section>
+                )}
             </main>
             <Footer />
         </div>

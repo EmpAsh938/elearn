@@ -111,7 +111,7 @@ export default function Forgot() {
             </div>
 
 
-            <Form {...phoneForm}>
+            {!otpSent ? <Form {...phoneForm}>
                 <form onSubmit={phoneForm.handleSubmit(sendOtp)} className="flex flex-col gap-4">
                     <div className="w-full mb-4">
                         <h1 className="text-2xl font-semibold">Forgot your password</h1>
@@ -140,46 +140,46 @@ export default function Forgot() {
                 </form>
             </Form>
 
-            {otpSent && <Form {...otpForm}>
-                <form onSubmit={otpForm.handleSubmit(resetPassword)} className="flex flex-col gap-4">
-                    <div className="w-full mb-4">
-                        <h1 className="text-2xl font-semibold">Reset your password</h1>
-                        <p className="text-sm text-gray-500">Enter the OTP you received and set a new password.</p>
-                    </div>
+                : <Form {...otpForm}>
+                    <form onSubmit={otpForm.handleSubmit(resetPassword)} className="flex flex-col gap-4">
+                        <div className="w-full mb-4">
+                            <h1 className="text-2xl font-semibold">Reset your password</h1>
+                            <p className="text-sm text-gray-500">Enter the OTP you received and set a new password.</p>
+                        </div>
 
-                    <FormField
-                        control={otpForm.control}
-                        name="otp"
-                        render={({ field }) => (
-                            <FormItem className="w-full">
-                                <FormLabel className="font-semibold text-stone-800">OTP</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Enter OTP" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                        <FormField
+                            control={otpForm.control}
+                            name="otp"
+                            render={({ field }) => (
+                                <FormItem className="w-full">
+                                    <FormLabel className="font-semibold text-stone-800">OTP</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter OTP" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
-                    <FormField
-                        control={otpForm.control}
-                        name="newPassword"
-                        render={({ field }) => (
-                            <FormItem className="w-full">
-                                <FormLabel className="font-semibold text-stone-800">New Password</FormLabel>
-                                <FormControl>
-                                    <Input type="password" placeholder="New password" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                        <FormField
+                            control={otpForm.control}
+                            name="newPassword"
+                            render={({ field }) => (
+                                <FormItem className="w-full">
+                                    <FormLabel className="font-semibold text-stone-800">New Password</FormLabel>
+                                    <FormControl>
+                                        <Input type="password" placeholder="New password" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
-                    <Button className="w-[300px] mx-auto" type="submit">
-                        Reset Password
-                    </Button>
-                </form>
-            </Form>
+                        <Button className="w-[300px] mx-auto" type="submit">
+                            Reset Password
+                        </Button>
+                    </form>
+                </Form>
             }
 
             <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mt-4">
