@@ -6,13 +6,14 @@ import dynamic from 'next/dynamic';
 
 // Data for the wheel segments
 const data = [
-    { option: '5%', style: { backgroundColor: '#f9d423', textColor: '#000000' } },
-    { option: '6%', style: { backgroundColor: '#f83600', textColor: '#ffffff' } },
-    { option: '7%', style: { backgroundColor: '#bd3f32', textColor: '#ffffff' } },
-    { option: '8%', style: { backgroundColor: '#ff4e50', textColor: '#ffffff' } },
-    { option: '9%', style: { backgroundColor: '#00b09b', textColor: '#ffffff' } },
-    { option: '10%', style: { backgroundColor: '#96c93d', textColor: '#ffffff' } },
+    { option: '5%', style: { backgroundColor: '#f9d423', textColor: '#000000' } },  // Bright Yellow
+    { option: '6%', style: { backgroundColor: '#ff6f61', textColor: '#ffffff' } },    // Coral Red
+    { option: '7%', style: { backgroundColor: '#5c3d99', textColor: '#ffffff' } },    // Purple
+    { option: '8%', style: { backgroundColor: '#3498db', textColor: '#ffffff' } },    // Light Blue
+    { option: '9%', style: { backgroundColor: '#e67e22', textColor: '#ffffff' } },    // Orange
+    { option: '10%', style: { backgroundColor: '#2ecc71', textColor: '#ffffff' } },   // Green
 ];
+
 
 // Dynamically import the Wheel component from 'react-custom-roulette'
 const DynamicWheel = dynamic(() => import('react-custom-roulette').then(mod => mod.Wheel), { ssr: false });
@@ -65,7 +66,7 @@ export default function WheelSpin() {
     };
 
     return (
-        <div className="fixed bottom-[80px] left-4 z-50 flex flex-col items-center parent-container">
+        <div className="fixed bottom-[80px] left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center parent-container">
             {/* Display the Discount Spin Wheel */}
             <DynamicWheel
                 mustStartSpinning={mustSpin}
@@ -73,6 +74,9 @@ export default function WheelSpin() {
                 data={data}
                 backgroundColors={['#3e3e3e', '#df3428']}
                 textColors={['#ffffff']}
+                outerBorderWidth={0}
+                radiusLineWidth={1}
+                radiusLineColor='white'
                 onStopSpinning={handleStopSpin}  // Call when the wheel stops spinning
             />
 
@@ -82,7 +86,7 @@ export default function WheelSpin() {
                 onClick={handleSpinClick}
                 disabled={mustSpin}  // Disable while the wheel is spinning
             >
-                {mustSpin ? 'Spinning...' : 'Spin'}
+                {mustSpin ? 'Spinning...' : 'Spin for Discount'}
             </button>
 
             {/* Display the Result */}

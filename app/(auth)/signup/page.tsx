@@ -39,6 +39,7 @@ export default function Signup() {
     const [isOtpSent, setIsOtpSent] = useState(false); // Track OTP status
     const [validOtp, setValidOtp] = useState(''); // Store valid OTP from the server
     const [isSendingOtp, setIsSendingOtp] = useState(false); // Track whether OTP is being sent
+    const [isSubmitting, setIsSubmitting] = useState(false); // Track whether form is being submitted
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -77,6 +78,7 @@ export default function Signup() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const { firstName, lastName, phonenumber, email, password } = values;
 
+        setIsSubmitting(true); // Disable the button
 
         try {
             const request = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}auth/register/`, {
@@ -89,10 +91,13 @@ export default function Signup() {
 
             const response = await request.json();
             // if (!response.ok) throw Error(response.error);
-            toast({ description: "Registration Successful" });
+            toast({ description: "Registration Successful. Redirecting..." });
             form.reset();
+            window.location.href = "/login";
         } catch (error: any) {
             toast({ variant: "destructive", title: "Registration Failed", description: error.message });
+        } finally {
+            setIsSubmitting(false); // Re-enable the button in case of error
         }
     }
 
@@ -132,18 +137,6 @@ export default function Signup() {
     return (
         <Form {...form}>
             <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4">
-                {/* <div className="w-full">
-                    <Link href="/">
-                        <Image
-                            src="/images/big-logo.avif"
-                            alt="Detailed Logo"
-                            height={300}
-                            width={300}
-                            className="w-40 object-cover"
-                        />
-                    </Link>
-                </div> */}
-
                 <div className="w-full mb-4">
                     <h1 className=" text-2xl font-semibold">Register</h1>
                     <p className="text-sm text-gray-500">Please fill the details with correct credentials and complete all the steps to create a new account</p>
@@ -190,7 +183,6 @@ export default function Signup() {
                                         <FormLabel>Phone Number</FormLabel>
                                         <FormControl>
                                             <Input placeholder="9800019201" {...field} />
-
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -273,8 +265,11 @@ export default function Signup() {
                 )}
 
                 {step > 1 ? (
-                    <Button onClick={handleNextStep}>
-                        {step === 2 ? "Verify OTP" : step === 3 ? "Register" : "Next"}
+                    <Button
+                        onClick={handleNextStep}
+                        disabled={isSubmitting} // Disable the button during form submission
+                    >
+                        {isSubmitting ? "Submitting..." : (step === 2 ? "Verify OTP" : step === 3 ? "Register" : "Next")}
                     </Button>
                 ) : <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                     <p>Already have an account</p>

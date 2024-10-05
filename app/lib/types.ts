@@ -15,3 +15,17 @@ export type TPosts = {
     content: string;
     // image
 }
+
+type TRole = {
+    id: string;
+    name: string;
+}
+
+export type TUser = {
+    id: string;
+    name: string;
+    collegename: string;
+    email: string;
+    imageName: string;
+    role: TRole[];
+}

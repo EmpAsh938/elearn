@@ -1,12 +1,7 @@
-// app/privacy/page.js
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
-
 export default function PrivacyPolicy() {
     return (
-        <div className="overflow-x-hidden bg-gray-50">
-            <Navbar />
-            <main className="p-8 px-16">
+        <div className="ml-20 md:ml-52 mt-16 p-6">
+            <div className="">
                 <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Privacy Policy of Utkrista Shikshya</h1>
                 <p className="text-lg text-gray-600 mb-6 text-center">
                     Last updated: October 5, 2024
@@ -108,8 +103,7 @@ export default function PrivacyPolicy() {
                         Have questions or thoughts about our policy? We’re all ears! Reach out to us at [insert email address]. Your feedback is essential in helping us serve you better.
                     </p>
                 </section>
-            </main>
-            <Footer />
+            </div>
         </div>
     );
 }

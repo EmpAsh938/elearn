@@ -1,16 +1,17 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
+import { TUser } from "./lib/types";
 
 type AppContextType = {
-    user: any;
+    user: TUser;
 };
 
 export const AppContext = createContext<AppContextType>({} as AppContextType);
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState<TUser>({} as TUser);
 
     useEffect(() => {
         const userFromStorage = JSON.parse(localStorage.getItem("user") || '{}');
@@ -37,13 +38,13 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         if (userFromStorage?.id) { // Check if userId exists
             fetchPlan(userFromStorage.id);
         } else {
-            setUser({});
+            setUser({} as TUser);
         }
     }, []); // Empty dependency array ensures this runs once on mount
 
     return (
         <AppContext.Provider value={{
-            user
+            user,
         }}>
             {children}
         </AppContext.Provider>

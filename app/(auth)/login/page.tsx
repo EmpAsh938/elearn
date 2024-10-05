@@ -1,11 +1,10 @@
 "use client"
 
+import { useState } from "react";
 import Image from "next/image"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
 import { Button } from "@/components/ui/button"
 import {
     Form,
@@ -19,30 +18,28 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 
-
 const formSchema = z.object({
-    email: z.string()
-        .min(10, { message: "This field has to be filled." }),
-    password: z.string().min(6, {
-        message: "Password must be at least 6 characters.",
-    })
+    email: z.string().min(10, { message: "This field has to be filled." }),
+    password: z.string().min(6, { message: "Password must be at least 6 characters." })
 });
 
 export default function Login() {
     const { toast } = useToast();
+    const [isSubmitting, setIsSubmitting] = useState(false); // Track form submission
 
-    // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
             password: "",
         },
-    })
+    });
 
-    // 2. Define a submit handler.
+    // Handle form submission
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const { email, password } = values;
+        setIsSubmitting(true); // Disable the button while submitting
+
         try {
             const request = await fetch('/api/auth/login/', {
                 method: 'POST',
@@ -50,46 +47,37 @@ export default function Login() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ username: email, password })
-            })
+            });
             const response = await request.json();
-            // console.log(response)
-            if (response.status !== 200) throw Error(response.error);
+
+            if (response.status !== 200) throw new Error(response.error);
+
             form.reset();
             localStorage.setItem("user", JSON.stringify(response.user));
+
             if (response.user.roles[0].id == 501) {
                 window.location.href = '/admin';
             } else {
-
                 window.location.href = '/dashboard';
             }
-            toast({ description: "Login Successful" });
 
+            toast({ description: "Login Successful" });
 
         } catch (error: any) {
             toast({ variant: "destructive", title: "Login Failed", description: error.toString() });
             console.log(error);
+        } finally {
+            setIsSubmitting(false); // Re-enable the button after submission
         }
     }
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
-                {/* <div className="w-full">
-                    <Link href={"/"}>
-                        <Image
-                            src="/images/big-logo.avif"
-                            alt="Detailed Logo"
-                            height={300}
-                            width={300}
-                            className="w-40 object-cover"
-                        />
-                    </Link>
-                </div> */}
                 <div className="w-full mb-4">
-                    <h1 className=" text-2xl font-semibold">Welcome back</h1>
+                    <h1 className="text-2xl font-semibold">Welcome back</h1>
                     <p className="text-sm text-gray-500">Please fill the details with correct credentials</p>
                 </div>
-
 
                 <FormField
                     control={form.control}
@@ -100,14 +88,10 @@ export default function Login() {
                             <FormControl>
                                 <Input placeholder="9800000000" {...field} />
                             </FormControl>
-
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-
-
-
 
                 <FormField
                     control={form.control}
@@ -118,7 +102,6 @@ export default function Login() {
                             <FormControl>
                                 <Input type="password" {...field} />
                             </FormControl>
-
                             <FormMessage />
                         </FormItem>
                     )}
@@ -127,10 +110,14 @@ export default function Login() {
                 <div className="flex items-center justify-end">
                     <Link className="font-semibold text-xs hover:underline" href="/forgot">Forgot Password</Link>
                 </div>
-                <Button className="w-[300px] mx-auto" type="submit">Login</Button>
+
+                {/* Login Button */}
+                <Button className="w-[300px] mx-auto" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Logging in..." : "Login"}
+                </Button>
 
                 <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-                    <p>Don&apos;t have an account</p>
+                    <p>Don&apos;t have an account?</p>
                     <Link className="text-gray-900 font-semibold hover:underline" href="/signup">Register</Link>
                 </div>
             </form>

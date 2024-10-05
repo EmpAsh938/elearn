@@ -1,11 +1,7 @@
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
-
 export default function Terms() {
     return (
-        <div className="overflow-x-hidden bg-gray-50">
-            <Navbar />
-            <main className="p-8 px-16">
+        <div className="ml-20 md:ml-52 mt-16 p-6">
+            <div className="">
                 <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Terms and Conditions of Utkrista Shikshya</h1>
                 <p className="text-lg text-gray-600 mb-6 text-center">
                     Effective Date: Oct 5, 2024
@@ -75,8 +71,7 @@ export default function Terms() {
                         If you have any questions or suggestions regarding these Terms and Conditions, please contact us at [insert email address].
                     </p>
                 </section>
-            </main>
-            <Footer />
+            </div>
         </div>
     );
 }
