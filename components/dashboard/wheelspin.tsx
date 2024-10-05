@@ -46,6 +46,7 @@ export default function WheelSpin() {
     };
 
     const sendDiscountToServer = async (discount: string) => {
+
         try {
 
             const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -59,11 +60,15 @@ export default function WheelSpin() {
 
             const result = await response.json();
 
-            if (result.status !== 200) {
+            if (response.status !== 200) {
                 throw new Error(result.error || 'Failed to send the discount to the server');
             }
 
-            toast({ description: 'Discount saved successfully!' });
+            toast({ description: 'You have received discount of ' + discount });
+
+            // Delay for 2 seconds to give time for the user to see the success message
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
             window.location.href = "/dashboard";
         } catch (error: any) {
             toast({ variant: 'destructive', description: error.message || 'Error sending discount to the server' });
@@ -90,7 +95,7 @@ export default function WheelSpin() {
             <button
                 className="mt-4 px-4 py-2 text-white bg-blue rounded"
                 onClick={handleSpinClick}
-                disabled={mustSpin}  // Disable while the wheel is spinning
+                disabled={mustSpin || spinResult !== null}  // Disable while the wheel is spinning
             >
                 {mustSpin ? 'Spinning...' : 'Spin for Discount'}
             </button>
@@ -98,7 +103,7 @@ export default function WheelSpin() {
             {/* Display the Result */}
             {spinResult && (
                 <div className="mt-4 text-lg font-bold text-green">
-                    You won: {spinResult} discount!
+                    Congratulations! You won: {spinResult} discount!
                 </div>
             )}
         </div>
