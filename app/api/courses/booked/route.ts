@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
 
 
     } catch (error) {
-        return NextResponse.json({ error: 'Booked sCourses Retreived Failed', status: 500 });
+        return NextResponse.json({ error: 'Booked Courses Retreived Failed', status: 500 });
     }
 }
 

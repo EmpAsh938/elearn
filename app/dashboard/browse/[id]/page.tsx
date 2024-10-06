@@ -34,12 +34,12 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
 
             const data = await response.json();
             console.log(data);
-            if (data.status !== 201) throw Error(data.error);
+            if (data.status !== 201) throw Error("Booking was already done or some other issues occured");
             toast({ description: 'Course booked successfully!. Now, we will contact you back soon.' });
 
-        } catch (err: any) {
-            console.error("Booking error:", err);
-            toast({ variant: 'destructive', description: err });
+        } catch (err) {
+            console.error("Booking error:", "Booking was already done or some other issues occured");
+            toast({ variant: 'destructive', description: "Booking was already done or some other issues occured" });
         } finally {
             setBooking(false);
         }
@@ -74,7 +74,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
 
         } catch (error: any) {
             console.error("Error fetching course or posts:", error);
-            setError(error.message || "Failed to load course data. Please try again.");
+            setError(error || "Failed to load course data. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -119,9 +119,9 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                     <div className="lg:w-2/3">
                         {/* Header */}
                         <div className="flex items-center justify-between">
-                            <h1 className="text-2xl md:text-3xl font-bold">{courseData.categoryTitle}</h1>
-                            <Badge variant="default" className={(!courseData.courseType || courseData.courseType.toLowerCase() == "upcoming") ? "bg-green" : "bg-blue"}>{courseData.courseType || "Upcoming"}</Badge>
-                            <span className="px-3 py-1 bg-red-600 text-white text-sm rounded">Best Seller</span>
+                            <h1 className="text-xl md:text-3xl font-bold">{courseData.categoryTitle}</h1>
+
+                            <Badge variant="default" className={(!courseData.courseType || courseData.courseType.toLowerCase() == "upcoming") ? "bg-green capitalize" : "bg-blue capitalize"}>{courseData.courseType || "Upcoming"}</Badge>
                             <button className="ml-2 text-gray-500 hover:text-gray-700">
                                 &#128279; {/* Icon representing share */}
                             </button>
@@ -156,7 +156,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                             )}
                             {activeTab === 'instructor' && (
                                 <div className="space-y-6">
-                                    {posts.map((instructor) => (
+                                    {posts.length > 0 ? posts.map((instructor) => (
                                         <div key={instructor.postId} className="flex items-center space-x-4">
                                             <Image
                                                 src={"/images/profile/user.jpeg"}
@@ -170,7 +170,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                                 <p className="text-sm text-gray-600">{"An experienced educator with over 5 years of experience"}</p>
                                             </div>
                                         </div>
-                                    ))}
+                                    )) : <p>We will update the instructor details soon.</p>}
                                 </div>
                             )}
 
@@ -187,7 +187,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 height={200}
                                 className="rounded-lg"
                             />
-                            <h2 className="text-2xl font-semibold mt-4">{courseData.price || "NRs. 3000"}</h2>
+                            {(!courseData.courseType || courseData.courseType.toLowerCase() == "upcoming") ? null : <h2 className="text-2xl font-semibold mt-4">{courseData.price || "NRs. 3000"}</h2>}
                             {/* Hardcoded Features */}
                             <ul className="mt-4 space-y-2 text-gray-600">
                                 <li>✓ Live classes</li>

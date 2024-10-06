@@ -126,7 +126,6 @@ export default function Signup() {
                 toast({
                     variant: "destructive",
                     title: "Sending OTP Failed",
-                    description: error.message,
                 });
                 setIsSendingOtp(false); // Reset OTP sending state on failure
             }

@@ -88,7 +88,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                         {/* Header */}
                         <div className="flex items-center justify-between">
                             <h1 className="text-2xl md:text-3xl font-bold">{courseData.categoryTitle}</h1>
-                            <Badge variant="default" className={(!courseData.courseType || courseData.courseType.toLowerCase() == "upcoming") ? "bg-green" : "bg-blue"}>{courseData.courseType || "Upcoming"}</Badge>
+                            <Badge variant="default" className={(!courseData.courseType || courseData.courseType.toLowerCase() == "upcoming") ? "bg-green capitalize" : "bg-blue capitalize"}>{courseData.courseType || "Upcoming"}</Badge>
                             <span className="px-3 py-1 bg-red-600 text-white text-sm rounded">Best Seller</span>
                             <button className="ml-2 text-gray-500 hover:text-gray-700">
                                 &#128279; {/* Icon representing share */}
@@ -155,7 +155,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 height={200}
                                 className="rounded-lg"
                             />
-                            <h2 className="text-2xl font-semibold mt-4">{courseData.price || "NRs.3000"}</h2>
+                            <h2 className="text-2xl font-semibold mt-4">NRs.{courseData.price || "3000"}</h2>
                             {/* Hardcoded Features */}
                             <ul className="mt-4 space-y-2 text-gray-600">
                                 <li>✓ Live classes</li>

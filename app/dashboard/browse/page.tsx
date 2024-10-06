@@ -42,6 +42,11 @@ export default function Courses() {
         fetchCourses();
     }, []);
 
+    // Function to filter courses based on selected tag
+    const filteredCourses = selectedTag === "All"
+        ? courses
+        : courses.filter(course => course.mainCategory === selectedTag);
+
     return (
         <div className="md:ml-52 mt-16 p-6">
             <section>
@@ -85,7 +90,7 @@ export default function Courses() {
                         <p className="text-xl text-red-500">{error}</p>
                     </div>
                 ) : (
-                    <CoursesList courses={courses} />
+                    <CoursesList courses={filteredCourses} />
                 )}
             </section>
         </div>

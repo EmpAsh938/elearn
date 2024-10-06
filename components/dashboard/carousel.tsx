@@ -36,6 +36,12 @@ const CourseCarousel = () => {
         fetchCourses();
     }, [])
 
+    if (!browseCourses || browseCourses.length === 0) return (
+        <div>
+            <p>Courses could not be loaded</p>
+        </div>
+    )
+
     return (
         <div className='w-full'>
 

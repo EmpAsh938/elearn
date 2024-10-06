@@ -1,3 +1,5 @@
+"use client";
+
 import { TCourses } from "@/app/lib/types";
 import { Button } from "@/components/ui/button";  // ShadCN UI Button component
 import { useGlobalContext } from "@/hooks/use-globalContext";
@@ -125,6 +127,14 @@ const Booked = () => {
             </div>
         );
     }
+
+    if (!courses || courses.length === 0) return (
+        <div className="flex items-center justify-center min-h-screen bg-gray-50">
+            <div className="text-center">
+                <p className="text-gray-700 text-lg font-semibold">Courses could not found</p>
+            </div>
+        </div>
+    )
 
     return (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">

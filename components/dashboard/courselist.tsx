@@ -11,14 +11,14 @@ const CoursesList = ({ courses }: { courses: TCourses[] }) => {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">
             {courses.map((course) => (
                 <div
                     key={course.categoryId}
-                    className="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-4 p-4 border rounded-lg shadow-sm"
+                    className="flex flex-col space-y-4 md:space-y-0 md:space-x-4 p-4 border rounded-lg shadow-sm"
                 >
                     {/* Thumbnail */}
-                    <div className="w-full md:w-1/4">
+                    <div className="">
                         <Image
                             src={course.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${course.imageName}` : "/images/courses/default.png"}
                             alt={course.categoryTitle}
@@ -29,19 +29,19 @@ const CoursesList = ({ courses }: { courses: TCourses[] }) => {
                     </div>
 
                     {/* Course Info */}
-                    <div className="w-full md:w-3/4 space-y-2">
+                    <div className="w-full pr-2 space-y-2">
                         <h3 className="text-xl font-semibold">{course.categoryTitle}</h3>
                         <p className="text-sm text-gray-600 text-justify md:text-left">{sliceDescription(course.categoryDescription)}</p>
 
                         {/* Price and Enroll Button in a row */}
                         <div className="flex justify-between items-center mt-4">
-                            <span className="text-lg font-medium text-blue-600">NRs.3000</span>
+                            {(!course.courseType || course.courseType.toLowerCase() == "upcoming") ? null : <span className="text-lg font-medium text-blue-600">NRs.3000</span>}
                             <Link href={"browse/" + course.categoryId} className="bg-blue text-white hover:bg-blue px-4 py-2 rounded">
-                                View & Book
+                                {(!course.courseType || course.courseType.toLowerCase() == "upcoming") ? "View" : "View & Book"}
                             </Link>
                         </div>
 
-                        <Badge variant="default" className={(!course.courseType || course.courseType.toLowerCase() == "upcoming") ? "bg-green" : "bg-blue"}>{course.courseType || "Upcoming"}</Badge>
+                        <Badge variant="default" className={(!course.courseType || course.courseType.toLowerCase() == "upcoming") ? "bg-green capitalize" : "bg-blue capitalize"}>{course.courseType || "Upcoming"}</Badge>
                     </div>
                 </div>
             ))}

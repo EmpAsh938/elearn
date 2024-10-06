@@ -16,7 +16,6 @@ export default function Courses() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-
     useEffect(() => {
         const fetchCourses = async () => {
             setLoading(true);
@@ -25,7 +24,7 @@ export default function Courses() {
             try {
                 const req = await fetch(`/api/courses/all`);
                 const res = await req.json();
-                const courses: TCourses[] = res.body;  // Ensure body is typed as Courses[]
+                const courses: TCourses[] = res.body;
                 setCourses(courses);
 
                 // Filter out empty or invalid categories
@@ -46,10 +45,13 @@ export default function Courses() {
         fetchCourses();
     }, []);
 
+    // Function to filter courses based on selected tag
+    const filteredCourses = selectedTag === "All"
+        ? courses
+        : courses.filter(course => course.mainCategory === selectedTag);
 
     return (
         <div className="overflow-x-hidden">
-            {/* Navbar positioned fixed */}
             <Navbar />
             <main className="p-6">
                 <section className="text-center">
@@ -83,7 +85,7 @@ export default function Courses() {
                     </div>
                 ) : (
                     <section className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8 px-4">
-                        {courses.map(pkg => (
+                        {filteredCourses.map(pkg => (
                             <Link key={pkg.categoryId} href={`/courses/${pkg.categoryId}`} className="block">
                                 <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
                                     <Image
@@ -95,7 +97,7 @@ export default function Courses() {
                                     />
                                     <div className="p-6">
                                         {/* Limit the title to 2 lines and add ellipsis for overflow */}
-                                        <h2 className="text-2xl font-bold mb-2 line-clamp-2 overflow-hidden text-ellipsis">
+                                        <h2 className="text-2xl font-bold mb-2 line-clamp-1 overflow-hidden text-ellipsis">
                                             {pkg.categoryTitle}
                                         </h2>
 
@@ -104,7 +106,7 @@ export default function Courses() {
                                             {pkg.categoryDescription}
                                         </p>
 
-                                        <Badge variant="default" className={(!pkg.courseType || pkg.courseType.toLowerCase() == "upcoming") ? "bg-green" : "bg-blue"}>{pkg.courseType || "Upcoming"}</Badge>
+                                        <Badge variant="default" className={(!pkg.courseType || pkg.courseType.toLowerCase() == "upcoming") ? "bg-green capitalize" : "bg-blue capitalize"}>{pkg.courseType || "Upcoming"}</Badge>
                                     </div>
 
                                 </div>
