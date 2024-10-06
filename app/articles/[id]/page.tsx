@@ -8,19 +8,19 @@ const articles = [
     {
         title: "The Future of Education Technology",
         description: "An in-depth look at how technology is shaping the future of education.",
-        image: "/images/notice.jpg", // Example image
+        image: "/images/notice.png", // Example image
         link: "/articles/future-of-edtech", // Example link
     },
     {
         title: "10 Tips to Excel in Online Learning",
         description: "Master the art of online learning with these essential tips.",
-        image: "/images/notice.jpg", // Example image
+        image: "/images/notice.png", // Example image
         link: "/articles/tips-online-learning",
     },
     {
         title: "The Role of Mentorship in Education",
         description: "Why having a mentor can change your academic and professional journey.",
-        image: "/images/notice.jpg", // Example image
+        image: "/images/notice.png", // Example image
         link: "/articles/role-of-mentorship",
     },
 ];
