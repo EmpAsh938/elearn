@@ -135,7 +135,7 @@ const Booked = () => {
                 >
                     {/* Thumbnail */}
                     <Image
-                        src={course.category.imageName || "/images/courses/default.png"}
+                        src={course.category.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${course.category.imageName}` : "/images/courses/default.png"}
                         alt={course.category.categoryTitle}
                         width={900}
                         height={900}

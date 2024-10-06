@@ -1,9 +1,10 @@
+
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
     try {
 
-        const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/`);
+        const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/`, { cache: 'no-store' });
 
         const data = await apiResponse.json();
 

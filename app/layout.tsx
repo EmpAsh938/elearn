@@ -12,8 +12,8 @@ const ubuntu = Ubuntu({
 });
 
 export const metadata: Metadata = {
-    title: "Elearn",
-    description: "E Learning Platform",
+    title: "उत्कृष्ट शिक्षा",
+    description: "Welcome to Utkrista Shikshya, a leading online learning platform committed to providing accessible and high-quality education for all. Our mission is to break down barriers to education and empower learners everywhere with knowledge that is both affordable and effective.",
 };
 
 export default function RootLayout({

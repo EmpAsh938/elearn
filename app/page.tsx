@@ -57,7 +57,7 @@ export default function Home() {
                     </div>
 
                     {/* Right: Carousel of Images */}
-                    <div className="relative w-screen md:w-[calc(100vw-300px)] max-h-[calc(100vh-80px)] p-4 pr-6">
+                    <div className="relative w-screen md:w-[calc(100vw-300px)] h-[calc(100vh-80px)] p-4 pr-6 overflow-hidden">
                         {/* Ensure the height is properly defined */}
                         <Carousel />
                     </div>
@@ -103,8 +103,8 @@ export default function Home() {
             <Footer />
 
             {showPopup && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-6 md:p-0">
-                    <div className="relative bg-white overflow-hidden rounded shadow-lg max-w-3xl w-full"> {/* Increased max width */}
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-6">
+                    <div className="relative bg-white overflow-hidden rounded shadow-lg max-w-4xl w-full"> {/* Increased max width */}
                         <button
                             onClick={() => setShowPopup(false)}
                             className="absolute top-2 right-2 text-gray-600 hover:text-black"
@@ -112,11 +112,11 @@ export default function Home() {
                             ✕
                         </button>
                         <Image
-                            src="/images/notice.jpg" // Replace with your notice image path
+                            src="/images/carousel2.png" // Replace with your notice image path
                             alt="Notice"
                             width={1000} // Increased width
                             height={800} // Increased height
-                            className="w-full h-auto"
+                            className="w-full h-[90vh] object-contain"
                         />
                     </div>
                 </div>

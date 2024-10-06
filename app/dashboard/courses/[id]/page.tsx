@@ -103,7 +103,7 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
             <div className="flex flex-col md:flex-row gap-4 items-center mb-6">
                 {/* Course Image */}
                 <Image
-                    src={courseData.imageName || "/images/courses/default.png"}
+                    src={courseData.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${courseData.imageName}` : "/images/courses/default.png"}
                     alt={courseData.categoryTitle}
                     width={600}
                     height={600}

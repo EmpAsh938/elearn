@@ -149,7 +149,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                     <div className="lg:w-1/3">
                         <div className="p-4 border rounded-lg shadow-lg">
                             <Image
-                                src={courseData.imageName || "/images/courses/default.png"}
+                                src={courseData.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${courseData.imageName}` : "/images/courses/default.png"}
                                 alt={courseData.categoryTitle}
                                 width={400}
                                 height={200}

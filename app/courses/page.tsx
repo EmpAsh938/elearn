@@ -87,7 +87,7 @@ export default function Courses() {
                             <Link key={pkg.categoryId} href={`/courses/${pkg.categoryId}`} className="block">
                                 <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
                                     <Image
-                                        src={pkg.imageName || "/images/courses/default.png"}
+                                        src={pkg.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${pkg.imageName}` : "/images/courses/default.png"}
                                         alt={pkg.categoryTitle}
                                         width={400}
                                         height={250}
