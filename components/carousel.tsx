@@ -10,17 +10,29 @@ import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 const Carousel = () => {
     const images = [
         {
-            src: "/images/carousel2.png",
+            src: "/images/carousel/carousel1.png",
             alt: "Dashain Offer"
         },
         {
-            src: "/images/notice.jpg",
+            src: "/images/carousel/carousel2.png",
             alt: "Offer"
         },
-        // {
-        //     src: "/images/notice.jpg",
-        //     alt: "Offer"
-        // },
+        {
+            src: "/images/carousel/carousel3.png",
+            alt: "Dashain Offer"
+        },
+        {
+            src: "/images/carousel/carousel4.png",
+            alt: "Dashain Offer"
+        },
+        {
+            src: "/images/carousel/carousel5.png",
+            alt: "Dashain Offer"
+        },
+        {
+            src: "/images/carousel/carousel6.png",
+            alt: "Offer"
+        },
     ];
 
     return (
@@ -41,7 +53,7 @@ const Carousel = () => {
             {images.map((image, index) => (
 
                 <SwiperSlide key={index}>
-                    <Image src={image.src} alt={image.alt} width={900} height={900} className="object-contain w-full" />
+                    <Image src={image.src} alt={image.alt} width={900} height={900} className="object-fill w-full" />
                 </SwiperSlide>
             ))}
 

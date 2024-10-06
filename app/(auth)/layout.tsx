@@ -15,16 +15,28 @@ export default function AuthLayout({
 
     const images = [
         {
-            src: "/images/notice.jpg",
-            alt: "Special Offer 1"
+            src: "/images/carousel/carousel1.png",
+            alt: "Dashain Offer"
         },
         {
-            src: "/images/notice.jpg",
-            alt: "Special Offer 2"
+            src: "/images/carousel/carousel2.png",
+            alt: "Offer"
         },
         {
-            src: "/images/notice.jpg",
-            alt: "Special Offer 3"
+            src: "/images/carousel/carousel3.png",
+            alt: "Dashain Offer"
+        },
+        {
+            src: "/images/carousel/carousel4.png",
+            alt: "Dashain Offer"
+        },
+        {
+            src: "/images/carousel/carousel5.png",
+            alt: "Dashain Offer"
+        },
+        {
+            src: "/images/carousel/carousel6.png",
+            alt: "Offer"
         },
     ];
 
@@ -63,7 +75,7 @@ export default function AuthLayout({
                                             src={image.src}
                                             alt={image.alt}
                                             layout="fill"
-                                            className="object-cover w-full h-full"
+                                            className="object-contain w-full h-full"
                                         />
                                     </SwiperSlide>
                                 ))}

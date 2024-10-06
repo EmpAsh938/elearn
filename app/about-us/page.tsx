@@ -19,7 +19,7 @@ export default function Aboutus() {
                 </section>
 
                 {/* Image Section */}
-                <section className="w-full h-[60vh] mb-12">
+                {/* <section className="w-full h-[60vh] mb-12">
                     <Image
                         src="/images/notice.jpg"
                         alt="Team or education banner"
@@ -27,7 +27,7 @@ export default function Aboutus() {
                         width={1600}
                         className="w-full h-full object-cover rounded-lg"
                     />
-                </section>
+                </section> */}
 
                 {/* Mission, Vision, Values Section */}
                 <section className="flex flex-col items-center text-center gap-6 py-8">

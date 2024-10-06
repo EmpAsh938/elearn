@@ -112,11 +112,11 @@ export default function Home() {
                             ✕
                         </button>
                         <Image
-                            src="/images/carousel2.png" // Replace with your notice image path
+                            src="/images/notice.png" // Replace with your notice image path
                             alt="Notice"
                             width={1000} // Increased width
                             height={800} // Increased height
-                            className="w-full h-[90vh] object-contain"
+                            className="w-full object-contain"
                         />
                     </div>
                 </div>
