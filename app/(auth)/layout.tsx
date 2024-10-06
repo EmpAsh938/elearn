@@ -15,14 +15,6 @@ export default function AuthLayout({
 
     const images = [
         {
-            src: "/images/carousel/carousel1.png",
-            alt: "Dashain Offer"
-        },
-        {
-            src: "/images/carousel/carousel2.png",
-            alt: "Offer"
-        },
-        {
             src: "/images/carousel/carousel3.png",
             alt: "Dashain Offer"
         },
@@ -30,15 +22,27 @@ export default function AuthLayout({
             src: "/images/carousel/carousel4.png",
             alt: "Dashain Offer"
         },
+
         {
             src: "/images/carousel/carousel5.png",
             alt: "Dashain Offer"
         },
         {
+            src: "/images/carousel/carousel2.png",
+            alt: "Offer"
+        },
+        {
+            src: "/images/carousel/carousel1.png",
+            alt: "Dashain Offer"
+        },
+
+
+        {
             src: "/images/carousel/carousel6.png",
             alt: "Offer"
         },
     ];
+
 
     return (
         <div className="overflow-x-hidden">

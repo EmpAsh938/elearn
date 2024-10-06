@@ -19,6 +19,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
     const { user } = useGlobalContext();
 
     const handleBookNow = async (categoryId: string) => {
+        if (courseData?.courseType.toLowerCase() === 'upcoming') return;
         if (!user) return;
         const userConfirmed = window.confirm("Are you sure you want to book this course?");
         if (!userConfirmed) return;
@@ -148,9 +149,9 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                             )}
                             {activeTab === 'syllabus' && (
                                 <ul className="list-disc ml-5 text-gray-700">
-                                    {posts.map((item) => (
+                                    {posts.length > 0 ? posts.map((item) => (
                                         <li key={item.postId} className="mb-2">{item.title}</li>
-                                    ))}
+                                    )) : <p>We will update the syllabus soon.</p>}
                                 </ul>
                             )}
                             {activeTab === 'instructor' && (
@@ -200,7 +201,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                             <Button
                                 onClick={() => handleBookNow(courseData.categoryId)}
                                 className={`mt-6 w-full ${booking ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue hover:bg-blue-700'} text-white`}
-                                disabled={booking}
+                                disabled={booking || courseData.courseType.toLowerCase() === 'upcoming'}
                             >
                                 {booking ? 'Booking...' : 'Book Now'}
                             </Button>                        </div>

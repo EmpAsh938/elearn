@@ -13,12 +13,12 @@ export default function Footer() {
                         src="/images/logo.avif"
                         width={600}
                         height={600}
-                        alt="Utkrista Shiksha logo"
+                        alt="Utkrista Shikshya logo"
                         className="w-24 object-cover mb-4"
                     />
                     <span className="font-bold text-white text-2xl mb-4">उत्कृष्ट शिक्षा</span>
                     <p className="text-gray-400 mb-4">
-                        Utkrista Shiksha provides comprehensive resources to help you enhance your skills and knowledge through quality e-learning.
+                        Utkrista Shikshya provides comprehensive resources to help you enhance your skills and knowledge through quality e-learning.
                     </p>
                     <Link href="/about-us" className="text-blue hover:underline">Learn more about us</Link>
                 </div>
@@ -51,28 +51,28 @@ export default function Footer() {
                         Stay connected with us through our social media channels.
                     </p>
                     <div className="flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-between gap-4 lg:gap-8">
-                        <a href="#" className="hover:underline" aria-label="Facebook">
+                        <Link href="https://www.facebook.com/utkristashikshya" target="_blank" className="hover:underline" aria-label="Facebook">
                             <Facebook className="w-8 h-8 text-blue" />
-                        </a>
-                        <a href="#" className="hover:underline" aria-label="Twitter">
+                        </Link>
+                        {/* <Link href="#" className="hover:underline" aria-label="Twitter">
                             <Twitter className="w-8 h-8 text-blue" />
-                        </a>
-                        <a href="#" className="hover:underline" aria-label="Linkedin">
+                        </Link> */}
+                        <Link href="#" className="hover:underline" aria-label="Linkedin">
                             <Linkedin className="w-8 h-8 text-blue-700" />
-                        </a>
-                        <a href="#" className="hover:underline" aria-label="Instagram">
+                        </Link>
+                        <Link href="https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.instagram.com%2Futkrista_shikshya%2F%3Ffbclid%3DIwZXh0bgNhZW0CMTAAAR3M_LPAkN4uqgJ93O4N70brcGU6MlHVbRq-gtwSbxqhfRhZGZQb00je4KY_aem_wBb_incgZkKJsPDXAyDLJw&h=AT1FtS5dJyI2DX1to1L6CbpPqLPRbpFz3lBcaN79iTo7sXt2L3ccYaRQDE_pdRifgVELrfMm1oz2_cmG1pTcJrfuhAYKGnpZ_1_YgZ-jOmYm1i6kXR-J9wCBIpFu-w" className="hover:underline" aria-label="Instagram">
                             <Instagram className="w-8 h-8 text-pink-600" />
-                        </a>
-                        <a href="#" className="hover:underline" aria-label="Youtube">
+                        </Link>
+                        <Link href="https://www.youtube.com/@utkristashikshya" className="hover:underline" aria-label="Youtube">
                             <Youtube className="w-8 h-8 text-red-600" />
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
 
             <div className="border-t border-gray-700 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center">
                 <div className="text-center md:text-left">
-                    <p className="text-gray-400">&copy; 2024 Utkrista Shiksha. All rights reserved.</p>
+                    <p className="text-gray-400">&copy; 2024 Utkrista Shikshya. All rights reserved.</p>
                 </div>
                 <div className="flex space-x-6 text-sm text-gray-400 mt-4 md:mt-0">
                     <Link href="/privacy" className="hover:underline">Privacy Policy</Link>

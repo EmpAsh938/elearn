@@ -10,14 +10,6 @@ import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 const Carousel = () => {
     const images = [
         {
-            src: "/images/carousel/carousel1.png",
-            alt: "Dashain Offer"
-        },
-        {
-            src: "/images/carousel/carousel2.png",
-            alt: "Offer"
-        },
-        {
             src: "/images/carousel/carousel3.png",
             alt: "Dashain Offer"
         },
@@ -25,10 +17,21 @@ const Carousel = () => {
             src: "/images/carousel/carousel4.png",
             alt: "Dashain Offer"
         },
+
         {
             src: "/images/carousel/carousel5.png",
             alt: "Dashain Offer"
         },
+        {
+            src: "/images/carousel/carousel2.png",
+            alt: "Offer"
+        },
+        {
+            src: "/images/carousel/carousel1.png",
+            alt: "Dashain Offer"
+        },
+
+
         {
             src: "/images/carousel/carousel6.png",
             alt: "Offer"
