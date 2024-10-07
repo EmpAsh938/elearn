@@ -111,6 +111,9 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
         );
     }
 
+    const isUpcoming = courseData?.courseType.toLowerCase() === 'upcoming' || courseData?.courseType === '' || courseData?.courseType === null;
+
+
     return (
         <div className="md:ml-52 mt-16 p-6 flex flex-col lg:flex-row gap-6">
             {courseData && (
@@ -121,7 +124,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                         <div className="flex items-center justify-between">
                             <h1 className="text-xl md:text-3xl font-bold">{courseData.categoryTitle}</h1>
 
-                            <Badge variant="default" className={(!courseData.courseType || courseData.courseType.toLowerCase() == "upcoming") ? "bg-green capitalize" : "bg-blue capitalize"}>{courseData.courseType || "Upcoming"}</Badge>
+                            <Badge variant="default" className={isUpcoming ? "bg-green capitalize" : "bg-blue capitalize"}>{courseData.courseType || "Upcoming"}</Badge>
                             <button className="ml-2 text-gray-500 hover:text-gray-700">
                                 &#128279; {/* Icon representing share */}
                             </button>
@@ -129,16 +132,28 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
 
                         {/* Tabs */}
                         <div className="flex mt-4 gap-4 flex-wrap">
-                            {['Overview', 'Syllabus', 'Instructor'].map((tab) => (
-                                <button
-                                    key={tab}
-                                    onClick={() => setActiveTab(tab.toLowerCase())}
-                                    className={`px-4 py-2 rounded ${activeTab === tab.toLowerCase() ? 'bg-black text-white' : 'bg-gray-200 text-gray-700'}`}
-                                >
-                                    {tab}
-                                </button>
-                            ))}
+                            {isUpcoming
+                                ? (
+                                    <button
+                                        key="Overview"
+                                        onClick={() => setActiveTab('overview')}
+                                        className={`px-4 py-2 rounded ${activeTab === 'overview' ? 'bg-black text-white' : 'bg-gray-200 text-gray-700'}`}
+                                    >
+                                        Overview
+                                    </button>
+                                )
+                                : ['Overview', 'Syllabus', 'Instructor'].map((tab) => (
+                                    <button
+                                        key={tab}
+                                        onClick={() => setActiveTab(tab.toLowerCase())}
+                                        className={`px-4 py-2 rounded ${activeTab === tab.toLowerCase() ? 'bg-black text-white' : 'bg-gray-200 text-gray-700'}`}
+                                    >
+                                        {tab}
+                                    </button>
+                                ))
+                            }
                         </div>
+
 
                         {/* Tab Content */}
                         <div className="mt-6">
@@ -187,7 +202,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 height={200}
                                 className="rounded-lg"
                             />
-                            {(!courseData.courseType || courseData.courseType.toLowerCase() == "upcoming") ? null : <h2 className="text-2xl font-semibold mt-4">{courseData.price || "NRs. 3000"}</h2>}
+                            {isUpcoming ? null : <h2 className="text-2xl font-semibold mt-4">NRs.{courseData.price || ""}</h2>}
                             {/* Hardcoded Features */}
                             <ul className="mt-4 space-y-2 text-gray-600">
                                 <li>✓ Live classes</li>
@@ -201,10 +216,11 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                             <Button
                                 onClick={() => handleBookNow(courseData.categoryId)}
                                 className={`mt-6 w-full ${booking ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue hover:bg-blue-700'} text-white`}
-                                disabled={booking || courseData.courseType.toLowerCase() === 'upcoming'}
+                                disabled={booking || isUpcoming}
                             >
-                                {booking ? 'Booking...' : 'Book Now'}
-                            </Button>                        </div>
+                                {booking ? 'Booking...' : isUpcoming ? 'Upcoming' : 'Book Now'}
+                            </Button>
+                        </div>
                     </div>
                 </div>
             )}

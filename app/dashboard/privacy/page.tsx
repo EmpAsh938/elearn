@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function PrivacyPolicy() {
     return (
         <div className="md:ml-52 mt-16 p-6">
@@ -100,7 +102,7 @@ export default function PrivacyPolicy() {
                 <section className="mb-8 bg-white shadow-md rounded-lg p-6">
                     <h2 className="text-2xl font-semibold mb-4 text-gray-800">Let’s Connect!</h2>
                     <p className="text-lg text-gray-700">
-                        Have questions or thoughts about our policy? We’re all ears! Reach out to us at [insert email address]. Your feedback is essential in helping us serve you better.
+                        Have questions or thoughts about our policy? We’re all ears! Reach out to us at <Link href="mailto:utkristashikshya@gmail.com" className="text-darkNavy font-medium">utkristashikshya@gmail.com</Link>. Your feedback is essential in helping us serve you better.
                     </p>
                 </section>
             </div>

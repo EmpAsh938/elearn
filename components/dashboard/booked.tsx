@@ -147,9 +147,9 @@ const Booked = () => {
                     <Image
                         src={course.category.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${course.category.imageName}` : "/images/courses/default.png"}
                         alt={course.category.categoryTitle}
-                        width={900}
-                        height={900}
-                        className="object-cover w-full"
+                        width={200}
+                        height={200}
+                        className="object-cover rounded w-full"
                     />
 
                     {/* Course Info */}

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Terms() {
     return (
         <div className="md:ml-52 mt-16 p-6">
@@ -68,7 +70,7 @@ export default function Terms() {
                 <section className="mb-8 bg-white shadow-md rounded-lg p-6">
                     <h2 className="text-2xl font-semibold mb-4 text-gray-800">8. Contact Information</h2>
                     <p className="text-lg text-gray-700">
-                        If you have any questions or suggestions regarding these Terms and Conditions, please contact us at [insert email address].
+                        If you have any questions or suggestions regarding these Terms and Conditions, please contact us at <Link href="mailto:utkristashikshya@gmail.com" className="text-darkNavy font-medium">utkristashikshya@gmail.com</Link>                       .
                     </p>
                 </section>
             </div>

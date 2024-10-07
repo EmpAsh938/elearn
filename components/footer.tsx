@@ -1,10 +1,10 @@
-import { Facebook, Twitter, Linkedin, Instagram, Youtube } from "lucide-react";
+import { Facebook, Instagram, Youtube, LucideMail } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Footer() {
     return (
-        <footer className="bg-darkNavy text-white p-12">
+        <footer className="bg-darkNavy text-white p-12 pb-4">
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
 
                 {/* Logo and About Section */}
@@ -39,8 +39,6 @@ export default function Footer() {
                     <h3 className="text-lg font-bold mb-4">Our Services</h3>
                     <ul className="space-y-2">
                         <li><Link href="/courses" className="hover:underline">Courses</Link></li>
-                        {/* <li><Link href="/resources" className="hover:underline">Learning Resources</Link></li> */}
-                        {/* <li><Link href="/community" className="hover:underline">Community Support</Link></li> */}
                     </ul>
                 </div>
 
@@ -54,13 +52,10 @@ export default function Footer() {
                         <Link href="https://www.facebook.com/utkristashikshya" target="_blank" className="hover:underline" aria-label="Facebook">
                             <Facebook className="w-8 h-8 text-blue" />
                         </Link>
-                        {/* <Link href="#" className="hover:underline" aria-label="Twitter">
-                            <Twitter className="w-8 h-8 text-blue" />
-                        </Link> */}
-                        <Link href="#" className="hover:underline" aria-label="Linkedin">
-                            <Linkedin className="w-8 h-8 text-blue-700" />
+                        <Link href="mailto:utkristashikshya@gmail.com" className="hover:underline" aria-label="Mail">
+                            <LucideMail className="w-8 h-8 text-blue" />
                         </Link>
-                        <Link href="https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.instagram.com%2Futkrista_shikshya%2F%3Ffbclid%3DIwZXh0bgNhZW0CMTAAAR3M_LPAkN4uqgJ93O4N70brcGU6MlHVbRq-gtwSbxqhfRhZGZQb00je4KY_aem_wBb_incgZkKJsPDXAyDLJw&h=AT1FtS5dJyI2DX1to1L6CbpPqLPRbpFz3lBcaN79iTo7sXt2L3ccYaRQDE_pdRifgVELrfMm1oz2_cmG1pTcJrfuhAYKGnpZ_1_YgZ-jOmYm1i6kXR-J9wCBIpFu-w" className="hover:underline" aria-label="Instagram">
+                        <Link href="https://www.instagram.com/utkrista_shikshya/" className="hover:underline" aria-label="Instagram">
                             <Instagram className="w-8 h-8 text-pink-600" />
                         </Link>
                         <Link href="https://www.youtube.com/@utkristashikshya" className="hover:underline" aria-label="Youtube">
@@ -79,6 +74,14 @@ export default function Footer() {
                     <Link href="/terms" className="hover:underline">Terms of Service</Link>
                 </div>
             </div>
+
+            {/* Developed by Section */}
+            <div className="text-left">
+                <p className="text-gray-400">
+                    ⚡ Powered by <Link href="https://a1itinnovation.com.np" target="_blank" className="font-bold hover:underline">A1 IT Innovation</Link>
+                </p>
+            </div>
+
         </footer>
     );
 }

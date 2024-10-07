@@ -63,8 +63,8 @@ const Topbar = ({ isOpen, handleOpen }: Props) => {
                                 <Image
                                     src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}users/image/${user.imageName}`}
                                     alt={user.name}
-                                    width={100}
-                                    height={100}
+                                    width={50}
+                                    height={50}
                                     className="w-10 h-10 object-cover rounded-full cursor-pointer"
                                 />
                             ) : (
@@ -85,8 +85,8 @@ const Topbar = ({ isOpen, handleOpen }: Props) => {
                                         <Image
                                             src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}users/image/${user.imageName}`}
                                             alt={user.name}
-                                            width={100}
-                                            height={100}
+                                            width={50}
+                                            height={50}
                                             className="w-6 h-6 mr-2 object-cover rounded-full cursor-pointer"
                                         />
                                     ) : (

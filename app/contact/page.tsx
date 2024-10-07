@@ -1,6 +1,6 @@
 "use client";
 
-import { Facebook, Twitter, Linkedin, MapPin, Phone, Mail } from "lucide-react";
+import { Facebook, Twitter, Linkedin, MapPin, Phone, Mail, LucideMail, Instagram, Youtube } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import {
@@ -18,6 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import { toast } from "@/hooks/use-toast";
 
 
 const formSchema = z.object({
@@ -46,6 +48,7 @@ export default function Contact() {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values)
+        toast({ description: "You message has been sent successfully" })
     }
     return (
         <div className="overflow-x-hidden">
@@ -114,17 +117,20 @@ export default function Contact() {
                     <div className="max-w-2xl mx-auto text-center">
                         <h2 className="text-2xl font-bold mb-4">Connect with Us</h2>
                         <div className="flex justify-center space-x-6 mb-8">
-                            <a href="#" className="text-gray-500 hover:text-blue-600">
-                                <Facebook className="w-6 h-6" />
-                            </a>
-                            <a href="#" className="text-gray-500 hover:text-blue-600">
-                                <Twitter className="w-6 h-6" />
-                            </a>
-                            <a href="#" className="text-gray-500 hover:text-blue-600">
-                                <Linkedin className="w-6 h-6" />
-                            </a>
+                            <Link href="https://www.facebook.com/utkristashikshya" target="_blank" className="hover:underline" aria-label="Facebook">
+                                <Facebook className="w-8 h-8 text-blue" />
+                            </Link>
+                            <Link href="mailto:utkristashikshya@gmail.com" className="hover:underline" aria-label="Mail">
+                                <LucideMail className="w-8 h-8 text-blue" />
+                            </Link>
+                            <Link href="https://www.instagram.com/utkrista_shikshya/" className="hover:underline" aria-label="Instagram">
+                                <Instagram className="w-8 h-8 text-pink-600" />
+                            </Link>
+                            <Link href="https://www.youtube.com/@utkristashikshya" className="hover:underline" aria-label="Youtube">
+                                <Youtube className="w-8 h-8 text-red-600" />
+                            </Link>
                         </div>
-                        <div className="flex justify-center space-x-6 mb-8 items-center flex-col md:flex-row">
+                        <div className="flex justify-center space-x-4 mb-8 items-center flex-col md:flex-row">
                             <div className="flex items-center space-x-2">
                                 <MapPin className="w-6 h-6 text-gray-500" />
                                 <p>MM5G+4XQ, Damak 57217</p>
@@ -135,7 +141,7 @@ export default function Contact() {
                             </div>
                             <div className="flex items-center space-x-2">
                                 <Mail className="w-6 h-6 text-gray-500" />
-                                <p>contact@example.com</p>
+                                <p>utkristashikshya@gmail.com</p>
                             </div>
                         </div>
                         <div className="flex justify-center">
