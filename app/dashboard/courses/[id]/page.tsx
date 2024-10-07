@@ -92,22 +92,31 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
         fetchCourseData();
     }, [id]);
 
-    if (!loading) return <p>Loading...</p>;
-    if (error) return <p>{error}</p>
+    if (loading) return (
+        <div className="relative md:ml-52 mt-16 p-6">
+            <p>Loading...</p>
+        </div>
+    )
+    if (error) return (
+        <div className="relative md:ml-52 mt-16 p-6">
+            <p>{error}</p>
+        </div>)
 
-    if (!courseData) return <p>Courses were not found</p>
-
+    if (!courseData) return (
+        <div className="relative md:ml-52 mt-16 p-6">
+            <p>Courses could not be found</p>
+        </div>)
     return (
         <div className="relative md:ml-52 mt-16 p-6">
             {/* Course Image */}
-            <div className="flex flex-col md:flex-row gap-4 items-center mb-6">
+            <div className="flex flex-col lg:flex-row gap-4 items-center mb-6">
                 {/* Course Image */}
                 <Image
                     src={courseData.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${courseData.imageName}` : "/images/courses/default.png"}
                     alt={courseData.categoryTitle}
                     width={600}
                     height={600}
-                    className="rounded-lg shadow-lg w-64 h-64 object-cover"
+                    className="rounded-lg shadow-lg w-full lg:w-96 object-cover"
                 />
 
                 {/* Course Title and Description */}
@@ -121,6 +130,7 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
             {/* Collapsible Syllabus List */}
             <Accordion type="single" collapsible className="space-y-4">
                 <h2 className="text-2xl font-semibold">Table of Contents</h2>
+                <p className='text-gray-400 text-sm'>Note: We have sample contents for now, we will update the actual contents real soon.</p>
                 {posts ? posts.map((topic, index) => (
                     <AccordionItem key={index} value={`item-${index}`}>
                         <AccordionTrigger>
