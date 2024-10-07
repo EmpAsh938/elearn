@@ -51,12 +51,12 @@ const Carousel = () => {
                 clickable: true,
             }}
             modules={[Autoplay, Pagination, Navigation]}
-            className="mySwiper h-full w-full"
+        // className="mySwiper h-full w-full"
         >
             {images.map((image, index) => (
 
                 <SwiperSlide key={index}>
-                    <Image src={image.src} alt={image.alt} width={900} height={900} className="object-fill w-full" />
+                    <Image src={image.src} alt={image.alt} width={900} height={900} className="object-contain h-full w-full" />
                 </SwiperSlide>
             ))}
 
