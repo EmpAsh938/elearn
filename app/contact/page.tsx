@@ -130,20 +130,26 @@ export default function Contact() {
                                 <Youtube className="w-8 h-8 text-red-600" />
                             </Link>
                         </div>
-                        <div className="flex justify-center space-x-4 mb-8 items-center flex-col md:flex-row">
-                            <div className="flex items-center space-x-2">
-                                <MapPin className="w-6 h-6 text-gray-500" />
-                                <p>MM5G+4XQ, Damak 57217</p>
+                        <div className="flex justify-center space-y-4 md:space-y-0 md:space-x-8 mb-8 items-center flex-col md:flex-row">
+                            <div className="flex items-center space-x-2 text-gray-700">
+                                <MapPin className="w-6 h-6 text-blue-500" />
+                                <p className="font-medium">MM5G+4XQ, Damak 57217</p>
                             </div>
-                            <div className="flex items-center space-x-2">
-                                <Phone className="w-6 h-6 text-gray-500" />
-                                <p>+1 (123) 456-7890</p>
+
+                            <div className="flex items-center space-x-2 text-gray-700">
+                                <Phone className="w-6 h-6 text-green-500" />
+                                <div>
+                                    <p className="font-medium">970-2642012</p>
+                                    <p className="font-medium">976-7781922</p>
+                                </div>
                             </div>
-                            <div className="flex items-center space-x-2">
-                                <Mail className="w-6 h-6 text-gray-500" />
-                                <p>utkristashikshya@gmail.com</p>
+
+                            <div className="flex items-center space-x-2 text-gray-700">
+                                <Mail className="w-6 h-6 text-red-500" />
+                                <p className="font-medium">utkristashikshya@gmail.com</p>
                             </div>
                         </div>
+
                         <div className="flex justify-center">
 
                             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3565.707805078271!2d87.67489747446353!3d26.6578363709991!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39e58f0076fd5507%3A0xe74a9298e30d41ce!2zVXRrcmlzdGEgU2hpa3NoeWEtIOCkieCkpOCljeCkleClg-Ckt-CljeCknyDgpLbgpL_gpJXgpY3gpLfgpL4!5e0!3m2!1sen!2snp!4v1727932793592!5m2!1sen!2snp" width="600"

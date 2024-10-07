@@ -29,6 +29,13 @@ const RightSidebar: React.FC = () => {
         { id: 3, title: "Platform Maintenance", date: "October 8, 2024" },
     ];
 
+    const currentYear = new Date().getFullYear();
+
+    // Define the minimum and maximum dates within the current year
+    const minDate = new Date(currentYear, 0, 1);  // January 1st of the current year
+    const maxDate = new Date(currentYear, 11, 31); // December 31st of the current year
+
+
     return (
         <aside className="fixed top-16 right-0 h-screen w-64 bg-white border-l border-gray-200 p-4 hidden md:flex flex-col justify-between">
             {/* Calendar with Toggle Button */}
@@ -49,16 +56,18 @@ const RightSidebar: React.FC = () => {
                         onChange={setDate}
                         value={date}
                         className="shadow-sm"
-                        showNavigation={false}
-                        activeStartDate={new Date()}
+                        showNavigation={true} // Enable navigation buttons
+                        minDate={minDate} // Set the minimum date to January 1st of the current year
+                        maxDate={maxDate} // Set the maximum date to December 31st of the current year
+                        calendarType="gregory"
                     />
                 )}
             </div>
 
             {/* Notices and News */}
-            <div className="flex flex-col h-full">
+            {/* <div className="flex flex-col h-full">
                 <h2 className="text-lg font-semibold mb-2 text-gray-700">Notices & News</h2>
-                <div className="flex-1 overflow-y-auto"> {/* Allow scrolling */}
+                <div className="flex-1 overflow-y-auto">
                     <ul className="space-y-4">
                         {notices.map((notice, index) => (
                             <li key={index} className="p-2 border-b text-gray-600">
@@ -68,7 +77,7 @@ const RightSidebar: React.FC = () => {
                         ))}
                     </ul>
                 </div>
-            </div>
+            </div> */}
 
         </aside>
     );

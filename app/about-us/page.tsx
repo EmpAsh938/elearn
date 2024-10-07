@@ -88,7 +88,7 @@ export default function Aboutus() {
                 </section>
 
                 {/* Team Section */}
-                <section className="text-center py-12">
+                {/* <section className="text-center py-12">
                     <h2 className="text-3xl font-semibold mb-8">Meet Our Team</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="flex flex-col items-center">
@@ -147,7 +147,7 @@ export default function Aboutus() {
                             <p className="text-gray-500">Market Representative</p>
                         </div>
                     </div>
-                </section>
+                </section> */}
             </main>
             <Footer />
         </div>

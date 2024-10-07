@@ -37,7 +37,7 @@ export default function Home() {
         <div className="overflow-x-hidden">
             <Navbar />
             <main className="flex flex-col gap-8">
-                <section className="grid grid-cols-1 md:grid-cols-[300px_1fr] border-y border-gray-300">
+                <section className="grid grid-cols-1 md:grid-cols-[300px_1fr] max-h-[calc(100vh-80px)] overflow-hidden border-y border-gray-300">
                     {/* Left: Vertically Scrollable Courses Links */}
                     <div className="hidden md:block overflow-y-auto max-h-[calc(100vh-80px)] border-r border-gray-300 px-3 py-5 pl-10">
                         {/* Sticky title */}
@@ -49,7 +49,8 @@ export default function Home() {
                             {browseCourses.map((course) => (
                                 <li key={course.categoryId}>
                                     <Link href={`/courses/${course.categoryId}`}>
-                                        <span className="text-md text-darkBlue hover:underline tracking-wide">{course.categoryTitle}</span>
+                                        <div className="text-md text-darkBlue hover:underline tracking-wide">{course.categoryTitle}</div>
+
                                     </Link>
                                 </li>
                             ))}
@@ -57,7 +58,7 @@ export default function Home() {
                     </div>
 
                     {/* Right: Carousel of Images */}
-                    <div className="relative w-screen md:w-[calc(100vw-300px)] h-fit p-4 pr-6 overflow-hidden">
+                    <div className="relative w-screen md:w-[calc(100vw-300px)] p-4 pr-6 overflow-hidden">
                         {/* Ensure the height is properly defined */}
                         <Carousel />
                     </div>

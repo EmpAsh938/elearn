@@ -12,7 +12,7 @@ const ubuntu = Ubuntu({
 });
 
 export const metadata: Metadata = {
-    title: "उत्कृष्ट शिक्षा",
+    title: "Utkrista Shikshya",
     description: "Welcome to Utkrista Shikshya, a leading online learning platform committed to providing accessible and high-quality education for all. Our mission is to break down barriers to education and empower learners everywhere with knowledge that is both affordable and effective.",
 };
 

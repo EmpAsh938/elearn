@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { generateRandomDiscounts } from '@/app/lib/utils';  // Import the discount generation function
 import { toast } from '@/hooks/use-toast';
 import dynamic from 'next/dynamic';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Button } from '../ui/button';
 
 // Data for the wheel segments
 const data = [
@@ -22,6 +24,8 @@ export default function WheelSpin() {
     const [mustSpin, setMustSpin] = useState(false);  // To trigger the wheel spin
     const [prizeNumber, setPrizeNumber] = useState(0);  // To store the selected discount index
     const [spinResult, setSpinResult] = useState<string | null>(null);  // Store the final result
+    const [open, setOpen] = useState(false);  // Control modal visibility
+
 
     // Function to handle the spinning logic
     const handleSpinClick = () => {
@@ -43,6 +47,7 @@ export default function WheelSpin() {
         setMustSpin(false);  // Stop the spinning
         setSpinResult(data[prizeNumber].option);  // Set the result based on the prize number
         sendDiscountToServer(data[prizeNumber].option);
+        setOpen(true);
     };
 
     const sendDiscountToServer = async (discount: string) => {
@@ -64,7 +69,7 @@ export default function WheelSpin() {
                 throw new Error(result.error || 'Failed to send the discount to the server');
             }
 
-            toast({ description: 'You have received discount of ' + discount });
+            // toast({ description: 'You have received discount of ' + discount });
 
             // Delay for 2 seconds to give time for the user to see the success message
             await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -92,20 +97,41 @@ export default function WheelSpin() {
             />
 
             {/* Spin Button */}
-            <button
+            <Button
                 className="mt-4 px-4 py-2 text-white bg-blue rounded"
                 onClick={handleSpinClick}
-                disabled={mustSpin || spinResult !== null}  // Disable while the wheel is spinning
+                disabled={mustSpin || spinResult !== null}
+            // Disable while the wheel is spinning
             >
                 {mustSpin ? 'Spinning...' : 'Spin for Discount'}
-            </button>
+            </Button>
 
-            {/* Display the Result */}
-            {spinResult && (
-                <div className="mt-4 text-lg font-bold text-green">
-                    Congratulations! You won: {spinResult} discount!
-                </div>
-            )}
+
+            {/* Modal to display the result */}
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent className="bg-white p-8 rounded-lg shadow-lg transition-transform transform duration-300">
+                    <DialogHeader>
+                        <DialogTitle className="text-3xl font-bold text-center text-gray-800">
+                            🎉 You’ve Hit the Jackpot!
+                        </DialogTitle>
+                    </DialogHeader>
+                    <div className="flex justify-center mt-4">
+                        <span className="text-6xl font-extrabold text-green-500">{spinResult}</span>
+                    </div>
+                    <p className="mt-4 text-center text-lg text-gray-600">
+                        Awesome! You’ve just unlocked a special <span className="font-bold">{spinResult}</span> discount on your next purchase. Get ready to save big!
+                    </p>
+                    <p className="mt-2 text-center text-gray-500">
+                        Don’t wait, your discount is waiting for you in your cart. Happy purchasing course! 🛒
+                    </p>
+                    <div className="flex justify-center mt-6">
+                        <Button className="bg-blue text-white hover:bg-blue transition-colors" onClick={() => setOpen(false)}>
+                            Close
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
         </div>
     );
 }

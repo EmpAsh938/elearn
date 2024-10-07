@@ -36,7 +36,6 @@ export default function Dashboard() {
             <FreeCoursesSection />
 
             {(discount || roles.id == '503') ? null : <WheelSpin />}
-            {/* <WheelSpin /> */}
 
         </div>
     )
