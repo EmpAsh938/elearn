@@ -10,6 +10,8 @@ const CoursesList = ({ courses }: { courses: TCourses[] }) => {
         return description.length > 100 ? description.slice(0, 100) + '...' : description;
     };
 
+
+
     return (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">
             {courses.map((course) => (
@@ -35,7 +37,7 @@ const CoursesList = ({ courses }: { courses: TCourses[] }) => {
 
                         {/* Price and Enroll Button in a row */}
                         <div className="flex justify-between items-center mt-4">
-                            {(!course.courseType || course.courseType.toLowerCase() == "upcoming") ? null : <span className="text-lg font-medium text-blue-600">NRs.3000</span>}
+                            {(!course.courseType || course.courseType.toLowerCase() == "upcoming") ? null : <h2 className="text-2xl font-semibold mt-4">NRs.{course.price}</h2>}
                             <Link href={"browse/" + course.categoryId} className="bg-blue text-white hover:bg-blue px-4 py-2 rounded">
                                 {(!course.courseType || course.courseType.toLowerCase() == "upcoming") ? "View" : "View & Book"}
                             </Link>
