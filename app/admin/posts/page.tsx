@@ -32,7 +32,7 @@ export default function Courses() {
         try {
             const request = await fetch('/api/subject', {
                 method: 'PUT',
-                body: JSON.stringify({ categoryId: updateData.category.categoryId, content: updateData.content, title: updateData.title, postId: updateData.postId })
+                body: JSON.stringify({ categoryId: updateData.category.categoryId, content: updateData.content, title: updateData.title, postId: updateData.postId, videoLink: updateData.videoLink })
             })
             const response = await request.json();
             if (response.status !== 200) throw Error(response.error);

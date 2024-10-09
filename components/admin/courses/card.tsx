@@ -41,10 +41,11 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [editTitle, setEditTitle] = useState(course.title);
+    const [editVideoLink, setEditVideoLink] = useState(course.videoLink);
     const [editContent, setEditContent] = useState(course.content); // Markdown content
 
     const handleEdit = () => {
-        onEdit({ ...course, title: editTitle, content: editContent });
+        onEdit({ ...course, title: editTitle, content: editContent, videoLink: editVideoLink });
         setEditDialogOpen(false);
     };
 
@@ -127,6 +128,12 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
                             value={editTitle}
                             onChange={(e) => setEditTitle(e.target.value)}
                             placeholder="Enter new syllabus title"
+                        />
+                        <label className="block text-sm font-medium mb-2">Video Link</label>
+                        <Input
+                            value={editVideoLink}
+                            onChange={(e) => setEditVideoLink(e.target.value)}
+                            placeholder="Enter Video title"
                         />
 
                         <label className="block text-sm font-medium mt-4 mb-2">Syllabus Content (Markdown)</label>

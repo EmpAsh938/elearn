@@ -139,10 +139,18 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
                         <AccordionContent>
                             {/* Video Player */}
                             <div className="mt-2">
-                                <video width="100%" height="315" controls>
-                                    <source src={topic.videoLink || "/videos/landing-bg.mp4"} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                </video>
+                                {topic.videoLink ? (
+                                    <iframe
+                                        width="100%"
+                                        height="315"
+                                        src={topic.videoLink}
+                                        title="Video Player"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                ) : null}
+
                             </div>
 
                             {/* Notes Button */}

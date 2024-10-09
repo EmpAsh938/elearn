@@ -40,7 +40,7 @@ import "easymde/dist/easymde.min.css"; // SimpleMDE's CSS
 // Define the schema for form validation
 const formSchema = z.object({
     title: z.string().min(1, "Title is required").max(50, "Title cannot exceed 50 characters"),
-    // videoLink: z.string().url("Please enter a valid URL"),
+    videoLink: z.string().url("Please enter a valid URL"),
     content: z.string().min(10, "Content must be at least 10 characters"),
 });
 
@@ -52,14 +52,14 @@ export function CreateDialog({ categoryId }: { categoryId: string }) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
-            // videoLink: "",
+            videoLink: "",
             content: "",
         },
     });
 
     // Submit handler for the form
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const { title, content } = values;
+        const { title, content, videoLink } = values;
 
         // Ensure localStorage is only accessed in the browser
         const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -71,7 +71,7 @@ export function CreateDialog({ categoryId }: { categoryId: string }) {
                     title,
                     userId: user.id,
                     categoryId,
-                    // videoLink,
+                    videoLink,
                     content,
                 }),
             });
@@ -163,7 +163,7 @@ export function CreateDialog({ categoryId }: { categoryId: string }) {
                         /> */}
 
                         {/* Video Link Field */}
-                        {/* <FormField
+                        <FormField
                             control={form.control}
                             name="videoLink"
                             render={({ field }) => (
@@ -175,7 +175,7 @@ export function CreateDialog({ categoryId }: { categoryId: string }) {
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        /> */}
+                        />
 
                         {/* Description Field with Markdown Editor */}
                         <FormField

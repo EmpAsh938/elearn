@@ -73,7 +73,7 @@ export async function PUT(req: NextRequest) {
     try {
         // Parse the request body
         const body = await req.json();
-        const { categoryId, postId, title, content } = body;
+        const { categoryId, postId, title, content, videoLink } = body;
 
         const sessionCookie = req.cookies.get('session')?.value;
         if (!sessionCookie) {
@@ -88,7 +88,7 @@ export async function PUT(req: NextRequest) {
                 'Content-Type': 'application/json',
                 'Authorization': `Sandip ${sessionCookie}`,
             },
-            body: JSON.stringify({ title, content, category: { categoryId } }),
+            body: JSON.stringify({ title, content, videoLink, category: { categoryId } }),
         });
 
         const data = await apiResponse.json();
