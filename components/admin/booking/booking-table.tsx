@@ -35,28 +35,22 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { toast } from "@/hooks/use-toast";
+import { TBookedCourse } from "@/app/lib/types";
 import { UpdateModal } from "./update";
 import { DeleteModal } from "./delete";
-import { toast } from "@/hooks/use-toast";
-import { TCourses } from "@/app/lib/types";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 
-
-
-export function GradesTable({ grades, loading }: { grades: TCourses[], loading: boolean }) {
-    const [data, setData] = React.useState<TCourses[]>(grades);
+export function BookingTable({ courses, loading }: { courses: TBookedCourse[], loading: boolean }) {
+    const [data, setData] = React.useState<TBookedCourse[]>(courses);
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
-    const [selectedGrade, setSelectedGrade] = React.useState<TCourses | null>(null); // Modal state
-    const [isModalOpen, setIsModalOpen] = React.useState(false); // Modal state
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false); // Modal state
+    const [selectedGrade, setSelectedGrade] = React.useState<TBookedCourse | null>(null);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
 
-    const router = useRouter();
-
-    const columns: ColumnDef<TCourses>[] = [
+    const columns: ColumnDef<TBookedCourse>[] = [
         {
             id: "select",
             header: ({ table }) => (
@@ -80,46 +74,35 @@ export function GradesTable({ grades, loading }: { grades: TCourses[], loading: 
             enableHiding: false,
         },
         {
-            accessorKey: "categoryTitle",
-            header: "Title",
-            cell: ({ row }) => <div className="capitalize">{row.getValue("categoryTitle")}</div>,
-        },
-        {
-            accessorKey: "courseType",
-            header: "Course Type",
-            cell: ({ row }) => <div className="capitalize">{row.getValue("courseType")}</div>,
-        },
-        {
-            accessorKey: "price",
-            header: "Price",
-            cell: ({ row }) => <div className="capitalize">NRs.{row.getValue("price")}</div>,
+            accessorKey: "category.categoryTitle",
+            header: "Course Title",
+            cell: ({ row }) => <div className="capitalize">{row.original.category.categoryTitle}</div>,
         },
         // {
-        //     id: "image",
-        //     header: "Image",
-        //     enableHiding: false,
-        //     cell: ({ row }) => {
-        //         const user = row.original;
-
-        //         return (
-        //             <div className="flex items-center justify-center">
-        //                 <Image
-        //                     src={user.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${user.imageName}` : "/images/courses/default.png"}
-        //                     alt={user.categoryTitle}
-        //                     width={100}
-        //                     height={100}
-        //                     className="h-8 w-8 rounded-full object-cover" 
-        //                 />
-
-        //             </div>
-        //         );
-        //     },
+        //     accessorKey: "category.categoryDescription",
+        //     header: "Course Description",
+        //     cell: ({ row }) => (
+        //         <div className="capitalize">
+        //             {row.original.category.categoryDescription}
+        //         </div>
+        //     ),
         // },
+        {
+            accessorKey: "user.name",
+            header: "User Name",
+            cell: ({ row }) => <div>{row.original.user.name}</div>,
+        },
+        {
+            accessorKey: "user.email",
+            header: "User Contact",
+            cell: ({ row }) => <div>{row.original.user.email}</div>,
+        },
+
         {
             id: "actions",
             enableHiding: false,
             cell: ({ row }) => {
-                const user = row.original;
+                const course = row.original;
 
                 return (
                     <DropdownMenu>
@@ -132,9 +115,12 @@ export function GradesTable({ grades, loading }: { grades: TCourses[], loading: 
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => router.push("posts?categoryId=" + user.categoryId)}>View Syllabus</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleOpenModal(user)}>Update Package</DropdownMenuItem>
-                            {/* <DropdownMenuItem onClick={() => handleDeleteModal(user)}>Delete Package</DropdownMenuItem> */}
+                            <DropdownMenuItem>
+                                Approve
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                Reject
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );
@@ -142,37 +128,24 @@ export function GradesTable({ grades, loading }: { grades: TCourses[], loading: 
         },
     ];
 
-    const handleOpenModal = (faculty: TCourses) => {
-        setSelectedGrade(faculty);
-        setIsModalOpen(true);
-    };
-    const handleDeleteModal = (faculty: TCourses) => {
-        setSelectedGrade(faculty);
-        setIsDeleteModalOpen(true);
+    // const handleOpenModal = (course: TBookedCourse) => {
+    //     setSelectedGrade(course);
+    //     setIsModalOpen(true);
+    // };
+
+    // const handleDeleteModal = (course: TBookedCourse) => {
+    //     setSelectedGrade(course);
+    //     setIsDeleteModalOpen(true);
+    // };
+
+    const handleApprove = async (updateData: TBookedCourse) => {
+        // Implement your save logic
     };
 
-    const handleSave = async (updateData: TCourses) => {
-        try {
-            const request = await fetch('/api/faculty', {
-                method: 'PUT',
-                body: JSON.stringify({ categoryId: updateData.categoryId, description: updateData.categoryDescription, title: updateData.categoryTitle, price: updateData.price, type: updateData.courseType })
-            })
-            const response = await request.json();
-            if (response.status !== 200) throw Error(response.error);
-            toast({ description: "Grade Updated Successfully" });
-            window.location.href = "/admin/packages";
-        } catch (error: any) {
-            toast({ variant: "destructive", title: "Updating package Failed", description: error.toString() });
-            console.error(error);
-        }
-    };
-
-    const handleDelete = (faculty: TCourses) => {
-        console.log("Package deleted");
-        const updatedData = data.filter((f) => f.categoryId !== faculty.categoryId);
+    const handleReject = (course: TBookedCourse) => {
+        const updatedData = data.filter((f) => f.bookedId !== course.bookedId);
         setData(updatedData);
-    }
-
+    };
 
     const table = useReactTable({
         data,
@@ -194,25 +167,41 @@ export function GradesTable({ grades, loading }: { grades: TCourses[], loading: 
     });
 
     React.useEffect(() => {
-        if (grades && grades.length > 0) {
-            setData(grades);
+        if (courses && courses.length > 0) {
+            setData(courses);
         }
-    }, [grades]);
+    }, [courses]);
 
     return (
         <div className="w-full">
-            <div className="flex items-center py-4">
+            <div className="flex flex-col md:flex-row items-center py-4 space-y-4 md:space-y-0 md:space-x-4">
                 <Input
-                    placeholder="Filter title..."
-                    value={(table.getColumn("categoryTitle")?.getFilterValue() as string) ?? ""}
+                    placeholder="Filter by course title..."
+                    value={(table.getColumn("category.categoryTitle")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("categoryTitle")?.setFilterValue(event.target.value)
+                        table.getColumn("category.categoryTitle")?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm"
+                    className="w-full sm:max-w-sm"
+                />
+                <Input
+                    placeholder="Filter by user name..."
+                    value={(table.getColumn("user.name")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) =>
+                        table.getColumn("user.name")?.setFilterValue(event.target.value)
+                    }
+                    className="w-full sm:max-w-sm"
+                />
+                <Input
+                    placeholder="Filter by user contact..."
+                    value={(table.getColumn("user.email")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) =>
+                        table.getColumn("user.email")?.setFilterValue(event.target.value)
+                    }
+                    className="w-full sm:max-w-sm"
                 />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
+                        <Button variant="outline" className="ml-auto w-full sm:w-auto">
                             Columns <ChevronDown className="ml-2 h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
@@ -237,6 +226,7 @@ export function GradesTable({ grades, loading }: { grades: TCourses[], loading: 
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
+
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -283,53 +273,44 @@ export function GradesTable({ grades, loading }: { grades: TCourses[], loading: 
                             ))
                         )}
                     </TableBody>
-
                 </Table>
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div>
-                <div className="space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        Previous
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        Next
-                    </Button>
-                </div>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => table.previousPage()}
+                    disabled={!table.getCanPreviousPage()}
+                >
+                    Previous
+                </Button>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => table.nextPage()}
+                    disabled={!table.getCanNextPage()}
+                >
+                    Next
+                </Button>
             </div>
 
-            {(selectedGrade && isModalOpen) && (
+            {/* {selectedGrade && (
                 <UpdateModal
-                    faculty={selectedGrade}
                     open={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
+                    course={selectedGrade}
                     onSave={handleSave}
                 />
             )}
-            {(selectedGrade && isDeleteModalOpen) && (
+
+            {selectedGrade && (
                 <DeleteModal
-                    faculty={selectedGrade}
                     open={isDeleteModalOpen}
                     onClose={() => setIsDeleteModalOpen(false)}
-                    onDelete={handleDelete} // Corrected the syntax here
+                    course={selectedGrade}
+                    onDelete={handleDelete}
                 />
-            )}
-
-
-
+            )} */}
         </div>
     );
 }

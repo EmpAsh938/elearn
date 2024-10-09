@@ -4,7 +4,7 @@ export async function POST(req: NextRequest) {
     try {
         // Parse the request body
         const body = await req.json();
-        const { title, description } = body;
+        const { title, description, price, type, tag } = body;
 
         const sessionCookie = req.cookies.get('session')?.value;
         if (!sessionCookie) {
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
                 'Content-Type': 'application/json',
                 'Authorization': `Sandip ${sessionCookie}`,
             },
-            body: JSON.stringify({ categoryTitle: title, categoryDescription: description }),
+            body: JSON.stringify({ categoryTitle: title, categoryDescription: description, mainCategory: tag, courseType: type, price }),
         });
 
         const data = await apiResponse.json();
@@ -48,7 +48,7 @@ export async function PUT(req: NextRequest) {
     try {
         // Parse the request body
         const body = await req.json();
-        const { categoryId, title, description } = body;
+        const { categoryId, title, description, price, courseType } = body;
 
         const sessionCookie = req.cookies.get('session')?.value;
         if (!sessionCookie) {
@@ -63,7 +63,7 @@ export async function PUT(req: NextRequest) {
                 'Content-Type': 'application/json',
                 'Authorization': `Sandip ${sessionCookie}`,
             },
-            body: JSON.stringify({ categoryTitle: title, categoryDescription: description }),
+            body: JSON.stringify({ categoryTitle: title, categoryDescription: description, price, courseType }),
         });
 
         const data = await apiResponse.json();

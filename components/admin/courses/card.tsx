@@ -84,7 +84,6 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
                         {course.title}
                     </CardTitle>
                     <div className="flex gap-2">
-                        {/* Edit Button */}
                         <Button
                             variant="ghost"
                             size="sm"
@@ -94,7 +93,6 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
                             <Edit size={18} className="text-gray-500 hover:text-gray-800" />
                         </Button>
 
-                        {/* Delete Button */}
                         <Button
                             variant="ghost"
                             size="sm"
@@ -111,31 +109,27 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
                             <ReactMarkdown>{course.content.slice(0, 20) + "..."}</ReactMarkdown>
                         </div>
                     </div>
-
                 </CardContent>
             </Card>
 
-            {/* Edit Dialog */}
             <Dialog open={editDialogOpen} onOpenChange={(isOpen) => setEditDialogOpen(isOpen)}>
                 <DialogContent className="max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
-                        <DialogTitle>Edit Course</DialogTitle>
+                        <DialogTitle>Edit Syllabus</DialogTitle>
                         <DialogDescription>
-                            Make changes to the course details below.
+                            Make changes to the syllabus details below.
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="py-4">
-                        {/* Edit Course Title */}
-                        <label className="block text-sm font-medium mb-2">Course Title</label>
+                        <label className="block text-sm font-medium mb-2">Syllabus Title</label>
                         <Input
                             value={editTitle}
                             onChange={(e) => setEditTitle(e.target.value)}
-                            placeholder="Enter new course title"
+                            placeholder="Enter new syllabus title"
                         />
 
-                        {/* Render SimpleMDE Editor */}
-                        <label className="block text-sm font-medium mt-4 mb-2">Course Content (Markdown)</label>
+                        <label className="block text-sm font-medium mt-4 mb-2">Syllabus Content (Markdown)</label>
                         {simpleMDEEditor}
                     </div>
 
@@ -148,17 +142,16 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
                 </DialogContent>
             </Dialog>
 
-            {/* Delete Confirmation Dialog */}
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Delete Course</DialogTitle>
+                        <DialogTitle>Delete Syllabus</DialogTitle>
                         <DialogDescription>
-                            Are you sure you want to delete this course? This action cannot be undone.
+                            Are you sure you want to delete this syllabus? This action cannot be undone.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button onClick={handleDelete} className="bg-red-600 text-white">
+                        <Button onClick={handleDelete} className="bg-red text-white">
                             Confirm Delete
                         </Button>
                         <Button variant="ghost" onClick={() => setDeleteDialogOpen(false)}>

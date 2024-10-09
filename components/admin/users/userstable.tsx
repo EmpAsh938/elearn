@@ -210,10 +210,19 @@ export function UsersTable() {
         setData(updatedData);
     };
 
-    const handleDeleteUser = (user: User) => {
-        console.log("user deleted");
-        const updatedData = data.filter((u) => u.id !== user.id);
-        setData(updatedData);
+    const handleDeleteUser = async (user: string) => {
+        try {
+            const request = await fetch(`/api/user?userId=${user}`, {
+                method: 'DELETE',
+            });
+            const response = await request.json();
+            if (response.status !== 200) throw Error();
+            toast({ description: "User deleted successfully" });
+            window.location.href = '/admin/users';
+        } catch (error) {
+            toast({ description: "User could not be deleted" });
+
+        }
     }
 
     // Fetch data from the server when the component mounts

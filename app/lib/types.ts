@@ -32,3 +32,9 @@ export type TUser = {
     discount: string;
 
 }
+
+export type TBookedCourse = {
+    bookedId: string;
+    category: TCourses;
+    user: TUser;
+}

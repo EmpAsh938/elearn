@@ -14,13 +14,32 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
     const [posts, setPosts] = useState<TPosts[]>([]); // State to hold posts within the course
     const [loading, setLoading] = useState<boolean>(true);
     const [booking, setBooking] = useState<boolean>(false);
+    const [alreadyBooked, setAlreadyBooked] = useState<boolean>(false); // New state for checking booking status
     const [error, setError] = useState<string | null>(null);
     const { id } = params;
     const { user } = useGlobalContext();
 
+    // Function to check if the course is already booked
+    const checkIfBooked = useCallback(async () => {
+        if (!user) return;
+        try {
+            const response = await fetch(`/api/courses/booked/check?userId=${user.id}&categoryId=${id}`);
+            const data = await response.json();
+
+            // If the course is already booked, update the state
+            if (data.status === 200 && data.body) {
+                setAlreadyBooked(true);
+            }
+        } catch (err) {
+            console.error("Error checking booking status:", err);
+        }
+    }, [id, user]);
+
+    // Function to handle booking
     const handleBookNow = async (categoryId: string) => {
         if (courseData?.courseType.toLowerCase() === 'upcoming') return;
-        if (!user) return;
+        if (!user || alreadyBooked) return;
+
         const userConfirmed = window.confirm("Are you sure you want to book this course?");
         if (!userConfirmed) return;
 
@@ -33,48 +52,38 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
             });
 
             const data = await response.json();
-            console.log(data);
-            if (data.status !== 201) throw Error("Booking was already done or some other issues occured");
-            toast({ description: 'Course booked successfully!. Now, we will contact you back soon.' });
+            if (data.status !== 201) throw Error("Booking was already done or some other issues occurred");
+            toast({ description: 'Course booked successfully! We will contact you soon.' });
+            setAlreadyBooked(true); // Mark as booked
 
         } catch (err) {
-            console.error("Booking error:", "Booking was already done or some other issues occured");
-            toast({ variant: 'destructive', description: "Booking was already done or some other issues occured" });
+            console.error("Booking error:", err);
+            toast({ variant: 'destructive', description: "Booking was already done or some other issues occurred" });
         } finally {
             setBooking(false);
         }
     };
 
     const fetchCourseData = useCallback(async () => {
-        console.log(`Fetching course data for id: ${id}`);
         setLoading(true);
         setError(null);
 
         try {
             // Fetch course by ID
             const courseRes = await fetch(`/api/courses/single/?categoryId=${id}`);
-            if (!courseRes.ok) {
-                const errorData = await courseRes.json();
-                throw new Error(errorData.error || 'Failed to fetch course data.');
-            }
+            if (!courseRes.ok) throw new Error('Failed to fetch course data.');
             const courseData = await courseRes.json();
 
             // Fetch posts within the course
             const postsRes = await fetch(`/api/posts/category/?categoryId=${id}`);
-            if (!postsRes.ok) {
-                const postsErrorData = await postsRes.json();
-                throw new Error(postsErrorData.error || 'Failed to fetch posts data.');
-            }
+            if (!postsRes.ok) throw new Error('Failed to fetch posts data.');
             const postsData = await postsRes.json();
 
-            // Set the fetched data
             setCourseData(courseData.body);
             setPosts(postsData.body);
-            console.log("Course Data and Posts fetched successfully.");
-
         } catch (error: any) {
             console.error("Error fetching course or posts:", error);
-            setError(error || "Failed to load course data. Please try again.");
+            setError(error.message);
         } finally {
             setLoading(false);
         }
@@ -82,7 +91,8 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
 
     useEffect(() => {
         fetchCourseData();
-    }, [fetchCourseData]);
+        checkIfBooked(); // Check if the course is already booked on component mount
+    }, [fetchCourseData, checkIfBooked]);
 
     // Custom Loading Component
     if (loading) {
@@ -113,7 +123,6 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
 
     const isUpcoming = courseData?.courseType.toLowerCase() === 'upcoming' || courseData?.courseType === '' || courseData?.courseType === null;
 
-
     return (
         <div className="md:ml-52 mt-16 p-6 flex flex-col lg:flex-row gap-6">
             {courseData && (
@@ -129,7 +138,6 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 &#128279; {/* Icon representing share */}
                             </button>
                         </div>
-
                         {/* Tabs */}
                         <div className="flex mt-4 gap-4 flex-wrap">
                             {isUpcoming
@@ -192,6 +200,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                         </div>
                     </div>
 
+
                     {/* Right Sidebar */}
                     <div className="lg:w-1/3">
                         <div className="p-4 border rounded-lg shadow-lg">
@@ -216,9 +225,9 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                             <Button
                                 onClick={() => handleBookNow(courseData.categoryId)}
                                 className={`mt-6 w-full ${booking ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue hover:bg-blue-700'} text-white`}
-                                disabled={booking || isUpcoming}
+                                disabled={booking || alreadyBooked || isUpcoming}
                             >
-                                {booking ? 'Booking...' : isUpcoming ? 'Upcoming' : 'Book Now'}
+                                {alreadyBooked ? 'Already Booked' : booking ? 'Booking...' : isUpcoming ? 'Upcoming' : 'Book Now'}
                             </Button>
                         </div>
                     </div>

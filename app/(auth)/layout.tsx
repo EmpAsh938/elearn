@@ -71,7 +71,7 @@ export default function AuthLayout({
                                 //     clickable: true,
                                 // }}
                                 modules={[Autoplay, Pagination, Navigation]}
-                                className="w-[350px] h-[200px] rounded-lg"
+                                className="w-[350px] h-[250px] lg:w-[400px] lg:h-[300px] rounded-lg"
                             >
                                 {images.map((image, index) => (
                                     <SwiperSlide key={index}>

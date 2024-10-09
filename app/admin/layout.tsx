@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, Home, Users, Book, Video, Clipboard, Package2, LogOut } from 'lucide-react';
+import { Menu, Home, Users, Book, Video, Clipboard, Package2, LogOut, BookImage } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
@@ -23,25 +23,30 @@ const sidemenuLinks = [
         link: "/admin/users"
     },
     {
+        title: "Bookings",
+        icon: <BookImage size={24} />,
+        link: "/admin/bookings"
+    },
+    {
         title: "Grades",
         icon: <Package2 size={24} />,
         link: "/admin/packages"
     },
-    {
-        title: "Courses",
-        icon: <Book size={24} />,
-        link: "/admin/course"
-    },
+    // {
+    //     title: "Courses",
+    //     icon: <Book size={24} />,
+    //     link: "/admin/course"
+    // },
     {
         title: "Live Classes",
         icon: <Video size={24} />,
         link: "/admin/live-classes"
     },
-    {
-        title: "Exams",
-        icon: <Clipboard size={24} />,
-        link: "/admin/exams"
-    },
+    // {
+    //     title: "Exams",
+    //     icon: <Clipboard size={24} />,
+    //     link: "/admin/exams"
+    // },
     // {
     //     title: "Recent Activities",
     //     icon: <Activity size={24} />,

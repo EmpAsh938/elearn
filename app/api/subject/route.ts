@@ -94,19 +94,60 @@ export async function PUT(req: NextRequest) {
         const data = await apiResponse.json();
 
         if (apiResponse.status !== 200) {
-            return NextResponse.json({ error: data.error }, { status: apiResponse.status });
+            return NextResponse.json({ error: data.error, status: apiResponse.status });
         }
 
 
 
         return NextResponse.json({
-            message: 'Course Updated successfully',
+            message: 'Syllabus Updated successfully',
             status: 200,
             body: data,
         });
 
 
     } catch (error) {
-        return NextResponse.json({ error: 'Course Update Failed' }, { status: 500 });
+        return NextResponse.json({ error: 'Syllabus Update Failed', status: 500 });
+    }
+}
+
+
+
+export async function DELETE(req: NextRequest) {
+    try {
+
+        const postId = req.nextUrl.searchParams.get('postId');
+
+        const sessionCookie = req.cookies.get('session')?.value;
+        if (!sessionCookie) {
+            return NextResponse.json({ error: 'No session cookie found' }, { status: 401 });
+        }
+
+
+        // Make the request to your authentication API to get the token
+        const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}posts/${postId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Sandip ${sessionCookie}`,
+            },
+        });
+
+        const data = await apiResponse.json();
+
+        if (apiResponse.status !== 200) {
+            return NextResponse.json({ error: data.error, status: apiResponse.status });
+        }
+
+
+
+        return NextResponse.json({
+            message: 'Syllabus Deleted successfully',
+            status: 200,
+            body: data,
+        });
+
+
+    } catch (error) {
+        return NextResponse.json({ error: 'Syllabus Delete Failed', status: 500 });
     }
 }
