@@ -178,7 +178,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                             <div>
                                                 <h4 className="text-lg font-semibold">{instructor.mentor}</h4>
                                                 <p className="text-sm text-gray-600">{"An experienced educator with over 5 years of experience"}</p>
-                                                <ReactMarkdown className="prose prose-sm">{instructor.content}</ReactMarkdown> {/* Render markdown */}
+
                                             </div>
                                         </div>
                                     ))}
