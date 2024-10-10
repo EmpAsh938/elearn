@@ -84,12 +84,12 @@ export default function Courses() {
 
     return (
         <div className="p-6">
-            <h2 className="text-2xl font-bold text-darkNavy mb-4">Syllabus</h2>
+            <h2 className="text-2xl font-bold text-darkNavy mb-4">Subject</h2>
             <section>
                 <CreateDialog categoryId={categoryId || ""} />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                     {isLoading ? <p>Loading...</p> : courses.length === 0 ? (
-                        <p>No syllabus to show</p>
+                        <p>No subject to show</p>
                     ) : (
                         courses.map((course, index) => (
                             <CourseCard

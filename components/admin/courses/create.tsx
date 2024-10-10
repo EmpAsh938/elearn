@@ -40,7 +40,7 @@ import "easymde/dist/easymde.min.css"; // SimpleMDE's CSS
 // Define the schema for form validation
 const formSchema = z.object({
     title: z.string().min(1, "Title is required").max(50, "Title cannot exceed 50 characters"),
-    videoLink: z.string().url("Please enter a valid URL"),
+    videoLink: z.string().url("Please enter a valid URL").optional(),
     content: z.string().min(10, "Content must be at least 10 characters"),
 });
 
@@ -107,12 +107,12 @@ export function CreateDialog({ categoryId }: { categoryId: string }) {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button className="bg-blue">Create Syllabus</Button>
+                <Button className="bg-blue">Create Subject</Button>
             </SheetTrigger>
 
             <SheetContent className="overflow-y-auto max-h-[100vh]"> {/* Enable scrolling */}
                 <SheetHeader>
-                    <SheetTitle>Create Syllabus</SheetTitle>
+                    <SheetTitle>Create Subject</SheetTitle>
                     <SheetDescription>
                         Fill all the input fields and click save when you&apos;re done.
                     </SheetDescription>
@@ -126,7 +126,7 @@ export function CreateDialog({ categoryId }: { categoryId: string }) {
                             name="title"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Syllabus Title</FormLabel>
+                                    <FormLabel>Subject Title</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Mathematics" {...field} />
                                     </FormControl>

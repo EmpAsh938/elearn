@@ -9,6 +9,9 @@ import { TCourses, TPosts } from '@/app/lib/types';
 import WheelSpin from '@/components/wheelspin';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown'; // Importing react-markdown
+import remarkGfm from 'remark-gfm';
+
 
 const CourseDetails = ({ params }: { params: { id: string } }) => {
     const [activeTab, setActiveTab] = useState('overview');
@@ -17,6 +20,14 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const { id } = params;
+
+    // State to track which syllabus item is expanded
+    const [expandedItems, setExpandedItems] = useState<string | null>(null);
+
+    // Toggle function for expanding/collapsing syllabus items
+    const toggleItem = (postId: string) => {
+        setExpandedItems((prev) => (prev == postId ? null : postId));
+    };
 
     // Fetch course data by ID and posts within that course
     useEffect(() => {
@@ -98,7 +109,6 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                         </div>
 
                         {/* Tabs */}
-                        {/* Tabs */}
                         <div className="flex mt-4 gap-4 flex-wrap">
                             {isUpcoming
                                 ? (
@@ -122,7 +132,6 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                             }
                         </div>
 
-
                         {/* Tab Content */}
                         <div className="mt-6">
                             {activeTab === 'overview' && (
@@ -131,9 +140,27 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 </p>
                             )}
                             {activeTab === 'syllabus' && (
-                                <ul className="list-disc ml-5 text-gray-700">
+                                <ul className="list-none ml-5 text-gray-700">
                                     {posts.length > 0 ? posts.map((item) => (
-                                        <li key={item.postId} className="mb-2">{item.title}</li>
+                                        <li key={item.postId} className="mb-2">
+                                            {/* Dropdown Title */}
+                                            <button
+                                                onClick={() => toggleItem(item.postId)}
+                                                className="flex justify-between w-full text-left bg-gray-100 px-4 py-2 text-gray-800 font-bold rounded-md hover:bg-gray-200"
+                                            >
+                                                {item.title}
+                                                <span>{expandedItems == item.postId ? '↑' : '↓'}</span> {/* Toggle Icon */}
+                                            </button>
+
+                                            {/* Dropdown Content (visible when expanded) */}
+                                            {expandedItems == item.postId && (
+                                                <div className="mt-2 pl-4 border-l-2 border-gray-300">
+                                                    <ReactMarkdown className="prose prose-lg"
+                                                        remarkPlugins={[remarkGfm]} // Adds support for GitHub Flavored Markdown
+                                                    >{item.content}</ReactMarkdown> {/* Render markdown */}
+                                                </div>
+                                            )}
+                                        </li>
                                     )) : <p>We will update the syllabus soon.</p>}
                                 </ul>
                             )}
@@ -151,12 +178,12 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                             <div>
                                                 <h4 className="text-lg font-semibold">{instructor.mentor}</h4>
                                                 <p className="text-sm text-gray-600">{"An experienced educator with over 5 years of experience"}</p>
+                                                <ReactMarkdown className="prose prose-sm">{instructor.content}</ReactMarkdown> {/* Render markdown */}
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             )}
-
                         </div>
                     </div>
 
@@ -170,7 +197,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 height={200}
                                 className="rounded-lg"
                             />
-                            {isUpcoming ? null : <h2 className="text-2xl font-semibold mt-4">NRs.{courseData.price || "3000"}</h2>}
+                            {isUpcoming ? null : <h2 className="text-2xl font-semibold mt-4">NRs.{courseData.price || ""}</h2>}
                             {/* Hardcoded Features */}
                             <ul className="mt-4 space-y-2 text-gray-600">
                                 <li>✓ Live classes</li>

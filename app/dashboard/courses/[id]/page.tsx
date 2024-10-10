@@ -6,49 +6,10 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { TCourses, TPosts } from '@/app/lib/types';
+import ReactMarkdown from 'react-markdown'; // Importing react-markdown
+import remarkGfm from 'remark-gfm';
 
-// Define interfaces for Course and SyllabusItem
-// interface SyllabusItem {
-//     topic: string;
-//     videoPath: string;
-//     notes: string;
-// }
 
-// interface Course {
-//     id: number;
-//     title: string;
-//     description: string;
-//     imageUrl: string;
-//     syllabus: SyllabusItem[];
-// }
-
-// Mock course data with proper typing
-// const courseData: Course[] = [
-//     {
-//         id: 1,
-//         title: "JavaScript Essentials",
-//         description: "Master JavaScript, from variables to closures and async programming.",
-//         imageUrl: "/images/courses/course1.png", // Added image URL
-//         syllabus: [
-//             { topic: "Introduction to JavaScript", videoPath: "/videos/landing-bg.mp4", notes: "/notes/pdf-sample.pdf" },
-//             { topic: "JavaScript Variables", videoPath: "/videos/landing-bg.mp4", notes: "/notes/pdf-sample.pdf" },
-//             { topic: "JavaScript Functions", videoPath: "/videos/landing-bg.mp4", notes: "/notes/pdf-sample.pdf" }
-//         ],
-//     },
-//     {
-//         id: 2,
-//         title: "React for Beginners",
-//         description: "Comprehensive guide to React from basics to hooks and context.",
-//         imageUrl: "/images/courses/course2.webp", // Added image URL
-//         syllabus: [
-//             { topic: "Introduction to React", videoPath: "/videos/landing-bg.mp4", notes: "/notes/pdf-sample.pdf" },
-//             { topic: "React Components", videoPath: "/videos/landing-bg.mp4", notes: "/notes/pdf-sample.pdf" },
-//             { topic: "React Hooks", videoPath: "/videos/landing-bg.mp4", notes: "/notes/pdf-sample.pdf" }
-//         ],
-//     },
-// ];
-
-// Define props for the component
 interface CourseDetailsProps {
     params: {
         id: string;
@@ -63,6 +24,15 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
     const [posts, setPosts] = useState<TPosts[]>([]); // State to hold posts within the course
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    // State to track which syllabus item is expanded
+    const [expandedItems, setExpandedItems] = useState<string | null>(null);
+
+    // Toggle function for expanding/collapsing syllabus items
+    const toggleItem = (postId: string) => {
+        setExpandedItems((prev) => (prev == postId ? null : postId));
+    };
+
 
     // Fetch course data by ID and posts within that course
     useEffect(() => {
@@ -137,9 +107,18 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
                             <h2 className="text-lg font-medium text-gray-600">{(index + 1) + ". " + topic.title}</h2>
                         </AccordionTrigger>
                         <AccordionContent>
-                            {/* Video Player */}
+
+
+                            {/* Dropdown Content (visible when expanded) */}
+                            <div className="mt-2 pl-4 border-l-2 border-gray-300">
+                                <ReactMarkdown className="prose prose-lg"
+                                    remarkPlugins={[remarkGfm]} // Adds support for GitHub Flavored Markdown
+                                >{topic.content}</ReactMarkdown> {/* Render markdown */}
+                            </div>
+
+                            {/* Display Video Player if course is active */}
                             <div className="mt-2">
-                                {topic.videoLink ? (
+                                {false ? (
                                     <iframe
                                         width="100%"
                                         height="315"
@@ -149,19 +128,28 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowFullScreen
                                     ></iframe>
-                                ) : null}
-
+                                ) : (
+                                    <p className="text-gray-600 italic">
+                                        We will update the video once the course is active.
+                                    </p>
+                                )}
                             </div>
 
                             {/* Notes Button */}
                             <div className="mt-4">
                                 <h3 className="text-lg font-medium">Notes</h3>
-                                {/* <Button
-                                    className="mt-2 bg-blue text-white px-4 py-2 rounded-lg"
-                                    onClick={() => setPdfUrl(topic.)}
-                                >
-                                    View PDF Notes
-                                </Button> */}
+                                {false ? (
+                                    <Button
+                                        className="mt-2 bg-blue text-white px-4 py-2 rounded-lg"
+                                        onClick={() => setPdfUrl("topic.noteLink")}
+                                    >
+                                        View PDF Notes
+                                    </Button>
+                                ) : (
+                                    <p className="text-gray-600 italic">
+                                        Notes will be provided once the course is active.
+                                    </p>
+                                )}
                             </div>
                         </AccordionContent>
                     </AccordionItem>

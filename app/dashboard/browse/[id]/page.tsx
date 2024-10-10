@@ -7,6 +7,9 @@ import { TCourses, TPosts } from '@/app/lib/types';
 import { toast } from '@/hooks/use-toast';
 import { useGlobalContext } from '@/hooks/use-globalContext';
 import { Badge } from '@/components/ui/badge';
+import ReactMarkdown from 'react-markdown'; // Importing react-markdown
+import remarkGfm from 'remark-gfm';
+
 
 const CourseDetails = ({ params }: { params: { id: string } }) => {
     const [activeTab, setActiveTab] = useState('overview');
@@ -18,6 +21,15 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
     const [error, setError] = useState<string | null>(null);
     const { id } = params;
     const { user } = useGlobalContext();
+
+    // State to track which syllabus item is expanded
+    const [expandedItems, setExpandedItems] = useState<string | null>(null);
+
+    // Toggle function for expanding/collapsing syllabus items
+    const toggleItem = (postId: string) => {
+        setExpandedItems((prev) => (prev == postId ? null : postId));
+    };
+
 
     // Function to check if the course is already booked
     const checkIfBooked = useCallback(async () => {
@@ -171,9 +183,27 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 </p>
                             )}
                             {activeTab === 'syllabus' && (
-                                <ul className="list-disc ml-5 text-gray-700">
+                                <ul className="list-none ml-5 text-gray-700">
                                     {posts.length > 0 ? posts.map((item) => (
-                                        <li key={item.postId} className="mb-2">{item.title}</li>
+                                        <li key={item.postId} className="mb-2">
+                                            {/* Dropdown Title */}
+                                            <button
+                                                onClick={() => toggleItem(item.postId)}
+                                                className="flex justify-between w-full text-left bg-gray-100 px-4 py-2 text-gray-800 font-bold rounded-md hover:bg-gray-200"
+                                            >
+                                                {item.title}
+                                                <span>{expandedItems == item.postId ? '↑' : '↓'}</span> {/* Toggle Icon */}
+                                            </button>
+
+                                            {/* Dropdown Content (visible when expanded) */}
+                                            {expandedItems == item.postId && (
+                                                <div className="mt-2 pl-4 border-l-2 border-gray-300">
+                                                    <ReactMarkdown className="prose prose-lg"
+                                                        remarkPlugins={[remarkGfm]} // Adds support for GitHub Flavored Markdown
+                                                    >{item.content}</ReactMarkdown> {/* Render markdown */}
+                                                </div>
+                                            )}
+                                        </li>
                                     )) : <p>We will update the syllabus soon.</p>}
                                 </ul>
                             )}
