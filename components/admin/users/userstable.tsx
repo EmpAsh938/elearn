@@ -99,16 +99,16 @@ export function UsersTable() {
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Email
+                    Contact
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             ),
             cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
         },
         {
-            accessorKey: "faculty",
-            header: () => <div className="text-right">Package</div>,
-            cell: ({ row }) => <div className="text-right font-medium capitalize">{row.getValue("faculty")}</div>,
+            accessorKey: "discount",
+            header: () => <div className="text-right">Discount</div>,
+            cell: ({ row }) => <div className="text-right font-medium capitalize">{row.getValue("discount") || "N/A"}</div>,
         },
         {
             accessorKey: "roles",

@@ -10,22 +10,20 @@ type Props = {
     faculty: TCourses;
     open: boolean;
     onClose: () => void;
-    onSave: any;
 }
 
 const predefinedType = ["Pre-booking", "upcoming"];
 
-
-export function UpdateModal({ faculty, open, onClose, onSave }: Props) {
+export function UpdateModal({ faculty, open, onClose }: Props) {
     const [title, setTitle] = useState(faculty?.categoryTitle || "");
     const [description, setDescription] = useState(faculty?.categoryDescription || "");
     const [file, setFile] = useState<File | null>(null); // State for the uploaded file
-
     const [type, setType] = useState(faculty.courseType || "upcoming");
     const [price, setPrice] = useState(faculty.price || "");
-
+    const [isSaving, setIsSaving] = useState(false); // New state to handle multiple saves
 
     const handleSave = async () => {
+
         let imageUrl = ""; // Variable to store the image URL if uploaded
 
         // Step 1: Upload the image if a file is selected
@@ -35,7 +33,7 @@ export function UpdateModal({ faculty, open, onClose, onSave }: Props) {
             formData.append("categoryId", faculty.categoryId); // Append the file to FormData
 
             try {
-                const imageResponse = await fetch('/api/upload/categories', {
+                const imageResponse = await fetch('/api/upload/courses', {
                     method: 'POST',
                     body: formData,
                 });
@@ -46,30 +44,37 @@ export function UpdateModal({ faculty, open, onClose, onSave }: Props) {
                     throw new Error(imageData.error || "Error uploading image");
                 }
 
-                imageUrl = imageData.url; // Assuming the API returns the URL of the uploaded image
+                imageUrl = imageData.body.imageName;
+
+                if (!title || !description) {
+                    return onClose();
+                }
+
             } catch (error) {
                 console.error("Failed to upload image:", error);
-                // Optionally show a toast or error message here
+                setIsSaving(false); // Reset saving state if there's an error
                 return; // Exit the function if the image upload fails
             }
         }
 
+
         // Step 2: Update the package details
         const updatedData = {
             categoryId: faculty.categoryId, // Assuming faculty has an id property
-            categoryTitle: title,
-            categoryDescription: description,
-            price,
-            courseType: type
+            title: title || faculty.categoryTitle,
+            description: description || faculty.categoryDescription,
+            price: price || faculty.price,
+            courseType: type || faculty.courseType,
+            imageName: imageUrl || faculty.imageName
         };
 
         try {
             const updateResponse = await fetch('/api/faculty', {
                 method: 'PUT', // Use PUT for updating
-                headers: {
-                    'Content-Type': 'application/json',
-                },
                 body: JSON.stringify(updatedData), // Send updated data as JSON
+                headers: {
+                    'Content-Type': 'application/json', // Add content-type header
+                },
             });
 
             const updateData = await updateResponse.json();
@@ -78,13 +83,15 @@ export function UpdateModal({ faculty, open, onClose, onSave }: Props) {
                 throw new Error(updateData.error || "Error updating package");
             }
 
-            onSave(updateData); // Call the onSave function with the updated data
             onClose(); // Close the modal after saving
+            window.location.href = "/admin/packages";
 
         } catch (error) {
             console.error("Failed to update package:", error);
-            // Optionally show a toast or error message here
+        } finally {
+            setIsSaving(false); // Reset saving state after completion
         }
+
     };
 
     return (
@@ -100,13 +107,8 @@ export function UpdateModal({ faculty, open, onClose, onSave }: Props) {
                     <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Name" />
                     <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" />
                     {/* File Input for image upload */}
-                    <Image
-                        src={faculty.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${faculty.imageName}` : "/images/courses/default.png"}
-                        alt={faculty.categoryTitle}
-                        width={50}
-                        height={50}
-                        className="h-8 w-8 rounded-full object-cover mx-auto"
-                    />
+                    <Image src={faculty.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${faculty.imageName}` : "/images/courses/default.png"}
+                        alt={faculty.categoryTitle} height={400} width={400} className="h-10 w-10 object-cover rounded-full mx-auto" />
                     <input
                         type="file"
                         accept="image/*"
@@ -132,7 +134,9 @@ export function UpdateModal({ faculty, open, onClose, onSave }: Props) {
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>Cancel</Button>
-                    <Button onClick={handleSave}>Save</Button>
+                    <Button onClick={handleSave} disabled={isSaving}>
+                        {isSaving ? "Saving..." : "Save"}
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

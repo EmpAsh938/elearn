@@ -151,21 +151,6 @@ export function GradesTable({ grades, loading }: { grades: TCourses[], loading: 
         setIsDeleteModalOpen(true);
     };
 
-    const handleSave = async (updateData: TCourses) => {
-        try {
-            const request = await fetch('/api/faculty', {
-                method: 'PUT',
-                body: JSON.stringify({ categoryId: updateData.categoryId, description: updateData.categoryDescription, title: updateData.categoryTitle, price: updateData.price, type: updateData.courseType })
-            })
-            const response = await request.json();
-            if (response.status !== 200) throw Error(response.error);
-            toast({ description: "Grade Updated Successfully" });
-            window.location.href = "/admin/packages";
-        } catch (error: any) {
-            toast({ variant: "destructive", title: "Updating package Failed", description: error.toString() });
-            console.error(error);
-        }
-    };
 
     const handleDelete = (faculty: TCourses) => {
         console.log("Package deleted");
@@ -316,7 +301,6 @@ export function GradesTable({ grades, loading }: { grades: TCourses[], loading: 
                     faculty={selectedGrade}
                     open={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
-                    onSave={handleSave}
                 />
             )}
             {(selectedGrade && isDeleteModalOpen) && (

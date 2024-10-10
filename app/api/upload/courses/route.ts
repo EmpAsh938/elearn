@@ -11,6 +11,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Category ID and file are required', status: 400 });
         }
 
+        const sessionCookie = req.cookies.get('session')?.value;
+        if (!sessionCookie) {
+            return NextResponse.json({ error: 'No session cookie found' }, { status: 401 });
+        }
+
+
         // Create a FormData object to send the file
         const uploadData = new FormData();
         uploadData.append("file", file);
@@ -18,6 +24,9 @@ export async function POST(req: NextRequest) {
 
         const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/file/upload/${categoryId}`, {
             method: 'POST',
+            headers: {
+                'Authorization': `Sandip ${sessionCookie}`,
+            },
             body: uploadData,
         });
 

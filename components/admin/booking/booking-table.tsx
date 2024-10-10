@@ -74,57 +74,49 @@ export function BookingTable({ courses, loading }: { courses: TBookedCourse[], l
             enableHiding: false,
         },
         {
-            accessorKey: "category.categoryTitle",
+            accessorFn: (row) => row.category?.categoryTitle || '',  // Handle potential undefined values
+            id: "categoryTitle",
             header: "Course Title",
-            cell: ({ row }) => <div className="capitalize">{row.original.category.categoryTitle}</div>,
+            filterFn: "includesString",  // Apply basic string filter
+            cell: ({ row }) => <div className="capitalize">{row.original.category?.categoryTitle}</div>,
         },
-        // {
-        //     accessorKey: "category.categoryDescription",
-        //     header: "Course Description",
-        //     cell: ({ row }) => (
-        //         <div className="capitalize">
-        //             {row.original.category.categoryDescription}
-        //         </div>
-        //     ),
-        // },
         {
-            accessorKey: "user.name",
+            accessorFn: (row) => row.user?.name || '',
+            id: "userName",
             header: "User Name",
-            cell: ({ row }) => <div>{row.original.user.name}</div>,
+            filterFn: "includesString",
+            cell: ({ row }) => <div>{row.original.user?.name}</div>,
         },
         {
-            accessorKey: "user.email",
+            accessorFn: (row) => row.user?.email || '',
+            id: "userEmail",
             header: "User Contact",
-            cell: ({ row }) => <div>{row.original.user.email}</div>,
+            filterFn: "includesString",
+            cell: ({ row }) => <div>{row.original.user?.email}</div>,
         },
-
         {
             id: "actions",
             enableHiding: false,
-            cell: ({ row }) => {
-                const course = row.original;
-
-                return (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                                Approve
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                Reject
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                );
-            },
+            cell: ({ row }) => (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => handleApprove(row.original)}>
+                            Approve
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleReject(row.original)}>
+                            Reject
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            ),
         },
     ];
 
@@ -155,7 +147,7 @@ export function BookingTable({ courses, loading }: { courses: TBookedCourse[], l
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
+        getFilteredRowModel: getFilteredRowModel(), // Ensure it's here
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
         state: {
@@ -172,33 +164,38 @@ export function BookingTable({ courses, loading }: { courses: TBookedCourse[], l
         }
     }, [courses]);
 
+
     return (
         <div className="w-full">
             <div className="flex flex-col md:flex-row items-center py-4 space-y-4 md:space-y-0 md:space-x-4">
                 <Input
                     placeholder="Filter by course title..."
-                    value={(table.getColumn("category.categoryTitle")?.getFilterValue() as string) ?? ""}
+                    value={(table.getColumn("categoryTitle")?.getFilterValue() as string) || ""}
                     onChange={(event) =>
-                        table.getColumn("category.categoryTitle")?.setFilterValue(event.target.value)
+                        table.getColumn("categoryTitle")?.setFilterValue(event.target.value)
                     }
                     className="w-full sm:max-w-sm"
                 />
                 <Input
                     placeholder="Filter by user name..."
-                    value={(table.getColumn("user.name")?.getFilterValue() as string) ?? ""}
+                    value={(table.getColumn("userName")?.getFilterValue() as string) || ""}
                     onChange={(event) =>
-                        table.getColumn("user.name")?.setFilterValue(event.target.value)
+                        table.getColumn("userName")?.setFilterValue(event.target.value)
                     }
                     className="w-full sm:max-w-sm"
                 />
                 <Input
                     placeholder="Filter by user contact..."
-                    value={(table.getColumn("user.email")?.getFilterValue() as string) ?? ""}
+                    value={(table.getColumn("userEmail")?.getFilterValue() as string) || ""}
                     onChange={(event) =>
-                        table.getColumn("user.email")?.setFilterValue(event.target.value)
+                        table.getColumn("userEmail")?.setFilterValue(event.target.value)
                     }
                     className="w-full sm:max-w-sm"
                 />
+
+
+
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto w-full sm:w-auto">

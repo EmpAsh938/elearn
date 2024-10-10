@@ -24,8 +24,8 @@ const CoursesList = ({ courses }: { courses: TCourses[] }) => {
                         <Image
                             src={course.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${course.imageName}` : "/images/courses/default.png"}
                             alt={course.categoryTitle}
-                            width={300}
-                            height={200}
+                            width={600}
+                            height={600}
                             className="object-cover rounded w-full"
                         />
                     </div>
