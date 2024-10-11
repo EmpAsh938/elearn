@@ -166,7 +166,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                             )}
                             {activeTab === 'instructor' && (
                                 <div className="space-y-6">
-                                    {posts.map((instructor) => (
+                                    {/* {posts.map((instructor) => (
                                         <div key={instructor.postId} className="flex items-center space-x-4">
                                             <Image
                                                 src={"/images/profile/user.jpeg"}
@@ -181,7 +181,8 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
 
                                             </div>
                                         </div>
-                                    ))}
+                                    ))} */}
+                                    <p className="text-sm text-gray-600">This section will be revealed soon</p>
                                 </div>
                             )}
                         </div>

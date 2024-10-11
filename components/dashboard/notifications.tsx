@@ -12,7 +12,7 @@ export default function Notifications() {
     ]);
 
     // Unread notification count
-    const notificationCount = notifications.length;
+    const notificationCount = 0;
 
     return (
         <DropdownMenu>
@@ -27,7 +27,7 @@ export default function Notifications() {
             <DropdownMenuContent className="w-64 bg-white shadow-lg rounded-lg p-2 max-h-64 overflow-y-auto">
                 <DropdownMenuLabel>Notifications</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {notifications.length > 0 ? (
+                {false ? (
                     notifications.map((notification) => (
                         <div key={notification.id}>
                             <DropdownMenuItem className="flex items-start p-2 text-sm text-gray-700 hover:bg-gray-100 rounded">

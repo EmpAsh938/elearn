@@ -9,6 +9,7 @@ import { useGlobalContext } from '@/hooks/use-globalContext';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown'; // Importing react-markdown
 import remarkGfm from 'remark-gfm';
+import useResponsiveSize from '@/hooks/use-responsiveSize';
 
 
 const CourseDetails = ({ params }: { params: { id: string } }) => {
@@ -21,6 +22,8 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
     const [error, setError] = useState<string | null>(null);
     const { id } = params;
     const { user } = useGlobalContext();
+    const imageSize = useResponsiveSize();  // Use the custom hook to get dynamic size
+
 
     // State to track which syllabus item is expanded
     const [expandedItems, setExpandedItems] = useState<string | null>(null);
@@ -208,22 +211,41 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 </ul>
                             )}
                             {activeTab === 'instructor' && (
+                                // <div className="space-y-6">
+                                //     {posts.length > 0 ? posts.map((instructor) => (
+                                //         <div key={instructor.postId} className="flex items-center space-x-4">
+                                //             <Image
+                                //                 src={"/images/profile/user.jpeg"}
+                                //                 alt={instructor.mentor}
+                                //                 width={50}
+                                //                 height={50}
+                                //                 className="rounded-full"
+                                //             />
+                                //             <div>
+                                //                 <h4 className="text-lg font-semibold">{instructor.mentor}</h4>
+                                //                 <p className="text-sm text-gray-600">{"An experienced educator with over 5 years of experience"}</p>
+                                //             </div>
+                                //         </div>
+                                //     )) : <p>We will update the instructor details soon.</p>}
+                                // </div>
                                 <div className="space-y-6">
-                                    {posts.length > 0 ? posts.map((instructor) => (
-                                        <div key={instructor.postId} className="flex items-center space-x-4">
-                                            <Image
-                                                src={"/images/profile/user.jpeg"}
-                                                alt={instructor.mentor}
-                                                width={50}
-                                                height={50}
-                                                className="rounded-full"
-                                            />
-                                            <div>
-                                                <h4 className="text-lg font-semibold">{instructor.mentor}</h4>
-                                                <p className="text-sm text-gray-600">{"An experienced educator with over 5 years of experience"}</p>
-                                            </div>
+                                    {/* {posts.map((instructor) => (
+                                    <div key={instructor.postId} className="flex items-center space-x-4">
+                                        <Image
+                                            src={"/images/profile/user.jpeg"}
+                                            alt={instructor.mentor}
+                                            width={50}
+                                            height={50}
+                                            className="rounded-full"
+                                        />
+                                        <div>
+                                            <h4 className="text-lg font-semibold">{instructor.mentor}</h4>
+                                            <p className="text-sm text-gray-600">{"An experienced educator with over 5 years of experience"}</p>
+
                                         </div>
-                                    )) : <p>We will update the instructor details soon.</p>}
+                                    </div>
+                                ))} */}
+                                    <p className="text-sm text-gray-600">This section will be revealed soon</p>
                                 </div>
                             )}
 
@@ -237,8 +259,8 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                             <Image
                                 src={courseData.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${courseData.imageName}` : "/images/courses/default.png"}
                                 alt={courseData.categoryTitle}
-                                width={400}
-                                height={200}
+                                width={imageSize.width}
+                                height={imageSize.height}
                                 className="rounded-lg"
                             />
                             {isUpcoming ? null : <h2 className="text-2xl font-semibold mt-4">NRs.{courseData.price || ""}</h2>}

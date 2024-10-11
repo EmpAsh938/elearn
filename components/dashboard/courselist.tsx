@@ -1,9 +1,15 @@
+"use client";
+
 import { TCourses } from "@/app/lib/types";
 import Image from "next/image";                  // Next.js Image component
 import Link from "next/link";
 import { Badge } from "../ui/badge";
+import useResponsiveSize from "@/hooks/use-responsiveSize";
 
 const CoursesList = ({ courses }: { courses: TCourses[] }) => {
+
+    const imageSize = useResponsiveSize();  // Use the custom hook to get dynamic size
+
 
     // Helper function to slice descriptions
     const sliceDescription = (description: string) => {
@@ -24,8 +30,8 @@ const CoursesList = ({ courses }: { courses: TCourses[] }) => {
                         <Image
                             src={course.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${course.imageName}` : "/images/courses/default.png"}
                             alt={course.categoryTitle}
-                            width={600}
-                            height={600}
+                            width={imageSize.width}
+                            height={imageSize.height}
                             className="object-cover rounded w-full"
                         />
                     </div>

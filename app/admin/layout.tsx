@@ -102,7 +102,7 @@ const AdminLayout = ({ children }: LayoutProps) => {
                     </ul>
                 </nav>
 
-                <div className="hidden sm:flex items-center justify-start pb-2 pl-4">
+                <div className="flex items-center justify-start pb-2 pl-4">
                     <Button onClick={handleLogout} variant="ghost" className={`flex gap-2 w-full justify-start ${isCollapsed ? 'justify-center' : 'justify-start'} text-red hover:bg-transparent hover:text-red`}>
                         <LogOut size={24} />
                         {isCollapsed || <span>Logout</span>}

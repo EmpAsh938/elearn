@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import useResponsiveSize from "@/hooks/use-responsiveSize";
 
 interface UserProfile {
     id: string;
@@ -19,6 +20,9 @@ export default function UserProfile() {
     const [profilePicture, setProfilePicture] = useState<string>("/images/profile/user.jpeg"); // Default profile picture
     const [selectedFile, setSelectedFile] = useState<File | null>(null); // To hold the selected file
     const [loading, setLoading] = useState(true); // Loading state
+
+    const imageSize = useResponsiveSize();  // Use the custom hook to get dynamic size
+
 
     // Fetch fresh user data from API
     useEffect(() => {
@@ -146,7 +150,8 @@ export default function UserProfile() {
                         <Image
                             src={profilePicture}
                             alt={user.name || "User Profile Picture"} // Fallback alt text
-                            layout="fill"
+                            width={imageSize.width}
+                            height={imageSize.height}
                             className="object-cover"
                         />
                     </div>

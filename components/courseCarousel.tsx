@@ -11,11 +11,15 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { useEffect, useState } from 'react';
 import { TCourses } from '@/app/lib/types';
+import useResponsiveSize from '@/hooks/use-responsiveSize';
 
 
 const CourseCarousel = () => {
     const [recentCourses, setRecentCourses] = useState<TCourses[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    const imageSize = useResponsiveSize();  // Use the custom hook to get dynamic size
+
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -63,7 +67,7 @@ const CourseCarousel = () => {
                         <Card className="transition-transform transform hover:scale-105">
                             <Link href={"courses/" + course.categoryId}>
                                 <Image src={course.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${course.imageName}` : "/images/courses/default.png"}
-                                    alt={course.categoryTitle} height={600} width={600} className="h-full w-full object-cover rounded" />
+                                    alt={course.categoryTitle} height={imageSize.height} width={imageSize.width} className="h-full w-full object-cover rounded" />
                                 <p className="text-center py-2 font-medium text-lg line-clamp-2 overflow-hidden text-ellipsis">{course.categoryTitle}</p>
                             </Link>
                         </Card>

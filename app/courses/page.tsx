@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { TCourses } from "../lib/types";
 import { Badge } from "@/components/ui/badge";
+import useResponsiveSize from "@/hooks/use-responsiveSize";
 
 export default function Courses() {
     const [tags, setTags] = useState<string[]>([]);
@@ -15,6 +16,9 @@ export default function Courses() {
     const [selectedTag, setSelectedTag] = useState<string>("All");
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const imageSize = useResponsiveSize();  // Use the custom hook to get dynamic size
+
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -91,9 +95,10 @@ export default function Courses() {
                                     <Image
                                         src={pkg.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${pkg.imageName}` : "/images/courses/default.png"}
                                         alt={pkg.categoryTitle}
-                                        width={400}
-                                        height={250}
-                                        className="w-full h-56 object-cover"
+                                        width={imageSize.width}  // Dynamic width from the hook
+                                        height={imageSize.height}
+                                        className="w-full object-contain"
+                                        priority={true}
                                     />
                                     <div className="p-6">
                                         {/* Limit the title to 2 lines and add ellipsis for overflow */}

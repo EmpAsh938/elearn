@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { TCourses, TPosts } from '@/app/lib/types';
 import ReactMarkdown from 'react-markdown'; // Importing react-markdown
 import remarkGfm from 'remark-gfm';
+import useResponsiveSize from '@/hooks/use-responsiveSize';
 
 
 interface CourseDetailsProps {
@@ -24,6 +25,9 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
     const [posts, setPosts] = useState<TPosts[]>([]); // State to hold posts within the course
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const imageSize = useResponsiveSize();  // Use the custom hook to get dynamic size
+
 
     // State to track which syllabus item is expanded
     const [expandedItems, setExpandedItems] = useState<string | null>(null);
@@ -84,8 +88,8 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
                 <Image
                     src={courseData.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${courseData.imageName}` : "/images/courses/default.png"}
                     alt={courseData.categoryTitle}
-                    width={600}
-                    height={600}
+                    width={imageSize.width}
+                    height={imageSize.height}
                     className="rounded-lg shadow-lg w-full lg:w-96 object-cover"
                 />
 

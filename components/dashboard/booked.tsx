@@ -3,6 +3,7 @@
 import { TCourses } from "@/app/lib/types";
 import { Button } from "@/components/ui/button";  // ShadCN UI Button component
 import { useGlobalContext } from "@/hooks/use-globalContext";
+import useResponsiveSize from "@/hooks/use-responsiveSize";
 import Image from "next/image";                  // Next.js Image component
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -69,6 +70,9 @@ const Booked = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [courses, setCourses] = useState<IBookedCourse[]>([]);
+
+    const imageSize = useResponsiveSize();  // Use the custom hook to get dynamic size
+
 
     // Helper function to slice descriptions
     const sliceDescription = (description: string) => {
@@ -147,8 +151,8 @@ const Booked = () => {
                     <Image
                         src={course.category.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${course.category.imageName}` : "/images/courses/default.png"}
                         alt={course.category.categoryTitle}
-                        width={600}
-                        height={600}
+                        width={imageSize.width}
+                        height={imageSize.height}
                         className="object-cover rounded w-full"
                     />
 
