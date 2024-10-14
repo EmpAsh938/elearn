@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react';
 
 const useResponsiveSize = () => {
     const [imageSize, setImageSize] = useState({ width: 200, height: 200 });
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        // Ensure this runs only on the client
+        setIsClient(true);
+    }, []);
 
     const updateSize = () => {
         if (window.innerWidth < 640) {
@@ -19,14 +25,16 @@ const useResponsiveSize = () => {
     };
 
     useEffect(() => {
-        // Initial size update
-        updateSize();
+        if (isClient) {
+            // Initial size update
+            updateSize();
 
-        // Update size on window resize
-        window.addEventListener('resize', updateSize);
+            // Update size on window resize
+            window.addEventListener('resize', updateSize);
 
-        return () => window.removeEventListener('resize', updateSize);
-    }, []);
+            return () => window.removeEventListener('resize', updateSize);
+        }
+    }, [isClient]);
 
     return imageSize;
 };

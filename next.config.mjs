@@ -4,7 +4,13 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: "https",
-                hostname: "**",
+                hostname: "elearningplatform-production.up.railway.app",
+                pathname: "/api/v1/categories/image/**",
+            },
+            {
+                protocol: "https",
+                hostname: "elearningplatform-production.up.railway.app",
+                pathname: "/api/v1/users/image/**",
             },
         ],
     },
