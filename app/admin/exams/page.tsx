@@ -44,9 +44,7 @@ export default function Exams() {
         setExams(exams.filter((_, i) => i !== index))
     }
 
-    if (1) {
-        return <p>This feature is under develoment. Please be patient for a while.</p>
-    }
+
 
     return (
         <div className="p-6">

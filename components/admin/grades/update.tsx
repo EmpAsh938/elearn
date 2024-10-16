@@ -12,13 +12,13 @@ type Props = {
     onClose: () => void;
 }
 
-const predefinedType = ["Pre-booking", "upcoming"];
+const predefinedType = ["Pre-booking", "Upcoming", "Ongoing"];
 
 export function UpdateModal({ faculty, open, onClose }: Props) {
     const [title, setTitle] = useState(faculty?.categoryTitle || "");
     const [description, setDescription] = useState(faculty?.categoryDescription || "");
     const [file, setFile] = useState<File | null>(null); // State for the uploaded file
-    const [type, setType] = useState(faculty.courseType || "upcoming");
+    const [type, setType] = useState(faculty.courseType || "Upcoming");
     const [price, setPrice] = useState(faculty.price || "");
     const [isSaving, setIsSaving] = useState(false); // New state to handle multiple saves
 
@@ -65,6 +65,7 @@ export function UpdateModal({ faculty, open, onClose }: Props) {
             description: description || faculty.categoryDescription,
             price: price || faculty.price,
             courseType: type || faculty.courseType,
+            mainCategory: faculty.mainCategory,
             imageName: imageUrl || faculty.imageName
         };
 
@@ -119,6 +120,7 @@ export function UpdateModal({ faculty, open, onClose }: Props) {
                         }}
                     />
                     {/* Dropdown for predefined types */}
+                    <h3 className="font-medium">Status</h3>
                     <select
                         value={type}
                         onChange={(e) => setType(e.target.value)}

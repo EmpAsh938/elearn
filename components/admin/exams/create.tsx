@@ -69,7 +69,7 @@ export function CreateExamDialog({ onCreate }: { onCreate: (newExam: Exam) => vo
             <DialogTrigger asChild>
                 <Button className="bg-blue">Create Exam</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="max-w-[600px] w-full max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Exam Details</DialogTitle>
                     <DialogDescription>

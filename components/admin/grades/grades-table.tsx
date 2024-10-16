@@ -86,13 +86,30 @@ export function GradesTable({ grades, loading }: { grades: TCourses[], loading: 
         },
         {
             accessorKey: "courseType",
-            header: "Course Type",
-            cell: ({ row }) => <div className="capitalize">{row.getValue("courseType")}</div>,
+            header: "Course Status",
+            cell: ({ row }) => {
+                const courseType = row.getValue<string>("courseType").toLowerCase(); // Automatically infer the type
+
+                const badgeClass: { [key: string]: string } = {
+                    ongoing: "text-green",   // Proper Tailwind green class
+                    prebooking: "text-yellow-800",
+                    'pre-booking': "text-yellow-800",
+                    upcoming: "text-blue",   // Proper Tailwind blue class
+                };
+
+                return (
+                    <span
+                        className={`capitalize px-2 py-1 rounded-full text-sm bg-gray-100 font-medium ${badgeClass[courseType] || 'text-gray-800'}`}
+                    >
+                        {courseType}
+                    </span>
+                );
+            },
         },
         {
             accessorKey: "price",
             header: "Price",
-            cell: ({ row }) => <div className="capitalize">NRs.{row.getValue("price")}</div>,
+            cell: ({ row }) => <div className="capitalize">{!row.getValue("price") ? 'N/A' : "NRs." + row.getValue("price")}</div>,
         },
         // {
         //     id: "image",

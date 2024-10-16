@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Trash, Edit, Clock, LinkIcon } from 'lucide-react'; // Importing icons
+import Image from 'next/image'; // Importing Next.js Image component
 
 interface LiveExamCardProps {
     title: string;
@@ -11,6 +13,7 @@ interface LiveExamCardProps {
     streamlink: string;
     onEdit: (title: string, startTime: string) => void;
     onDelete: () => void;
+    imageUrl?: string; // Optional prop for the class image
 }
 
 const LiveExamCard = ({
@@ -19,6 +22,7 @@ const LiveExamCard = ({
     streamlink,
     onEdit,
     onDelete,
+    imageUrl, // Accepting imageUrl as a prop
 }: LiveExamCardProps) => {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -35,28 +39,52 @@ const LiveExamCard = ({
         setIsDeleteOpen(false);
     };
 
-    return (
-        <div className="bg-white shadow-lg rounded-lg p-4 mb-4">
-            <h3 className="text-xl font-bold text-darkNavy">{title}</h3>
-            <p className="text-darkNavy mb-2">
-                <strong>Start Time:</strong> {startTime}
-            </p>
-            <p className="text-darkNavy mb-2">
-                <strong>Stream Link:</strong> {streamlink}
-            </p>
+    // Default image URL (replace with your default image path)
+    const defaultImageUrl = "/images/live.avif";
 
-            <div className="flex mt-4">
-                <Button className="mr-2" variant="secondary" onClick={() => setIsEditOpen(true)}>
+    return (
+        <div className="bg-white shadow-lg rounded-lg p-6 mb-4 transition-transform transform hover:scale-105">
+            {/* Displaying the image */}
+            <div className="mb-4">
+                <Image
+                    src={imageUrl || defaultImageUrl} // Use provided image or default
+                    alt="Live Class"
+                    width={400}
+                    height={250}
+                    className="h-36 object-cover rounded-lg"
+                />
+            </div>
+            {/* Title Section */}
+            <h3 className="text-2xl font-bold text-darkNavy mb-2">{title}</h3>
+
+            {/* Info Section */}
+            <div className="flex items-center mb-3">
+                <Clock className="mr-2 text-darkNavy" />
+                <p className="text-darkNavy">
+                    <strong>Start Time:</strong> {startTime}
+                </p>
+            </div>
+            <div className="flex items-center mb-3">
+                <LinkIcon className="mr-2 text-darkNavy" />
+                <p className="text-darkNavy">
+                    <strong>Stream Link:</strong> <span className="text-blue-600 hover:underline">{streamlink}</span>
+                </p>
+            </div>
+
+            <div className="flex mt-4 space-x-2">
+                <Button variant="secondary" onClick={() => setIsEditOpen(true)} className="flex items-center">
+                    <Edit className="mr-2" />
                     Edit
                 </Button>
-                <Button variant="destructive" onClick={() => setIsDeleteOpen(true)}>
+                <Button variant="destructive" onClick={() => setIsDeleteOpen(true)} className="flex items-center">
+                    <Trash className="mr-2" />
                     Delete
                 </Button>
             </div>
 
             {/* Edit Dialog */}
             <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-                <DialogContent>
+                <DialogContent className="max-w-lg">
                     <DialogHeader>
                         <DialogTitle>Edit Live Exam</DialogTitle>
                         <DialogDescription>
@@ -99,7 +127,7 @@ const LiveExamCard = ({
 
             {/* Delete Confirmation Dialog */}
             <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-                <DialogContent>
+                <DialogContent className="max-w-lg">
                     <DialogHeader>
                         <DialogTitle>Delete Live Exam</DialogTitle>
                         <DialogDescription>

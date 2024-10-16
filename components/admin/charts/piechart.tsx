@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { TrendingUp } from "lucide-react"
-import { LabelList, Pie, PieChart } from "recharts"
+import { TrendingUp } from "lucide-react";
+import { LabelList, Pie, PieChart, Cell, Tooltip } from "recharts";
 
 import {
     Card,
@@ -10,85 +10,104 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
     ChartConfig,
     ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-} from "@/components/ui/chart"
-const chartData = [
-    { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-    { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-    { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-    { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-    { browser: "other", visitors: 90, fill: "var(--color-other)" },
-]
+} from "@/components/ui/chart";
 
-const chartConfig = {
-    visitors: {
-        label: "Visitors",
+// Updated data for Student Metrics
+const chartData = [
+    { category: "Active", students: 1200, fill: "#34D399" }, // green
+    { category: "Subscribed", students: 800, fill: "#3B82F6" }, // blue
+    { category: "Inactive", students: 500, fill: "#F87171" }, // red
+    { category: "Guest", students: 300, fill: "#FBBF24" }, // yellow
+    { category: "Other", students: 100, fill: "#A78BFA" }, // purple
+];
+
+// Chart config for Student Metrics
+const chartConfig: ChartConfig = {
+    students: {
+        label: "Students",
     },
-    chrome: {
-        label: "Chrome",
+    active: {
+        label: "Active Students",
         color: "hsl(var(--chart-1))",
     },
-    safari: {
-        label: "Safari",
+    subscribed: {
+        label: "Subscribed Students",
         color: "hsl(var(--chart-2))",
     },
-    firefox: {
-        label: "Firefox",
+    inactive: {
+        label: "Inactive Students",
         color: "hsl(var(--chart-3))",
     },
-    edge: {
-        label: "Edge",
+    guest: {
+        label: "Guest Students",
         color: "hsl(var(--chart-4))",
     },
     other: {
         label: "Other",
         color: "hsl(var(--chart-5))",
     },
-} satisfies ChartConfig
+};
 
 export default function AdminPieChart() {
     return (
-        <Card className="flex flex-col">
-            <CardHeader className="items-center pb-0">
-                <CardTitle>Pie Chart - Label List</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
+        <Card className="flex flex-col shadow-lg">
+            <CardHeader className="items-center pb-2">
+                <CardTitle className="text-xl font-semibold">Student Metrics</CardTitle>
+                <CardDescription className="text-sm text-gray-500">
+                    Segregation of Students (Active, Subscribed, etc.)
+                </CardDescription>
             </CardHeader>
-            <CardContent className="flex-1 pb-0">
-                <ChartContainer
-                    config={chartConfig}
-                    className="mx-auto aspect-square max-h-[250px]"
-                >
+            <CardContent className="flex-1 pb-4">
+                <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[300px]">
                     <PieChart>
-                        <ChartTooltip
-                            content={<ChartTooltipContent nameKey="visitors" hideLabel />}
-                        />
-                        <Pie data={chartData} dataKey="visitors">
-                            <LabelList
-                                dataKey="browser"
-                                className="fill-background"
-                                stroke="none"
-                                fontSize={12}
-                                formatter={(value: keyof typeof chartConfig) =>
-                                    chartConfig[value]?.label
+                        <Tooltip
+                            content={({ active, payload }) => {
+                                if (active && payload && payload.length) {
+                                    const { category, students } = payload[0].payload; // Get data from payload
+                                    return (
+                                        <div className="bg-white border p-2 rounded shadow">
+                                            <p className="font-semibold">{category}</p>
+                                            <p>{students} Students</p>
+                                        </div>
+                                    );
                                 }
+                                return null;
+                            }}
+                        />
+                        <Pie
+                            data={chartData}
+                            dataKey="students"
+                            innerRadius={10}
+                            outerRadius={90} // Increased outer radius for better label visibility
+                            paddingAngle={1} // Adjust padding angle
+                        >
+                            {chartData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.fill} />
+                            ))}
+                            <LabelList
+                                dataKey="category"
+                                position="outside" // Position labels outside
+                                className="fill-foreground"
+                                fontSize={12}
+                                stroke="none"
+                                formatter={(value: string) => value}
                             />
                         </Pie>
                     </PieChart>
                 </ChartContainer>
             </CardContent>
             <CardFooter className="flex-col gap-2 text-sm">
-                <div className="flex items-center gap-2 font-medium leading-none">
-                    Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+                <div className="flex items-center gap-2 font-medium text-green-600">
+                    Trending up by 3.4% this month <TrendingUp className="h-4 w-4" />
                 </div>
-                <div className="leading-none text-muted-foreground">
-                    Showing total visitors for the last 6 months
+                <div className="leading-none text-gray-500">
+                    Showing total student categories for the last 6 months.
                 </div>
             </CardFooter>
         </Card>
-    )
+    );
 }

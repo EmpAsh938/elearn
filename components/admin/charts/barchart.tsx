@@ -1,7 +1,7 @@
 "use client";
 
-import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
+import { TrendingUp } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 
 import {
     Card,
@@ -10,34 +10,37 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
     ChartConfig,
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
-} from "@/components/ui/chart"
-const chartData = [
-    { month: "January", desktop: 186 },
-    { month: "February", desktop: 305 },
-    { month: "March", desktop: 237 },
-    { month: "April", desktop: 73 },
-    { month: "May", desktop: 209 },
-    { month: "June", desktop: 214 },
-]
+} from "@/components/ui/chart";
 
+// Updated data for Sales (Monthly Revenue)
+const chartData = [
+    { month: "January", revenue: 12000 },
+    { month: "February", revenue: 15000 },
+    { month: "March", revenue: 17000 },
+    { month: "April", revenue: 19000 },
+    { month: "May", revenue: 13000 },
+    { month: "June", revenue: 18000 },
+];
+
+// Updated chart config for sales report
 const chartConfig = {
-    desktop: {
-        label: "Desktop",
+    revenue: {
+        label: "Revenue (₹)",
         color: "hsl(var(--chart-1))",
     },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export default function AdminBarChart() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Bar Chart - Label</CardTitle>
+                <CardTitle>Sales Report - Monthly Revenue</CardTitle>
                 <CardDescription>January - June 2024</CardDescription>
             </CardHeader>
             <CardContent>
@@ -55,13 +58,13 @@ export default function AdminBarChart() {
                             tickLine={false}
                             tickMargin={10}
                             axisLine={false}
-                            tickFormatter={(value: string) => value.slice(0, 3)}
+                            tickFormatter={(value: string) => value.slice(0, 3)} // Format month
                         />
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent hideLabel />}
                         />
-                        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8}>
+                        <Bar dataKey="revenue" fill="var(--color-desktop)" radius={8}>
                             <LabelList
                                 position="top"
                                 offset={12}
@@ -74,12 +77,12 @@ export default function AdminBarChart() {
             </CardContent>
             <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">
-                    Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+                    Trending up by 7.5% this month <TrendingUp className="h-4 w-4" />
                 </div>
                 <div className="leading-none text-muted-foreground">
-                    Showing total visitors for the last 6 months
+                    Showing total revenue for the last 6 months
                 </div>
             </CardFooter>
         </Card>
-    )
+    );
 }

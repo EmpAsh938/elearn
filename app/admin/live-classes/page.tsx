@@ -18,6 +18,8 @@ interface LiveClass {
 
 export default function LiveClasses() {
     const [liveClass, setLiveClass] = useState<LiveClass[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<boolean>(false);
 
     const handleEdit = (index: number, updatedClass: LiveClass) => {
         setLiveClass((prevClass) =>
@@ -54,6 +56,9 @@ export default function LiveClasses() {
                 setLiveClass(res.body);
             } catch (error) {
                 console.log(error);
+                setError(true);
+            } finally {
+                setLoading(false);
             }
 
         }
@@ -61,14 +66,13 @@ export default function LiveClasses() {
         fetchLiveClass();
     }, [])
 
-    console.log(liveClass)
     return (
         <div className="p-6">
             <h2 className="text-2xl font-bold text-darkNavy mb-4">Live Class</h2>
             <section>
                 <CreateDialog />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                    {!liveClass ? <p>Nothing to show</p> : liveClass.map((item, index) => (
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-6">
+                    {error ? <p>Something went wrong.</p> : loading ? <p>Loading...</p> : liveClass.length === 0 ? <p>Nothing to show</p> : liveClass.map((item, index) => (
                         <LiveClassCard
                             key={index}
                             title={item.title}

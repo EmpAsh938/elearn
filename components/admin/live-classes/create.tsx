@@ -56,7 +56,8 @@ export function CreateDialog() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const { title, streamLink, startTime } = values;
         const user = JSON.parse(localStorage.getItem("user") || "{}");
-        const categoryId = form.getValues("grade");
+        const category = form.getValues("grade");
+        const categoryId = grades.find(item => item.categoryTitle === category)?.categoryId;
         try {
             if (Object.entries(user).length === 0) throw Error("User ID not found");
             const request = await fetch("/api/live", {
@@ -97,7 +98,6 @@ export function CreateDialog() {
 
         fetchGrades();
     }, []);
-    console.log(grades)
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -164,8 +164,8 @@ export function CreateDialog() {
                                                 {grades.length > 0 &&
                                                     grades.map((item) => (
                                                         <SelectItem
-                                                            key={item.categoryId}
-                                                            value={item.categoryId}
+                                                            key={item.categoryTitle}
+                                                            value={item.categoryTitle}
                                                         >
                                                             {item.categoryTitle}
                                                         </SelectItem>

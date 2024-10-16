@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, Home, Users, Book, Video, Clipboard, Package2, LogOut, BookImage } from 'lucide-react';
+import { Menu, Home, Users, Book, Video, Clipboard, Package2, LogOut, BookImage, GraduationCap, BookUser } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import Topbar from '@/components/admin/topbar';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -22,21 +23,27 @@ const sidemenuLinks = [
         icon: <Users size={24} />,
         link: "/admin/users"
     },
+
+    {
+        title: "Students",  // Added Students route
+        icon: <GraduationCap size={24} />, // Icon for students (you can change this to any suitable icon)
+        link: "/admin/students"
+    },
+    {
+        title: "Teachers",  // Added Teachers route
+        icon: <BookUser size={24} />, // Icon for teachers (use a relevant icon for teachers)
+        link: "/admin/teachers"
+    },
     {
         title: "Bookings",
         icon: <BookImage size={24} />,
         link: "/admin/bookings"
     },
     {
-        title: "Grades",
+        title: "Packages",
         icon: <Package2 size={24} />,
         link: "/admin/packages"
     },
-    // {
-    //     title: "Courses",
-    //     icon: <Book size={24} />,
-    //     link: "/admin/course"
-    // },
     {
         title: "Live Classes",
         icon: <Video size={24} />,
@@ -46,6 +53,11 @@ const sidemenuLinks = [
     //     title: "Exams",
     //     icon: <Clipboard size={24} />,
     //     link: "/admin/exams"
+    // },
+    // {
+    //     title: "Courses",
+    //     icon: <Book size={24} />,
+    //     link: "/admin/course"
     // },
     // {
     //     title: "Recent Activities",
@@ -58,6 +70,7 @@ const sidemenuLinks = [
     //     link: "/dashboard/profile"
     // }
 ];
+
 
 const AdminLayout = ({ children }: LayoutProps) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
@@ -78,6 +91,7 @@ const AdminLayout = ({ children }: LayoutProps) => {
     }
     return (
         <div className="h-screen bg-gray-100">
+            <Topbar isOpen={isCollapsed} />
             <aside className={`fixed h-screen top-0 left-0 ${isCollapsed ? 'w-20' : 'w-64'} bg-darkNavy text-white flex flex-col transition-all duration-300 z-50`}>
                 <div className={`p-0 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between p-1'} my-4`}>
                     <h2 className={`text-xl font-bold ${isCollapsed ? 'hidden' : 'block'}`}>Admin Dashboard</h2>
@@ -109,7 +123,7 @@ const AdminLayout = ({ children }: LayoutProps) => {
                     </Button>
                 </div>
             </aside>
-            <main className={`${isCollapsed ? 'pl-20' : 'pl-64'}`}>
+            <main className={`pt-16 ${isCollapsed ? 'pl-20' : 'pl-64'}`}>
                 {/* <header className="bg-white shadow-md p-4 rounded-lg mb-4">
                     <h1 className="text-2xl font-bold text-darkNavy">{pathname}</h1>
                 </header> */}

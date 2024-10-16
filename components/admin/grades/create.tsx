@@ -27,67 +27,92 @@ import { z } from "zod"
 import { useEffect, useState } from "react"
 import { TCourses } from "@/app/lib/types"
 
-// Define some pre-existing tags for the dropdown
-const predefinedType = ["Pre-booking", "upcoming"];
+// Define the course types
+const predefinedType = ["Upcoming", "Pre-booking", "Ongoing"];
 
-// Update the form schema to include price and tag validation
+// Update the form schema
 const formSchema = z.object({
     name: z.string().min(1, "Name is required").max(30, "Name cannot exceed 30 characters"),
     description: z.string().min(10, "Description must be at least 10 characters").max(200, "Description cannot exceed 200 characters"),
-    price: z.string().regex(/^(1|[1-2][0-9]{3}|99999)$/, "Price must be between 1-99999"), // Price as a string in the range 1500-3500
-    tag: z.string().min(1, "Tag is required"), // Tag validation
-    type: z.string().min(1, "Type is required"), // Tag validation
-})
+    price: z
+        .string()
+        .regex(/^(1|[1-9][0-9]{0,4})$/, "Price must be between 1-99999")
+        .optional(), // Price is optional and only required for certain types
+    tag: z.string().min(1, "Tag is required"),
+    type: z.string().min(1, "Type is required"),
+});
 
 export function CreateDialog({ grades, loading }: { grades: TCourses[], loading: boolean }) {
-
     const { toast } = useToast();
-    const [tags, setTags] = useState<string[]>([]); // Manage tags list
-    const [newTag, setNewTag] = useState(""); // To store new tag input
+    const [tags, setTags] = useState<string[]>([]);
+    const [newTag, setNewTag] = useState("");
 
-    // 1. Define your form.
+    // Initialize form with zod schema validation
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
             description: "",
-            price: "",
+            price: "1",
             tag: "",
-            type: "",
+            type: predefinedType[0],
         },
     });
 
-    // 2. Define a submit handler.
+    const { watch } = form;
+
+    // Use watch to observe the type field
+    const selectedType = watch("type");
+
+    // Handle form submission
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const { name, description, price, tag, type } = values;
 
         try {
-
+            // Include price only if "type" is "Ongoing" or "Pre-booking"
+            const payload = {
+                description,
+                title: name,
+                price: (selectedType === "Ongoing" || selectedType === "Pre-booking") ? price : undefined,
+                tag,
+                type,
+            };
 
             const request = await fetch('/api/faculty', {
                 method: 'POST',
-                body: JSON.stringify({ description, title: name, price, tag, type })
-            })
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+
             const response = await request.json();
-            if (response.status !== 201) throw Error(response.error);
+            console.log(response); // Add logging to inspect response
+
+            if (response.status !== 201) throw new Error(response.error || "Unexpected error");
+
             toast({ description: "Course Created Successfully" });
-            form.reset();
+            form.reset(); // Reset form after successful submission
         } catch (error: any) {
-            toast({ variant: "destructive", title: "Creating Course Failed", description: error.toString() });
-            console.error(error);
+            console.error(error); // Log full error details
+            toast({
+                variant: "destructive",
+                title: "Creating Course Failed",
+                description: error.message || "Something went wrong",
+            });
         }
     }
 
-    // Function to add a new tag to the dropdown
+    // Function to handle adding new tags
     function handleAddTag() {
         if (newTag && !tags.includes(newTag)) {
             setTags([...tags, newTag]);
-            setNewTag(""); // Reset new tag input
+            setNewTag("");
         }
     }
 
+    // Fetch unique tags on component mount
     useEffect(() => {
-        // Get unique mainCategory values from the grades array
         const uniqueTags = [...new Set(grades.map(grade => grade.mainCategory))];
         setTags(uniqueTags);
     }, [grades]);
@@ -120,7 +145,8 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
                                 </FormItem>
                             )}
                         />
-                        {/* Description Field (Textarea) */}
+
+                        {/* Description Field */}
                         <FormField
                             control={form.control}
                             name="description"
@@ -134,28 +160,53 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
                                 </FormItem>
                             )}
                         />
-                        {/* Price Field */}
+
+                        {/* Type Field */}
                         <FormField
                             control={form.control}
-                            name="price"
+                            name="type"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Price (1-99999)</FormLabel>
-                                    <FormControl>
-                                        <Input type="text" placeholder="1500" {...field} />
+                                    <FormLabel>Status</FormLabel>
+                                    <FormControl className="ml-2 text-sm">
+                                        <select {...field}>
+                                            {predefinedType.map((item) => (
+                                                <option key={item} value={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        {/* Tag Field (Dropdown) */}
+
+                        {/* Conditionally render Price Field */}
+                        {(selectedType === "Ongoing" || selectedType === "Pre-booking") && (
+                            <FormField
+                                control={form.control}
+                                name="price"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Price (1-99999)</FormLabel>
+                                        <FormControl>
+                                            <Input type="text" placeholder="1500" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        )}
+
+                        {/* Tag Field */}
                         <FormField
                             control={form.control}
                             name="tag"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Tag</FormLabel>
-                                    <FormControl>
+                                    <FormControl className="ml-2 text-sm">
                                         <select {...field}>
                                             {tags.map((tag) => (
                                                 <option key={tag} value={tag}>
@@ -178,29 +229,7 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
                             )}
                         />
 
-                        {/* Type Field (Dropdown) */}
-                        <FormField
-                            control={form.control}
-                            name="type"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Type</FormLabel>
-                                    <FormControl>
-                                        <select {...field}>
-                                            {predefinedType.map((item) => (
-                                                <option key={item} value={item}>
-                                                    {item}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </FormControl>
-                                    <FormMessage />
-
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* Submit Button inside the form */}
+                        {/* Submit Button */}
                         <SheetFooter>
                             <Button type="submit">Save changes</Button>
                         </SheetFooter>
