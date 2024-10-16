@@ -39,7 +39,7 @@ const initialData: Student[] = [
 
 const ITEMS_PER_PAGE = 5; // Customize items per page
 
-export function StudentsPage() {
+export default function StudentsPage() {
     const [data, setData] = React.useState<Student[]>(initialData);
     const [selectedPackage, setSelectedPackage] = React.useState<string | null>(null);
     const [selectedSubject, setSelectedSubject] = React.useState<string | null>(null);
@@ -210,5 +210,3 @@ export function StudentsPage() {
         </div>
     );
 }
-
-export default StudentsPage;

@@ -47,7 +47,7 @@ export default function TeacherPage() {
                 const teacherList = await fetchTeachers();
                 setTeachers(teacherList);
             } catch (error) {
-                toast({ variant: "destructive", title: "Error", description: "Failed to fetch teachers." });
+                console.log(error);
             }
         }
         loadTeachers();
