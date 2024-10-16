@@ -7,6 +7,7 @@ import AdminBarChart from "@/components/admin/charts/barchart";
 import AdminPieChart from "@/components/admin/charts/piechart";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import CreateNoticeButton from "@/components/admin/createnotice";
 
 // Dummy data for New Users
 const newUsers = [
@@ -105,6 +106,8 @@ export default function AdminHome() {
 
             {/* Right Sidebar */}
             <RightSidebar />
+
+            <CreateNoticeButton />
         </div>
     );
 }

@@ -1,4 +1,6 @@
-import { useState, useMemo, useCallback } from "react";
+"use client";
+
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,11 +14,10 @@ import {
     DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import "easymde/dist/easymde.min.css"; // Import SimpleMDE's CSS
 import ReactMarkdown from "react-markdown";
 
-// Dynamically load SimpleMDE to avoid SSR issues
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"), { ssr: false });
+// Dynamically load MDEditor to avoid SSR issues
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 interface ICat {
     categoryId: string;
@@ -53,27 +54,6 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
         onDelete();
         setDeleteDialogOpen(false);
     };
-
-    // Memoize the SimpleMDE editor to prevent losing focus
-    const handleEditorChange = useCallback((value: string) => {
-        setEditContent(value);
-    }, []);
-
-    const simpleMDEEditor = useMemo(
-        () => (
-            <SimpleMDE
-                value={editContent}
-                onChange={handleEditorChange}
-                options={{
-                    spellChecker: true,
-                    placeholder: "Enter course content in Markdown format...",
-                    status: false,
-                    autofocus: true, // Focus immediately on load
-                }}
-            />
-        ),
-        [editContent, handleEditorChange] // Only re-render if the content changes
-    );
 
     return (
         <>
@@ -113,8 +93,9 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
                 </CardContent>
             </Card>
 
+            {/* Edit Dialog */}
             <Dialog open={editDialogOpen} onOpenChange={(isOpen) => setEditDialogOpen(isOpen)}>
-                <DialogContent className="max-h-[80vh] overflow-y-auto">
+                <DialogContent className="max-h-[80vh] max-w-[90%] w-full overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Edit Syllabus</DialogTitle>
                         <DialogDescription>
@@ -137,7 +118,11 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
                         />
 
                         <label className="block text-sm font-medium mt-4 mb-2">Syllabus Content (Markdown)</label>
-                        {simpleMDEEditor}
+                        <MDEditor
+                            value={editContent}
+                            onChange={(value) => setEditContent(value || '')}
+                            height={300}
+                        />
                     </div>
 
                     <DialogFooter>
@@ -149,6 +134,7 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
                 </DialogContent>
             </Dialog>
 
+            {/* Delete Dialog */}
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <DialogContent>
                     <DialogHeader>

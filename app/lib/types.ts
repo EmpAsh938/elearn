@@ -38,3 +38,8 @@ export type TBookedCourse = {
     category: TCourses;
     user: TUser;
 }
+
+export type TExam = {
+    title: string;
+    data: Date;
+}

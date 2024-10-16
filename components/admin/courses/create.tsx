@@ -23,19 +23,10 @@ import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import dynamic from "next/dynamic"; // Dynamic import for SimpleMDE
-import { useMemo } from "react";
+import dynamic from "next/dynamic"; // Dynamic import for @uiw/react-md-editor
 
-// SimpleMDE dynamically loaded to avoid SSR issues
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"), { ssr: false });
-import "easymde/dist/easymde.min.css"; // SimpleMDE's CSS
+// Dynamically import the MDEditor to work with Next.js SSR
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 // Define the schema for form validation
 const formSchema = z.object({
@@ -43,7 +34,6 @@ const formSchema = z.object({
     videoLink: z.string().url("Please enter a valid URL").optional(),
     content: z.string().min(10, "Content must be at least 10 characters"),
 });
-
 
 export function CreateDialog({ categoryId }: { categoryId: string }) {
 
@@ -89,28 +79,13 @@ export function CreateDialog({ categoryId }: { categoryId: string }) {
         }
     }
 
-    // Memoized SimpleMDE component to prevent unnecessary re-renders
-    const simpleMDEEditor = useMemo(
-        () => (
-            <SimpleMDE
-                value={form.watch("content")}
-                onChange={(value) => form.setValue("content", value)}
-                options={{
-                    placeholder: "Write your Syllabus contents here in markdown...",
-                    spellChecker: false,
-                }}
-            />
-        ),
-        [form] // Dependencies ensure this is only re-rendered when necessary
-    );
-
     return (
         <Sheet>
             <SheetTrigger asChild>
                 <Button className="bg-blue">Create Subject</Button>
             </SheetTrigger>
 
-            <SheetContent className="overflow-y-auto max-h-[100vh]"> {/* Enable scrolling */}
+            <SheetContent className="overflow-y-auto max-h-[100vh]">
                 <SheetHeader>
                     <SheetTitle>Create Subject</SheetTitle>
                     <SheetDescription>
@@ -135,33 +110,6 @@ export function CreateDialog({ categoryId }: { categoryId: string }) {
                             )}
                         />
 
-                        {/* Grade Dropdown */}
-                        {/* <FormField
-                            control={form.control}
-                            name="grade"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Select Package</FormLabel>
-                                    <FormControl>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select Package" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {grades.length > 0 &&
-                                                    grades.map((item) => (
-                                                        <SelectItem key={item.categoryId} value={item.categoryTitle}>
-                                                            {item.categoryTitle}
-                                                        </SelectItem>
-                                                    ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        /> */}
-
                         {/* Video Link Field */}
                         <FormField
                             control={form.control}
@@ -177,14 +125,20 @@ export function CreateDialog({ categoryId }: { categoryId: string }) {
                             )}
                         />
 
-                        {/* Description Field with Markdown Editor */}
+                        {/* Markdown Editor for Syllabus Content */}
                         <FormField
                             control={form.control}
                             name="content"
-                            render={() => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Content (Markdown)</FormLabel>
-                                    <FormControl>{simpleMDEEditor}</FormControl>
+                                    <FormControl>
+                                        <MDEditor
+                                            value={field.value}
+                                            onChange={(value) => field.onChange(value || '')}
+                                            height={300}
+                                        />
+                                    </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}

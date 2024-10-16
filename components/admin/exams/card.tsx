@@ -4,7 +4,7 @@ import { Edit, Trash } from "lucide-react"
 
 interface Exam {
     title: string
-    description: string
+    // description: string
     date: string
 }
 
@@ -29,7 +29,7 @@ export function ExamCard({ exam, onEdit, onDelete }: ExamCardProps) {
                 </div>
             </CardHeader>
             <CardContent>
-                <p className="text-darkNavy mb-2">{exam.description}</p>
+                {/* <p className="text-darkNavy mb-2">{exam.description}</p> */}
                 <p className="text-gray-500 text-sm">Date: {exam.date}</p>
             </CardContent>
             <CardFooter>

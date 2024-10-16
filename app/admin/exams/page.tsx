@@ -7,23 +7,22 @@ import { useState } from "react"
 
 interface Exam {
     title: string
-    description: string
+    // description: string
     date: string
-    questions: { questionText: string; options: string[]; correctOption: number }[]
 }
 
 const initialExams: Exam[] = [
     {
         title: "Math Exam",
-        description: "Covers algebra, geometry, and calculus.",
+        // description: "Covers algebra, geometry, and calculus.",
         date: "2024-08-10",
-        questions: [],
+        // questions: [],
     },
     {
         title: "Science Exam",
-        description: "Includes physics, chemistry, and biology topics.",
+        // description: "Includes physics, chemistry, and biology topics.",
         date: "2024-09-15",
-        questions: [],
+        // questions: [],
     },
 ]
 
@@ -51,7 +50,7 @@ export default function Exams() {
             <h2 className="text-2xl font-bold text-darkNavy mb-4">Exams</h2>
             <section>
                 <CreateExamDialog onCreate={handleCreate} />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))]s gap-4 mt-6">
                     {exams.map((exam, index) => (
                         <ExamCard
                             key={index}
