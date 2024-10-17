@@ -3,6 +3,7 @@ import { Ubuntu } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import AppProvider from "./provider";
+import { CartProvider } from "./cartProvider";
 
 const ubuntu = Ubuntu({
     weight: ['300', '400', '500', '700'],
@@ -25,8 +26,9 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${ubuntu.className} antialiased bg-[var(--c-white-1)] text-textDarkNavy`}>
                 <AppProvider>
-
-                    {children}
+                    <CartProvider>
+                        {children}
+                    </CartProvider>
                     <Toaster />
                 </AppProvider>
             </body>

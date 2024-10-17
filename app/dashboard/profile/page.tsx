@@ -214,6 +214,7 @@ export default function UserProfile() {
                                 type="file"
                                 onChange={handleFileChange}
                                 className="mb-4"
+                                accept="image/jpg, image/jpeg"
                             />
                             <Button onClick={saveProfile} className="bg-green text-white">
                                 Save Changes

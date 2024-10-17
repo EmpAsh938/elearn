@@ -14,57 +14,6 @@ interface IBookedCourse {
 }
 
 const Booked = () => {
-    // const courses = [
-    //     {
-    //         thumbnail: "/images/courses/course1.png",
-    //         title: "JavaScript Essentials",
-    //         description: "This course covers all the essential JavaScript concepts you need to become proficient in front-end development. From variables to advanced topics like closures and asynchronous programming, this is the ultimate guide to mastering JavaScript.",
-    //         price: "NRs.990",
-    //         status: "Booked",
-    //     },
-    //     {
-    //         thumbnail: "/images/courses/course2.webp",
-    //         title: "React for Beginners",
-    //         description: "A comprehensive guide to building interactive UIs using React. This course takes you from the very basics of React to more advanced features such as hooks and context.",
-    //         price: "NRs.790",
-    //         status: "Booked",
-    //     },
-    //     {
-    //         thumbnail: "/images/courses/course1.png",
-    //         title: "CSS Mastery",
-    //         description: "Learn how to style beautiful and responsive websites using CSS. This course covers everything from flexbox, grid, and CSS variables to advanced animations and transitions.",
-    //         price: "NRs.490",
-    //         status: "Booked",
-    //     },
-    //     {
-    //         thumbnail: "/images/courses/course2.webp",
-    //         title: "React for Beginners",
-    //         description: "A comprehensive guide to building interactive UIs using React. This course takes you from the very basics of React to more advanced features such as hooks and context.",
-    //         price: "NRs.790",
-    //         status: "Booked",
-    //     },
-    //     {
-    //         thumbnail: "/images/courses/course1.png",
-    //         title: "CSS Mastery",
-    //         description: "Learn how to style beautiful and responsive websites using CSS. This course covers everything from flexbox, grid, and CSS variables to advanced animations and transitions.",
-    //         price: "NRs.490",
-    //         status: "Booked",
-    //     },
-    //     {
-    //         thumbnail: "/images/courses/course2.webp",
-    //         title: "React for Beginners",
-    //         description: "A comprehensive guide to building interactive UIs using React. This course takes you from the very basics of React to more advanced features such as hooks and context.",
-    //         price: "NRs.790",
-    //         status: "Booked",
-    //     },
-    //     {
-    //         thumbnail: "/images/courses/course1.png",
-    //         title: "CSS Mastery",
-    //         description: "Learn how to style beautiful and responsive websites using CSS. This course covers everything from flexbox, grid, and CSS variables to advanced animations and transitions.",
-    //         price: "NRs.490",
-    //         status: "Booked",
-    //     }
-    // ];
 
     const { user } = useGlobalContext();
     const [loading, setLoading] = useState(false);

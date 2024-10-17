@@ -10,6 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown'; // Importing react-markdown
 import remarkGfm from 'remark-gfm';
 import useResponsiveSize from '@/hooks/use-responsiveSize';
+import Cart from '../cart';
+import { useCartContext } from '@/hooks/use-cartContext';
 
 
 const CourseDetails = ({ params }: { params: { id: string } }) => {
@@ -20,9 +22,16 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
     const [booking, setBooking] = useState<boolean>(false);
     const [alreadyBooked, setAlreadyBooked] = useState<boolean>(false); // New state for checking booking status
     const [error, setError] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const { id } = params;
     const { user } = useGlobalContext();
+    const { addToCart } = useCartContext();
     const imageSize = useResponsiveSize();  // Use the custom hook to get dynamic size
+
+
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
 
 
     // State to track which syllabus item is expanded
@@ -255,7 +264,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
 
                     {/* Right Sidebar */}
                     <div className="lg:w-1/3">
-                        <div className="p-4 border rounded-lg shadow-lg">
+                        <div className="relative p-4 border rounded-lg shadow-lg">
                             <Image
                                 src={courseData.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${courseData.imageName}` : "/images/courses/default.png"}
                                 alt={courseData.categoryTitle}
@@ -274,15 +283,27 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 <li>✓ 24/7 Support</li>
                             </ul>
 
-                            <Button
+                            {/* Add to Cart Button for Ongoing Courses */}
+                            {courseData.courseType && courseData.courseType.toLowerCase() === "ongoing" && (
+                                <Button
+                                    onClick={() => addToCart(courseData)}
+                                    className="absolute top-0 right-0 w-fit h-fit bg-green text-white px-4 py-2 rounded hover:bg-green"
+                                >
+                                    Add to Cart
+                                </Button>
+                            )}
+
+                            {courseData.courseType.toLowerCase() === "ongoing" ? null : <Button
                                 onClick={() => handleBookNow(courseData.categoryId)}
                                 className={`mt-6 w-full ${booking ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue hover:bg-blue-700'} text-white`}
                                 disabled={booking || alreadyBooked || isUpcoming}
                             >
                                 {alreadyBooked ? 'Already Booked' : booking ? 'Booking...' : isUpcoming ? 'Upcoming' : 'Book Now'}
-                            </Button>
+                            </Button>}
                         </div>
                     </div>
+
+                    <Cart isModalOpen={isModalOpen} toggleModal={toggleModal} />
                 </div>
             )}
         </div>

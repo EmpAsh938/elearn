@@ -38,6 +38,14 @@ const CourseCarousel = () => {
         fetchCourses();
     }, [])
 
+    if (isLoading) {
+        return (
+            <div>
+                <p>Loading...</p>
+            </div>
+        )
+    }
+
     if (!browseCourses || browseCourses.length === 0) return (
         <div>
             <p>Courses could not be loaded</p>
@@ -47,7 +55,7 @@ const CourseCarousel = () => {
     return (
         <div className='w-full'>
 
-            {isLoading ? <p>Loading...</p> : <Swiper
+            <Swiper
                 spaceBetween={30}
                 slidesPerView={3}
                 navigation={true}
@@ -82,7 +90,6 @@ const CourseCarousel = () => {
                 ))}
 
             </Swiper>
-            }
         </div>
 
     );

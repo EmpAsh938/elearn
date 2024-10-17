@@ -33,7 +33,7 @@ const predefinedType = ["Upcoming", "Pre-booking", "Ongoing"];
 // Update the form schema
 const formSchema = z.object({
     name: z.string().min(1, "Name is required").max(30, "Name cannot exceed 30 characters"),
-    description: z.string().min(10, "Description must be at least 10 characters").max(200, "Description cannot exceed 200 characters"),
+    description: z.string().min(10, "Description must be at least 10 characters").max(500, "Description cannot exceed 500 characters"),
     price: z
         .string()
         .regex(/^(1|[1-9][0-9]{0,4})$/, "Price must be between 1-99999")

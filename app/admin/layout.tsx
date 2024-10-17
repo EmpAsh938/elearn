@@ -49,11 +49,11 @@ const sidemenuLinks = [
         icon: <Video size={24} />,
         link: "/admin/live-classes"
     },
-    // {
-    //     title: "Exams",
-    //     icon: <Clipboard size={24} />,
-    //     link: "/admin/exams"
-    // },
+    {
+        title: "Exams",
+        icon: <Clipboard size={24} />,
+        link: "/admin/exams"
+    },
     // {
     //     title: "Courses",
     //     icon: <Book size={24} />,

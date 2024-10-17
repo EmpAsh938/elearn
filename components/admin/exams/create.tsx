@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -8,61 +8,103 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Plus, Trash } from "lucide-react"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
+import { useGlobalContext } from "@/hooks/use-globalContext";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // Assuming you're using a Select component
+import { TCourses } from "@/app/lib/types";
+import { Spinner } from "@/components/ui/spinner";
 
-interface Question {
-    questionText: string
-    options: string[]
-    correctOption: number
-}
+export function CreateExamDialog() {
+    const [title, setTitle] = useState("");
+    const [deadline, setDeadline] = useState("");
+    const [grades, setGrades] = useState<TCourses[]>([]); // grades or categories
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null); // state for selected category
+    const [image, setImage] = useState<File | null>(null); // state for image file
+    const [loading, setLoading] = useState(false); // loading state for exam creation
+    const [imageUploading, setImageUploading] = useState(false); // loading state for image upload
 
-interface Exam {
-    title: string
-    description: string
-    questions: Question[]
-    date: string
+    const { user } = useGlobalContext();
 
-}
-
-export function CreateExamDialog({ onCreate }: { onCreate: (newExam: Exam) => void }) {
-    const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
-    const [questions, setQuestions] = useState<Question[]>([
-        { questionText: "", options: ["", "", "", ""], correctOption: 0 }
-    ])
-
-    const addQuestion = () => {
-        setQuestions([...questions, { questionText: "", options: ["", "", "", ""], correctOption: 0 }])
-    }
-
-    const updateQuestion = (index: number, updatedQuestion: Partial<Question>) => {
-        const newQuestions = [...questions]
-        newQuestions[index] = { ...newQuestions[index], ...updatedQuestion }
-        setQuestions(newQuestions)
-    }
-
-    const removeQuestion = (index: number) => {
-        const newQuestions = questions.filter((_, i) => i !== index)
-        setQuestions(newQuestions)
-    }
-
-    const handleCreate = () => {
-        const newExam: Exam = {
-            title,
-            description,
-            questions,
-            date: new Date().getTime().toString()
+    const handleCreate = async () => {
+        if (!title || !deadline || !selectedCategoryId || !image) {
+            toast({ variant: 'destructive', description: "Title, Deadline, Category, and Image are required" });
+            return;
         }
-        onCreate(newExam)
-        // Reset form fields
-        setTitle("")
-        setDescription("")
-        setQuestions([{ questionText: "", options: ["", "", "", ""], correctOption: 0 }])
-    }
+
+        setLoading(true); // Start loading
+        let examId = '';
+
+        const categoryId = grades.find(item => item.categoryTitle === selectedCategoryId)?.categoryId;
+
+        try {
+            const req = await fetch('/api/exam', {
+                method: 'POST',
+                body: JSON.stringify({ title, deadline, userId: user.id, categoryId }),
+            });
+
+            const res = await req.json();
+            if (res.status !== 201) throw Error(res.error);
+            examId = res.body.examId;
+            toast({ description: 'Exam created successfully!' });
+
+        } catch (error: any) {
+            toast({ variant: 'destructive', description: error.toString() });
+            setLoading(false); // Stop loading if error
+            return;
+        }
+
+        // Upload image after exam creation
+        if (examId && image) {
+            setImageUploading(true); // Start image upload loading
+            const formData = new FormData();
+            formData.append("file", image); // Append the file to FormData
+            formData.append("examId", examId); // Append the exam ID to FormData
+
+            try {
+                const imageResponse = await fetch('/api/upload/exam', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const imageData = await imageResponse.json();
+
+                if (imageResponse.status !== 200) {
+                    throw new Error(imageData.error || "Error uploading image");
+                }
+                toast({ description: 'Image uploaded successfully!' });
+
+            } catch (error: any) {
+                toast({ variant: 'destructive', description: "Failed to upload image: " + error.toString() });
+            } finally {
+                setImageUploading(false); // Stop image upload loading
+            }
+        }
+
+        setLoading(false); // Stop loading after both exam creation and image upload
+        setTitle("");
+        setDeadline("");
+        setSelectedCategoryId(null);
+        setImage(null); // clear image after creating
+    };
+
+    // Fetch grades (categories) for the grade dropdown
+    useEffect(() => {
+        const fetchGrades = async () => {
+            try {
+                const request = await fetch("/api/faculty/");
+                const response = await request.json();
+                if (response.status !== 200) throw Error(response.error);
+                setGrades(response.body); // Assuming response.body contains grades
+            } catch (error: any) {
+                console.log(error);
+            }
+        };
+
+        fetchGrades();
+    }, []);
 
     return (
         <Dialog>
@@ -88,75 +130,84 @@ export function CreateExamDialog({ onCreate }: { onCreate: (newExam: Exam) => vo
                             className="col-span-3"
                         />
                     </div>
+                    {/* Grade Dropdown */}
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="description" className="text-right">
-                            Description
+                        <Label htmlFor="grade" className="text-right">
+                            Select Grade
                         </Label>
-                        <Textarea
-                            id="description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                        <div className="col-span-3">
+                            <Select
+                                onValueChange={(value) => setSelectedCategoryId(value)}
+                                value={selectedCategoryId || ""}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select Grade" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {grades.length > 0 &&
+                                        grades.map((grade) => (
+                                            <SelectItem
+                                                key={grade.categoryId}
+                                                value={grade.categoryTitle}
+                                            >
+                                                {grade.categoryTitle}
+                                            </SelectItem>
+                                        ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                    {/* Deadline Input */}
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="deadline" className="text-right">
+                            Deadline
+                        </Label>
+                        <Input
+                            id="deadline"
+                            type="datetime-local"
+                            value={deadline}
+                            onChange={(e) => setDeadline(e.target.value)}
                             className="col-span-3"
                         />
                     </div>
-                    {questions.map((question, index) => (
-                        <div key={index} className="bg-gray-100 p-4 rounded-lg mb-4">
-                            <div className="flex justify-between items-center mb-2">
-                                <Label className="font-bold">Question {index + 1}</Label>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => removeQuestion(index)}
-                                    className="hover:text-red-500"
-                                >
-                                    <Trash size={16} />
-                                </Button>
-                            </div>
-                            <Input
-                                placeholder="Question text"
-                                value={question.questionText}
-                                onChange={(e) =>
-                                    updateQuestion(index, { questionText: e.target.value })
-                                }
-                                className="mb-2"
-                            />
-                            {question.options.map((option, optionIndex) => (
-                                <div key={optionIndex} className="grid grid-cols-5 items-center gap-2 mb-1">
-                                    <Label className="col-span-1">Option {optionIndex + 1}</Label>
-                                    <Input
-                                        value={option}
-                                        onChange={(e) => {
-                                            const newOptions = [...question.options]
-                                            newOptions[optionIndex] = e.target.value
-                                            updateQuestion(index, { options: newOptions })
-                                        }}
-                                        className="col-span-3"
-                                    />
-                                    <input
-                                        type="radio"
-                                        name={`correct-option-${index}`}
-                                        checked={question.correctOption === optionIndex}
-                                        onChange={() => updateQuestion(index, { correctOption: optionIndex })}
-                                        className="col-span-1"
-                                    />
-                                </div>
-                            ))}
+                    {/* Image Upload */}
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="image" className="text-right">
+                            Upload Image
+                        </Label>
+                        <Input
+                            id="image"
+                            type="file"
+                            accept="image/jpeg, image/jpg, application/pdf"
+                            onChange={(e) => {
+                                const file = e.target.files ? e.target.files[0] : null;
+                                setImage(file);
+                            }}
+                            className="col-span-3"
+                        />
+                    </div>
+                    {/* Display loading state */}
+                    {loading && (
+                        <div className="col-span-4 text-center">
+                            <Spinner /> Creating exam...
                         </div>
-                    ))}
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={addQuestion}
-                        className="flex items-center gap-1 text-blue-500"
-                    >
-                        <Plus size={16} />
-                        Add Question
-                    </Button>
+                    )}
+                    {imageUploading && (
+                        <div className="col-span-4 text-center">
+                            <Spinner /> Uploading image...
+                        </div>
+                    )}
                 </div>
                 <DialogFooter>
-                    <Button type="button" onClick={handleCreate}>Create</Button>
+                    <Button
+                        type="button"
+                        onClick={handleCreate}
+                        disabled={loading || imageUploading}
+                    >
+                        {loading || imageUploading ? "Processing..." : "Create"}
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    )
+    );
 }

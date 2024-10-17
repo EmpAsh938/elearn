@@ -4,6 +4,7 @@ import { TCourses } from "@/app/lib/types";
 import CoursesList from "@/components/dashboard/courselist";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import Cart from "./cart";
 
 export default function Courses() {
     const [tags, setTags] = useState<string[]>([]);
@@ -11,6 +12,12 @@ export default function Courses() {
     const [selectedTag, setSelectedTag] = useState<string>("All");
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
 
 
     useEffect(() => {
@@ -41,6 +48,7 @@ export default function Courses() {
 
         fetchCourses();
     }, []);
+
 
     // Function to filter courses based on selected tag
     const filteredCourses = selectedTag === "All"
@@ -93,6 +101,13 @@ export default function Courses() {
                     <CoursesList courses={filteredCourses} />
                 )}
             </section>
+
+
+            {/* pop out cart component with list of courses  */}
+            <Cart
+                isModalOpen={isModalOpen}
+                toggleModal={toggleModal}
+            />
         </div>
     )
 }

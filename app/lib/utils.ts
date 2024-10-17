@@ -28,3 +28,20 @@ export function generateRandomDiscounts() {
         return 10;
     }
 }
+
+export function formatTime(seconds: number) {
+    const days = Math.floor(seconds / (3600 * 24));
+    const hours = Math.floor((seconds % (3600 * 24)) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    let timeString = '';
+
+    if (days > 0) timeString += `${days} day${days > 1 ? 's' : ''}, `;
+    if (hours > 0) timeString += `${hours} hour${hours > 1 ? 's' : ''}, `;
+    if (minutes > 0) timeString += `${minutes} minute${minutes > 1 ? 's' : ''}, `;
+
+    timeString += `${secs} second${secs > 1 ? 's' : ''}`;
+
+    return timeString;
+};

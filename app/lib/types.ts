@@ -40,6 +40,17 @@ export type TBookedCourse = {
 }
 
 export type TExam = {
+    examId: string;
     title: string;
-    data: Date;
+    category: TCourses;
+    imageName: string;
+    deadline: string;
+}
+
+export type TLive = {
+    liveid: string;
+    category: TCourses;
+    startingTime: string;
+    streamlink: string;
+    title: string;
 }
