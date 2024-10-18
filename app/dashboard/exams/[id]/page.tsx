@@ -17,10 +17,7 @@ import { PDFViewer } from "@/components/pdfviewer";
 import { pdfjs } from 'react-pdf';
 
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url,
-).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export default function JoinExam({ params }: { params: { id: string } }) {
     const [exam, setExam] = useState<TExam | null>(null);
