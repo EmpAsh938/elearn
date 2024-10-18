@@ -1,5 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET(req: NextRequest) {
+    try {
+
+        const sessionCookie = req.cookies.get('session')?.value;
+        if (!sessionCookie) {
+            return NextResponse.json({ error: 'No session cookie found' }, { status: 401 });
+        }
+        // Make the request to your authentication API to get the token
+        const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}payments`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Sandip ${sessionCookie}`
+            }
+        });
+
+        const data = await apiResponse.json();
+        if (apiResponse.status !== 200) {
+            return NextResponse.json({ error: data.error, status: apiResponse.status });
+        }
+
+
+
+        return NextResponse.json({
+            message: 'Payment Listing successful',
+            status: 200,
+            body: data,
+        });
+
+
+    } catch (error) {
+        return NextResponse.json({ error: 'Payment Listing failed', status: 500 });
+    }
+}
+
 export async function POST(req: NextRequest) {
     try {
 

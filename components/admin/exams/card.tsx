@@ -14,6 +14,15 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { TExam } from "@/app/lib/types";
 import Image from "next/image";
+import { PDFViewer } from "@/components/pdfviewer";
+
+import { pdfjs } from 'react-pdf';
+
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.min.mjs',
+    import.meta.url,
+).toString();
 
 interface ExamCardProps {
     exam: TExam;
@@ -139,7 +148,7 @@ export function ExamCard({ exam }: ExamCardProps) {
 
             {/* View Details Modal to Show Image */}
             <Dialog open={viewDetailsOpen} onOpenChange={setViewDetailsOpen}>
-                <DialogContent className="max-w-[600px] w-full">
+                <DialogContent className="max-w-[600px] max-h-[90%] w-full overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>{exam.title}</DialogTitle>
                         <DialogDescription>Details of the selected exam</DialogDescription>
@@ -153,15 +162,17 @@ export function ExamCard({ exam }: ExamCardProps) {
                             className="rounded-md mb-4"
                         />
                     ) : (
+                        <PDFViewer fileUrl={imageUrl} />
                         // <PdfViewer url={imageUrl} />
-                        // <PdfViewer url="https://example.com/sample.pdf" />
-                        <div>
-                            <p className="underline">
-                                <a href={imageUrl} download="file.pdf">
-                                    Download PDF
-                                </a>
-                            </p>
-                        </div>
+                        // <PDFViewer fileUrl="https://example.com/sample.pdf" />
+                        // <div>
+                        //     <p className="underline">
+                        //         <a href={imageUrl} download="file.pdf">
+                        //             Download PDF
+                        //         </a>
+                        //     </p>
+                        // </div>
+
 
                     )}
 

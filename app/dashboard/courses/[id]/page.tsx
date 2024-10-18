@@ -9,7 +9,15 @@ import { TCourses, TPosts } from '@/app/lib/types';
 import ReactMarkdown from 'react-markdown'; // Importing react-markdown
 import remarkGfm from 'remark-gfm';
 import useResponsiveSize from '@/hooks/use-responsiveSize';
+import { PDFViewer } from "@/components/pdfviewer";
 
+import { pdfjs } from 'react-pdf';
+
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.min.mjs',
+    import.meta.url,
+).toString();
 
 interface CourseDetailsProps {
     params: {
@@ -165,7 +173,7 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
 
             {/* Modal to display PDF */}
             {pdfUrl ? (
-                <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+                <div className="fixed inset-0 z-50 max-h-screen overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white p-6 rounded-lg w-11/12 max-w-4xl">
                         <button
                             className="mb-4 text-red"
@@ -173,12 +181,8 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
                         >
                             Close
                         </button>
-                        <iframe
-                            src={pdfUrl}
-                            width="100%"
-                            height="600px"
-                            title="PDF Notes"
-                        />
+                        <PDFViewer fileUrl={pdfUrl} />
+
                     </div>
                 </div>
             ) : null}

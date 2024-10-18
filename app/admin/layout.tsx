@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, Home, Users, Book, Video, Clipboard, Package2, LogOut, BookImage, GraduationCap, BookUser } from 'lucide-react';
+import { Menu, Home, Users, Book, Video, Clipboard, Package2, LogOut, BookImage, GraduationCap, BookUser, DollarSign } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Topbar from '@/components/admin/topbar';
@@ -38,6 +38,11 @@ const sidemenuLinks = [
         title: "Bookings",
         icon: <BookImage size={24} />,
         link: "/admin/bookings"
+    },
+    {
+        title: "Payments",
+        icon: <DollarSign size={24} />, // Use an appropriate icon, like `DollarSign`
+        link: "/admin/payment"         // Replace with the correct payments route
     },
     {
         title: "Packages",

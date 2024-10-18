@@ -5,63 +5,59 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { MoreVertical } from "lucide-react";
+import { LucideUser, MoreVertical } from "lucide-react";
 import Image from "next/image";
+import { TUser } from "@/app/lib/types";
 
 // Define classes (for simplicity)
 const classes = ["All", "Web Development", "NEB 12 Management", "NEB 12 Science"];
 
-interface Teacher {
-    id: number;
-    name: string;
-    profilePicture: string;
-    class: string;
-    subject: string;
-}
-
-// Mock fetching function
-const fetchTeachers = async (): Promise<Teacher[]> => {
-    // Simulate API call
-    return [
-        { id: 1, name: "Teacher 1", profilePicture: "/images/profile/user.jpeg", class: "NEB 12 Management", subject: "Math" },
-        { id: 2, name: "Teacher 2", profilePicture: "/images/profile/user.jpeg", class: "", subject: "" },
-        { id: 3, name: "Teacher 3", profilePicture: "/images/profile/user.jpeg", class: "NEB 12 Science", subject: "English" },
-        { id: 4, name: "Teacher 4", profilePicture: "/images/profile/user.jpeg", class: "Web Development", subject: "Math" },
-        { id: 5, name: "Teacher 5", profilePicture: "/images/profile/user.jpeg", class: "NEB 12 Management", subject: "Science" },
-        { id: 6, name: "Teacher 6", profilePicture: "/images/profile/user.jpeg", class: "NEB 12 Science", subject: "English" },
-        // Add more mock teachers as needed
-    ];
-};
 
 export default function TeacherPage() {
-    const [teachers, setTeachers] = useState<Teacher[]>([]);
+    const [teachers, setTeachers] = useState<TUser[]>([]);
     const [selectedClass, setSelectedClass] = useState<string>("All");
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [itemsPerPage] = useState<number>(5); // Number of teachers to show per page
+    const [loading, setLoading] = useState(true);
     const { toast } = useToast();
 
     useEffect(() => {
-        // Fetch teachers on page load
-        async function loadTeachers() {
+        async function fetchUsers() {
             try {
-                const teacherList = await fetchTeachers();
-                setTeachers(teacherList);
+                const response = await fetch('/api/user');
+                const result = await response.json();
+                if (result.status !== 200) throw Error(result.error);
+                const teacherData: TUser[] = result.body;
+                setTeachers(teacherData.filter(item => (item.roles[0]['id'] == '504'))); // Set the data from API
+
             } catch (error) {
-                console.log(error);
+                console.error("Error fetching users:", error);
+            } finally {
+                setLoading(false);
             }
         }
-        loadTeachers();
+
+        fetchUsers();
     }, []);
 
     // Filter teachers based on selected class
     const filteredTeachers = teachers.filter((teacher) => {
-        return selectedClass === "All" ? teacher : teacher.class === selectedClass;
+        return teacher;
+        // return selectedClass === "All" ? teacher : teacher.class === selectedClass;
     });
 
     // Calculate pagination
     const totalPages = Math.ceil(filteredTeachers.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentTeachers = filteredTeachers.slice(startIndex, startIndex + itemsPerPage);
+
+    if (loading) {
+        return (
+            <div className="w-full p-6">
+                <p>Loading...</p>
+            </div>
+        )
+    }
 
     return (
         <div className="container mx-auto p-4">
@@ -92,7 +88,7 @@ export default function TeacherPage() {
                     <TeacherCard key={teacher.id} teacher={teacher} onUpdate={(updatedTeacher) => {
                         setTeachers((prev) => prev.map(t => t.id === updatedTeacher.id ? updatedTeacher : t));
                     }} onDelete={(id) => {
-                        setTeachers((prev) => prev.filter(t => t.id !== id));
+                        // setTeachers((prev) => prev.filter(t => t.id !== id));
                     }} />
                 ))}
             </div>
@@ -117,17 +113,17 @@ export default function TeacherPage() {
     );
 }
 
-function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: Teacher; onUpdate: (teacher: Teacher) => void; onDelete: (id: number) => void; }) {
+function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: TUser; onUpdate: (teacher: TUser) => void; onDelete: (id: number) => void; }) {
     const [isMoreOptionsVisible, setIsMoreOptionsVisible] = useState(false);
     const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
     const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-    const [assignClass, setAssignClass] = useState<string>(teacher.class || "");
-    const [assignSubject, setAssignSubject] = useState<string>(teacher.subject || "");
-    const [updateName, setUpdateName] = useState<string>(teacher.name);
-    const [updateClass, setUpdateClass] = useState<string>(teacher.class);
-    const [updateSubject, setUpdateSubject] = useState<string>(teacher.subject);
+    // const [assignClass, setAssignClass] = useState<string>(teacher.class || "");
+    // const [assignSubject, setAssignSubject] = useState<string>(teacher.subject || "");
+    // const [updateName, setUpdateName] = useState<string>(teacher.name);
+    // const [updateClass, setUpdateClass] = useState<string>(teacher.class);
+    // const [updateSubject, setUpdateSubject] = useState<string>(teacher.subject);
 
     const { toast } = useToast();
 
@@ -135,14 +131,14 @@ function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: Teacher; onUpda
         try {
             const response = await fetch("/api/assign-class", {
                 method: "POST",
-                body: JSON.stringify({ teacherId: teacher.id, class: assignClass, subject: assignSubject }),
+                // body: JSON.stringify({ teacherId: teacher.id, class: assignClass, subject: assignSubject }),
             });
 
-            if (!response.ok) throw new Error("Failed to assign class");
+            // if (!response.ok) throw new Error("Failed to assign class");
 
-            const updatedTeacher = { ...teacher, class: assignClass, subject: assignSubject };
-            onUpdate(updatedTeacher);
-            toast({ description: `Assigned ${assignClass} - ${assignSubject} to ${teacher.name}` });
+            // const updatedTeacher = { ...teacher, class: assignClass, subject: assignSubject };
+            // onUpdate({});
+            // toast({ description: `Assigned ${assignClass} - ${assignSubject} to ${teacher.name}` });
             setIsAssignDialogOpen(false);
         } catch (error: any) {
             toast({ variant: "destructive", title: "Error", description: error.message });
@@ -150,8 +146,8 @@ function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: Teacher; onUpda
     }
 
     async function handleUpdate() {
-        const updatedTeacher = { ...teacher, name: updateName, class: updateClass, subject: updateSubject };
-        onUpdate(updatedTeacher);
+        // const updatedTeacher = { ...teacher, name: updateName, class: updateClass, subject: updateSubject };
+        // onUpdate(updatedTeacher);
         setIsUpdateDialogOpen(false);
         toast({ description: `Updated details for ${teacher.name}` });
     }
@@ -166,7 +162,7 @@ function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: Teacher; onUpda
             return;
         }
 
-        onDelete(teacher.id);
+        // onDelete(teacher.id);
         toast({ description: `Deleted ${teacher.name}` });
         setIsDeleteDialogOpen(false);
     }
@@ -175,11 +171,23 @@ function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: Teacher; onUpda
     return (
         <div className="p-4 border rounded-lg flex items-center justify-between">
             <div className="flex items-center">
-                <Image src={teacher.profilePicture} alt={teacher.name} width={400} height={400} className="w-12 h-12 rounded-full mr-4" />
-                <div>
-                    <p className="font-semibold">{teacher.name}</p>
+                {/* <Image src={teacher.profilePicture} alt={teacher.name} width={400} height={400} className="w-12 h-12 rounded-full mr-4" /> */}
+                {teacher && teacher.imageName ? (
+                    <Image
+                        src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}users/image/${teacher.imageName}`}
+                        alt={teacher.name}
+                        width={50}
+                        height={50}
+                        className="w-10 h-10 object-cover rounded-full cursor-pointer"
+                    />
+                ) : (
+                    <LucideUser className="w-10 h-10 text-gray-600 cursor-pointer" />
+                )}
+                <div className="ml-2">
+                    <p className="font-semibold capitalize">{teacher.name}</p>
                     <p className="text-sm text-gray-500">
-                        {teacher.class ? `${teacher.class} - ${teacher.subject}` : "Not Assigned"}
+                        Not Assigned
+                        {/* {teacher.class ? `${teacher.class} - ${teacher.subject}` : "Not Assigned"} */}
                     </p>
                 </div>
             </div>
@@ -205,7 +213,7 @@ function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: Teacher; onUpda
             </div>
 
             {/* Assign Class Dialog */}
-            <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
+            {/* <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Assign Class & Subject</DialogTitle>
@@ -240,10 +248,10 @@ function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: Teacher; onUpda
                         </Button>
                     </div>
                 </DialogContent>
-            </Dialog>
+            </Dialog> */}
 
             {/* Update Teacher Dialog */}
-            <Dialog open={isUpdateDialogOpen} onOpenChange={setIsUpdateDialogOpen}>
+            {/* <Dialog open={isUpdateDialogOpen} onOpenChange={setIsUpdateDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Update Teacher Details</DialogTitle>
@@ -285,7 +293,7 @@ function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: Teacher; onUpda
                         </Button>
                     </div>
                 </DialogContent>
-            </Dialog>
+            </Dialog> */}
 
             {/* Delete Teacher Confirmation Dialog */}
             <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>

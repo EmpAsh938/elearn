@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
     ColumnDef,
     getCoreRowModel,
@@ -13,71 +12,62 @@ import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuConten
 import { ChevronDown } from "lucide-react";
 import * as XLSX from "xlsx";
 import Image from "next/image";
+import { TUser } from "@/app/lib/types";
+import { useEffect, useMemo, useState } from "react";
 
 
-type Student = {
-    id: string;
-    name: string;
-    thumbnail: string;
-    enrolledSubjects: string;
-    package: string;
-};
 
-const initialData: Student[] = [
-    { id: "S001", thumbnail: "/images/profile/user.jpeg", name: "John Doe", enrolledSubjects: "Math, Science", package: "Package 1" },
-    { id: "S002", thumbnail: "/images/profile/user.jpeg", name: "John Doe", enrolledSubjects: "Math", package: "Package 1" },
-    { id: "S003", thumbnail: "/images/profile/user.jpeg", name: "John Doe", enrolledSubjects: "Science", package: "Package 1" },
-    { id: "S004", thumbnail: "/images/profile/user.jpeg", name: "Jane Smith", enrolledSubjects: "Math, English", package: "Package 2" },
-    { id: "S005", thumbnail: "/images/profile/user.jpeg", name: "Jane Smith", enrolledSubjects: "English", package: "Package 2" },
-    { id: "S006", thumbnail: "/images/profile/user.jpeg", name: "Jack Johnson", enrolledSubjects: "Science, History", package: "Package 3" },
-    { id: "S007", thumbnail: "/images/profile/user.jpeg", name: "Jack Johnson", enrolledSubjects: "History", package: "Package 3" },
-    { id: "S008", thumbnail: "/images/profile/user.jpeg", name: "Jack Johnson", enrolledSubjects: "Science", package: "Package 3" },
-    { id: "S009", thumbnail: "/images/profile/user.jpeg", name: "Jack Johnson", enrolledSubjects: "Science, History", package: "Package 3" },
-    { id: "S010", thumbnail: "/images/profile/user.jpeg", name: "Jack Johnson", enrolledSubjects: "History", package: "Package 3" },
-    { id: "S011", thumbnail: "/images/profile/user.jpeg", name: "Jack Johnson", enrolledSubjects: "Science", package: "Package 3" },
-];
 
 const ITEMS_PER_PAGE = 5; // Customize items per page
 
 export default function StudentsPage() {
-    const [data, setData] = React.useState<Student[]>(initialData);
-    const [selectedPackage, setSelectedPackage] = React.useState<string | null>(null);
-    const [selectedSubject, setSelectedSubject] = React.useState<string | null>(null);
-    const [page, setPage] = React.useState(0); // Pagination state
+    const [data, setData] = useState<TUser[]>([]);
+    const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
+    const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+    const [page, setPage] = useState(0); // Pagination state
+    const [loading, setLoading] = useState(true);
 
     // Memoize the filtered data to avoid recalculating on every render
-    const filteredData = React.useMemo(() => {
-        return data.filter((student) => {
-            const packageMatches = selectedPackage && selectedPackage !== "All" ? student.package === selectedPackage : true;
-            const subjectMatches = selectedSubject && selectedSubject !== "All" ? student.enrolledSubjects.includes(selectedSubject) : true;
-            return packageMatches && subjectMatches;
-        });
-    }, [data, selectedPackage, selectedSubject]);
+    // const filteredData = useMemo(() => {
+    //     return data.filter((student) => {
+    //         const packageMatches = selectedPackage && selectedPackage !== "All" ? student.package === selectedPackage : true;
+    //         const subjectMatches = selectedSubject && selectedSubject !== "All" ? student.enrolledSubjects.includes(selectedSubject) : true;
+    //         return packageMatches && subjectMatches;
+    //     });
+    // }, [data, selectedPackage, selectedSubject]);
 
     // Pagination logic: slice filtered data based on current page and items per page
-    const paginatedData = React.useMemo(() => {
+    const paginatedData = useMemo(() => {
         const start = page * ITEMS_PER_PAGE;
         const end = start + ITEMS_PER_PAGE;
-        return filteredData.slice(start, end);
-    }, [filteredData, page]);
+        // return filteredData.slice(start, end);
+        return data.slice(start, end);
+    }, [data, page]);
 
     // Memoize the table columns definition
-    const columns: ColumnDef<Student>[] = React.useMemo(() => [
+    const columns: ColumnDef<TUser>[] = useMemo(() => [
         { accessorKey: "id", header: "ID" },
+        // {
+        //     accessorKey: "imageName",
+        //     header: "Avatar",
+        //     cell: (info) => (
+        //         <Image
+        //             src={info.getValue() as string}
+        //             alt="Student Avatar"
+        //             width={100}
+        //             height={100}
+        //             className="w-10 h-10 rounded-full"
+        //         />
+        //     ),
+        // },
+        { accessorKey: "name", header: "Name" },
         {
-            accessorKey: "thumbnail",
-            header: "Avatar",
-            cell: (info) => (
-                <Image
-                    src={info.getValue() as string}
-                    alt="Student Avatar"
-                    width={100}
-                    height={100}
-                    className="w-10 h-10 rounded-full"
-                />
-            ),
-        }, { accessorKey: "name", header: "Name" },
-        { accessorKey: "enrolledSubjects", header: "Enrolled Subjects" },
+            accessorKey: "roles", header: "Status", cell: ({ row }) => {
+                const roles = row.original.roles.map(role => role.name).join(", ");
+                return <div>{roles.slice(5)}</div>; // Display roles as comma-separated
+            },
+        },
+        // { accessorKey: "enrolledSubjects", header: "Enrolled Subjects" },
     ], []);
 
     // Use memoized data and columns in React Table configuration
@@ -87,14 +77,15 @@ export default function StudentsPage() {
         getCoreRowModel: getCoreRowModel(),
     });
 
-    const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE); // Calculate total pages
+    // const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE); // Calculate total pages
+    const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE); // Calculate total pages
 
 
     const handleDownload = () => {
         // Step 1: Prepare the student data in a 2D array format for Excel
         const worksheetData = [
-            ["ID", "Name", "Enrolled Subjects", "Package"], // Header row
-            ...data.map((student) => [student.id, student.name, student.enrolledSubjects, student.package]), // Data rows
+            ["ID", "Name", "Enrolled"], // Header row
+            ...data.map((student) => [student.id, student.name]), // Data rows
         ];
 
         // Step 2: Create a new workbook and a worksheet from the data
@@ -106,6 +97,33 @@ export default function StudentsPage() {
         XLSX.writeFile(workbook, "students.xlsx");
     };
 
+    // Fetch data from the server when the component mounts
+    useEffect(() => {
+        async function fetchUsers() {
+            try {
+                const response = await fetch('/api/user');
+                const result = await response.json();
+                if (result.status !== 200) throw Error(result.error);
+                const studentsData: TUser[] = result.body;
+                setData(studentsData.filter(item => (item.roles[0]['id'] == '502' || item.roles[0]['id'] == '503'))); // Set the data from API
+
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchUsers();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="w-full p-6">
+                <p>Loading...</p>
+            </div>
+        )
+    }
     return (
         <div className="w-full p-6">
             <h2 className="text-2xl font-medium">Students</h2>
@@ -126,7 +144,7 @@ export default function StudentsPage() {
                 </DropdownMenu>
 
                 {/* Subject Filter */}
-                <DropdownMenu>
+                {/* <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline">
                             {selectedSubject ? selectedSubject : "Select Subject"} <ChevronDown className="ml-2 h-4 w-4" />
@@ -138,7 +156,7 @@ export default function StudentsPage() {
                         <DropdownMenuItem onClick={() => setSelectedSubject("Science")}>Science</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => setSelectedSubject("History")}>History</DropdownMenuItem>
                     </DropdownMenuContent>
-                </DropdownMenu>
+                </DropdownMenu> */}
             </div>
 
             {/* Students Table */}

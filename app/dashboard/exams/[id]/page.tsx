@@ -12,6 +12,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { useGlobalContext } from "@/hooks/use-globalContext";
+import { PDFViewer } from "@/components/pdfviewer";
+
+import { pdfjs } from 'react-pdf';
+
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.min.mjs',
+    import.meta.url,
+).toString();
 
 export default function JoinExam({ params }: { params: { id: string } }) {
     const [exam, setExam] = useState<TExam | null>(null);
@@ -195,13 +204,8 @@ export default function JoinExam({ params }: { params: { id: string } }) {
                         ) : (
                             // <PdfViewer url={imageUrl} />
                             // <PdfViewer url="https://example.com/sample.pdf" />
-                            <div>
-                                <p className="underline">
-                                    <a href={imageUrl} download="file.pdf">
-                                        Download PDF
-                                    </a>
-                                </p>
-                            </div>
+                            <PDFViewer fileUrl={imageUrl} />
+
 
                         )}
                     </div>
