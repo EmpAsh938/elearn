@@ -1,16 +1,11 @@
 "use client";
-
+import '../polyfills.mjs';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useState } from 'react';
 import { Button } from './ui/button';
 
 
-// pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
-    import.meta.url,
-).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 
 export function PDFViewer({ fileUrl }: { fileUrl: string }) {
