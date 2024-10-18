@@ -16,10 +16,8 @@ import { TExam } from "@/app/lib/types";
 import Image from "next/image";
 import { PDFViewer } from "@/components/pdfviewer";
 
-import { pdfjs } from 'react-pdf';
 
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 interface ExamCardProps {
     exam: TExam;
