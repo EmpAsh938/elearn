@@ -30,6 +30,7 @@ export function ExamCard({ exam }: ExamCardProps) {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [viewDetailsOpen, setViewDetailsOpen] = useState(false);
     const [title, setTitle] = useState(exam.title);
+    const [isSaving, setIsSaving] = useState(false);
     const [deadline, setDeadline] = useState(() => {
         const date = new Date(exam.deadline);
         return date.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:MM
@@ -43,7 +44,7 @@ export function ExamCard({ exam }: ExamCardProps) {
             return;
         }
 
-
+        setIsSaving(true);
         // Step 1: Upload the image if a file is selected
         if (file) {
             const formData = new FormData();
@@ -86,6 +87,7 @@ export function ExamCard({ exam }: ExamCardProps) {
         //     console.error(error);
         // }
 
+        setIsSaving(false);
 
     };
 
@@ -137,9 +139,12 @@ export function ExamCard({ exam }: ExamCardProps) {
                 <p className="text-gray-500 text-sm">Package: {exam.category.categoryTitle}</p>
             </CardContent>
 
-            <CardFooter>
+            <CardFooter className="flex flex-col gap-2">
                 <Button className="bg-blue text-white w-full" onClick={() => setViewDetailsOpen(true)}>
                     View Details
+                </Button>
+                <Button className="bg-green text-white w-full">
+                    View Student&apos;s Answers
                 </Button>
             </CardFooter>
 
@@ -211,7 +216,7 @@ export function ExamCard({ exam }: ExamCardProps) {
 
 
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <label htmlFor="image" className="text-right">Upload Image</label>
+                            <label htmlFor="image" className="text-right">Upload Question</label>
                             <Input
                                 id="image"
                                 type="file"
@@ -226,7 +231,7 @@ export function ExamCard({ exam }: ExamCardProps) {
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button onClick={handleEdit}>Save Changes</Button>
+                        <Button disabled={isSaving} onClick={handleEdit}>{isSaving ? 'Saving...' : 'Save Changes'}</Button>
                         <Button variant="ghost" onClick={() => setEditDialogOpen(false)}>Cancel</Button>
                     </DialogFooter>
                 </DialogContent>

@@ -173,7 +173,7 @@ export function CreateExamDialog() {
                     {/* Image Upload */}
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="image" className="text-right">
-                            Upload Image
+                            Upload Question Paper
                         </Label>
                         <Input
                             id="image"

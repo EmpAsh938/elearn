@@ -30,7 +30,7 @@ export default function LiveClassRoom({ params }: { params: { id: string } }) {
             } catch (error) {
                 console.error('Error checking stream:', error);
                 setIsStreaming(false);
-                setError('Error checking stream availability');
+                setError('Stream has either ended or has not started');
             }
         };
 
