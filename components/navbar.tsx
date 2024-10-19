@@ -44,15 +44,15 @@ export default function Navbar() {
 
     return (
         <div className="bg-white z-50 w-screen md:h-[80px] relative">
-            <nav className="max-w-screen-2xl mx-auto flex items-center justify-between px-6 py-4">
+            <nav className="max-w-screen-2xl mx-auto flex items-center justify-between px-6 py-4 pt-0">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
                     <Image
-                        src="/images/logo.avif"
+                        src="/images/utkrista-logo.png"
                         alt="logo"
                         height={300}
                         width={300}
-                        className="w-14 object-cover"
+                        className="w-20 object-cover"
                     />
                     <span className="font-bold text-blue">उत्कृष्ट शिक्षा</span>
                 </Link>

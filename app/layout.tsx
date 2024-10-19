@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Ubuntu } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import AppProvider from "./provider";
 import { CartProvider } from "./cartProvider";
 
-const ubuntu = Ubuntu({
+const poppins = Poppins({
     weight: ['300', '400', '500', '700'],
     style: ['normal', 'italic'],
     subsets: ['latin'],
@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${ubuntu.className} antialiased bg-[var(--c-white-1)] text-textDarkNavy`}>
+            <body className={`${poppins.className} antialiased bg-[var(--c-white-1)] text-textDarkNavy`}>
                 <AppProvider>
                     <CartProvider>
                         {children}

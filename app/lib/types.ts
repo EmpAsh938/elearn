@@ -14,7 +14,7 @@ export type TPosts = {
     videoLink: string;
     mentor: string;
     content: string;
-    // image
+    imageName: string;
 }
 
 type TRole = {

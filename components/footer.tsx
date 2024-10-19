@@ -10,7 +10,7 @@ export default function Footer() {
                 {/* Logo and About Section */}
                 <div className="flex flex-col items-start">
                     <Image
-                        src="/images/logo.avif"
+                        src="/images/utkrista-logo.png"
                         width={600}
                         height={600}
                         alt="Utkrista Shikshya logo"

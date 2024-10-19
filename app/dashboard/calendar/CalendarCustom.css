@@ -1,0 +1,44 @@
+/* Disable month and year selection */
+.react-calendar__navigation__label {
+    pointer-events: none;
+    /* Disable clicks on the header label */
+    cursor: default;
+    /* Make it look non-interactive */
+}
+
+/* Disable all child interactions for navigation labels */
+.react-calendar__navigation__label>* {
+    pointer-events: none;
+}
+
+/* Optional: Remove hover effect if present */
+.react-calendar__navigation__label:hover {
+    background-color: inherit;
+}
+
+/* Custom class to remove text selection (optional) */
+.no-select {
+    user-select: none;
+    /* Prevent text from being selectable */
+}
+
+.react-calendar__tile.non-saturday {
+    color: black;
+}
+
+
+/* Style for Saturdays */
+.react-calendar__tile.saturday {
+    background-color: #E1F2FE;
+    /* Light blue background */
+    color: red;
+    /* Blue text */
+}
+
+/* Optional: Additional styles for hovering over Saturday */
+.react-calendar__tile.saturday:hover {
+    background-color: red;
+    /* Darker blue when hovering */
+    color: white;
+    /* Change text to white */
+}

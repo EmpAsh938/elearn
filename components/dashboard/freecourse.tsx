@@ -5,15 +5,15 @@ const FreeCoursesSection = () => {
     // Array of free courses with YouTube video links
     const freeCourses = [
         {
-            thumbnail: "/images/youtube/6.webp",
+            thumbnail: "/images/youtube/statistics-i.jpg",
             title: "Statistics I (CSIT 2nd Sem)",
             youtubeLink: "https://www.youtube.com/playlist?list=PLacXNk1LcMgy706sKNz7fFLRhBTSylWr-"
         },
-        {
-            thumbnail: "/images/youtube/3.webp",
-            title: "BBS First Year (Business Statistics)",
-            youtubeLink: "https://www.youtube.com/playlist?list=PLacXNk1LcMgwB3Vd2WmUqJyOhtMachsXt"
-        },
+        // {
+        //     thumbnail: "/images/youtube/3.webp",
+        //     title: "BBS First Year (Business Statistics)",
+        //     youtubeLink: "https://www.youtube.com/playlist?list=PLacXNk1LcMgwB3Vd2WmUqJyOhtMachsXt"
+        // },
     ];
 
     return (
@@ -50,7 +50,7 @@ const FreeCoursesSection = () => {
                                         </svg>
                                     </div>
                                 </div>
-                                <p className="text-center py-2 font-medium text-lg line-clamp-2 overflow-hidden text-ellipsis">{course.title}</p>
+                                <p className="text-center py-2 font-medium text-lg line-clamp-1 overflow-hidden text-ellipsis">{course.title}</p>
                             </div>
                         </div>
                     </Link>

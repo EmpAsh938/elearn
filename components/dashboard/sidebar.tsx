@@ -1,6 +1,6 @@
 "use client";
 
-import { LucideHome, LucideBookOpen, LucideMessageSquare, LucideBookCopy, ClipboardCheck, Video } from 'lucide-react';
+import { LucideHome, LucideBookOpen, LucideMessageSquare, LucideBookCopy, ClipboardCheck, Video, Calendar } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -77,6 +77,15 @@ const Sidebar = ({ isOpen }: Props) => {
                         >
                             <Video className="inline-block sm:w-6 sm:h-6" />
                             <span className="hidden md:inline">Live Class</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            className={`flex gap-4 justify-center md:justify-start items-end text-base tracking-wide hover:cursor-pointer py-2 ${pathname === '/dashboard/calendar' ? 'bg-gray-100' : 'bg-white'}`}
+                            href="/dashboard/calendar"
+                        >
+                            <Calendar className="inline-block sm:w-6 sm:h-6" />
+                            <span className="hidden md:inline">Calendar</span>
                         </Link>
                     </li>
                     <li>
