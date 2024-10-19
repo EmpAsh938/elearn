@@ -46,6 +46,7 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
     const { toast } = useToast();
     const [tags, setTags] = useState<string[]>([]);
     const [newTag, setNewTag] = useState("");
+    const [isSaving, setIsSaving] = useState(false);
 
     // Initialize form with zod schema validation
     const form = useForm<z.infer<typeof formSchema>>({
@@ -67,6 +68,8 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
     // Handle form submission
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const { name, description, price, tag, type } = values;
+
+        setIsSaving(true);
 
         try {
             // Include price only if "type" is "Ongoing" or "Pre-booking"
@@ -100,6 +103,8 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
                 title: "Creating Course Failed",
                 description: error.message || "Something went wrong",
             });
+        } finally {
+            setIsSaving(false);
         }
     }
 
@@ -231,7 +236,7 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
 
                         {/* Submit Button */}
                         <SheetFooter>
-                            <Button type="submit">Save changes</Button>
+                            <Button disabled={isSaving} type="submit">{isSaving ? 'Saving...' : 'Save changes'}</Button>
                         </SheetFooter>
                     </form>
                 </Form>

@@ -84,7 +84,7 @@ const Booked = () => {
     if (!courses || courses.length === 0) return (
         <div className="flex items-center justify-center min-h-screen bg-gray-50">
             <div className="text-center">
-                <p className="text-gray-700 text-lg font-semibold">Courses could not found</p>
+                <p className="text-gray-700 text-lg font-semibold">Courses could not be found</p>
             </div>
         </div>
     )
