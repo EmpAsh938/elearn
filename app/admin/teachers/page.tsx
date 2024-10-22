@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { LucideUser, MoreVertical } from "lucide-react";
 import Image from "next/image";
 import { TUser } from "@/app/lib/types";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 // Define classes (for simplicity)
 const classes = ["All", "Web Development", "NEB 12 Management", "NEB 12 Science"];
@@ -19,6 +20,7 @@ export default function TeacherPage() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [itemsPerPage] = useState<number>(5); // Number of teachers to show per page
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState(""); // Search state
     const { toast } = useToast();
 
     useEffect(() => {
@@ -40,11 +42,12 @@ export default function TeacherPage() {
         fetchUsers();
     }, []);
 
-    // Filter teachers based on selected class
-    const filteredTeachers = teachers.filter((teacher) => {
-        return teacher;
-        // return selectedClass === "All" ? teacher : teacher.class === selectedClass;
-    });
+    // Filter data based on searchQuery
+    const filteredTeachers = useMemo(() => {
+        return teachers.filter(teacher =>
+            teacher.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [searchQuery, teachers]);
 
     // Calculate pagination
     const totalPages = Math.ceil(filteredTeachers.length / itemsPerPage);
@@ -62,6 +65,16 @@ export default function TeacherPage() {
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Teachers</h1>
+            {/* Search Input */}
+            <div className="my-4">
+                <input
+                    type="text"
+                    placeholder="Search students..."
+                    className="border p-2 rounded-md w-full"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery on input change
+                />
+            </div>
 
             {/* Sort by Class */}
             <div className="flex items-center mb-4">
@@ -113,44 +126,18 @@ export default function TeacherPage() {
     );
 }
 
-function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: TUser; onUpdate: (teacher: TUser) => void; onDelete: (id: number) => void; }) {
-    const [isMoreOptionsVisible, setIsMoreOptionsVisible] = useState(false);
-    const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
-    const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+
+function TeacherCard({
+    teacher,
+    onUpdate,
+    onDelete,
+}: {
+    teacher: TUser;
+    onUpdate: (teacher: TUser) => void;
+    onDelete: (id: number) => void;
+}) {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
-    // const [assignClass, setAssignClass] = useState<string>(teacher.class || "");
-    // const [assignSubject, setAssignSubject] = useState<string>(teacher.subject || "");
-    // const [updateName, setUpdateName] = useState<string>(teacher.name);
-    // const [updateClass, setUpdateClass] = useState<string>(teacher.class);
-    // const [updateSubject, setUpdateSubject] = useState<string>(teacher.subject);
-
     const { toast } = useToast();
-
-    async function handleAssign() {
-        try {
-            const response = await fetch("/api/assign-class", {
-                method: "POST",
-                // body: JSON.stringify({ teacherId: teacher.id, class: assignClass, subject: assignSubject }),
-            });
-
-            // if (!response.ok) throw new Error("Failed to assign class");
-
-            // const updatedTeacher = { ...teacher, class: assignClass, subject: assignSubject };
-            // onUpdate({});
-            // toast({ description: `Assigned ${assignClass} - ${assignSubject} to ${teacher.name}` });
-            setIsAssignDialogOpen(false);
-        } catch (error: any) {
-            toast({ variant: "destructive", title: "Error", description: error.message });
-        }
-    }
-
-    async function handleUpdate() {
-        // const updatedTeacher = { ...teacher, name: updateName, class: updateClass, subject: updateSubject };
-        // onUpdate(updatedTeacher);
-        setIsUpdateDialogOpen(false);
-        toast({ description: `Updated details for ${teacher.name}` });
-    }
 
     async function handleDelete() {
         const response = await fetch(`/api/delete-teacher/${teacher.id}`, {
@@ -167,11 +154,9 @@ function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: TUser; onUpdate
         setIsDeleteDialogOpen(false);
     }
 
-
     return (
         <div className="p-4 border rounded-lg flex items-center justify-between">
             <div className="flex items-center">
-                {/* <Image src={teacher.profilePicture} alt={teacher.name} width={400} height={400} className="w-12 h-12 rounded-full mr-4" /> */}
                 {teacher && teacher.imageName ? (
                     <Image
                         src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}users/image/${teacher.imageName}`}
@@ -185,115 +170,29 @@ function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: TUser; onUpdate
                 )}
                 <div className="ml-2">
                     <p className="font-semibold capitalize">{teacher.name}</p>
-                    <p className="text-sm text-gray-500">
-                        Not Assigned
-                        {/* {teacher.class ? `${teacher.class} - ${teacher.subject}` : "Not Assigned"} */}
-                    </p>
+                    <p className="text-sm text-gray-500">Not Assigned</p>
                 </div>
             </div>
 
-            {/* More Options */}
-            <div className="relative">
-                <Button variant="ghost" onClick={() => setIsMoreOptionsVisible(!isMoreOptionsVisible)}>
-                    <MoreVertical />
-                </Button>
-                {isMoreOptionsVisible && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-10">
-                        <Button variant="ghost" className="w-full" onClick={() => setIsAssignDialogOpen(true)}>
-                            Assign Class
-                        </Button>
-                        <Button variant="ghost" className="w-full" onClick={() => setIsUpdateDialogOpen(true)}>
-                            Update Teacher
-                        </Button>
-                        <Button variant="ghost" className="w-full" onClick={() => setIsDeleteDialogOpen(true)}>
-                            Delete Teacher
-                        </Button>
-                    </div>
-                )}
-            </div>
-
-            {/* Assign Class Dialog */}
-            {/* <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Assign Class & Subject</DialogTitle>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                        <Select onValueChange={setAssignClass} defaultValue={assignClass}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select Class" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {classes.map((cls) => (
-                                    <SelectItem key={cls} value={cls}>
-                                        {cls}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        <Select onValueChange={setAssignSubject} defaultValue={assignSubject}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select Subject" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {["Math", "Science", "English"].map((subject) => (
-                                    <SelectItem key={subject} value={subject}>
-                                        {subject}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        <Button className="bg-blue-500 text-white" onClick={handleAssign}>
-                            Assign
-                        </Button>
-                    </div>
-                </DialogContent>
-            </Dialog> */}
-
-            {/* Update Teacher Dialog */}
-            {/* <Dialog open={isUpdateDialogOpen} onOpenChange={setIsUpdateDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Update Teacher Details</DialogTitle>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                        <input
-                            type="text"
-                            value={updateName}
-                            onChange={(e) => setUpdateName(e.target.value)}
-                            placeholder="Teacher Name"
-                            className="p-2 border rounded w-full"
-                        />
-                        <Select onValueChange={setUpdateClass} defaultValue={updateClass}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select Class" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {classes.map((cls) => (
-                                    <SelectItem key={cls} value={cls}>
-                                        {cls}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        <Select onValueChange={setUpdateSubject} defaultValue={updateSubject}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select Subject" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {["Math", "Science", "English"].map((subject) => (
-                                    <SelectItem key={subject} value={subject}>
-                                        {subject}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        <Button className="bg-blue-500 text-white" onClick={handleUpdate}>
-                            Update
-                        </Button>
-                    </div>
-                </DialogContent>
-            </Dialog> */}
+            {/* More Options with ShadCN Dropdown */}
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost">
+                        <MoreVertical />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => console.log("Assign class")}>
+                        Assign Class
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => console.log("Update teacher")}>
+                        Update Teacher
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setIsDeleteDialogOpen(true)}>
+                        Delete Teacher
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Delete Teacher Confirmation Dialog */}
             <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
@@ -315,3 +214,4 @@ function TeacherCard({ teacher, onUpdate, onDelete }: { teacher: TUser; onUpdate
         </div>
     );
 }
+

@@ -63,7 +63,7 @@ export default function Sidebar({ isCollapsed, toggleCollapse }: Props) {
     return (
         <>
             <aside className={`fixed bottom-0 left-0 w-screen h-fit sm:h-screen bg-white text-textDarkNavy flex flex-col ${isCollapsed ? "sm:w-28" : "sm:w-64"} transition-all duration-300`}>
-                <Image src="/images/logo.avif" alt="Company logo" height={300} width={300} className="hidden sm:block w-20 object-cover pl-4 pt-2 mx-auto" />
+                <Image src="/images/utkrista-logo.png" alt="Company logo" height={300} width={300} className="hidden sm:block w-20 object-cover pl-4 pt-2 mx-auto" />
                 <div className={`hidden sm:flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} px-4 py-4 pr-0`}>
                     {isCollapsed || <h2 className="text-2xl font-bold">Dashboard</h2>}
                     <Button variant="ghost" className="hover:bg-transparent" onClick={() => toggleCollapse(!isCollapsed)}>

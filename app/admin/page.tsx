@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { UserPlus } from "lucide-react"; // Lucide icons
-import RightSidebar from "@/components/dashboard/rightsidebar";
+import RightSidebar from "@/components/admin/rightsidebar";
 import AdminBarChart from "@/components/admin/charts/barchart";
 import AdminPieChart from "@/components/admin/charts/piechart";
 import { useState } from "react";
@@ -31,7 +31,7 @@ export default function AdminHome() {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentUsers = newUsers.slice(startIndex, startIndex + itemsPerPage);
     return (
-        <div className="p-6 md:mr-64">
+        <div className="p-6">
             {/* Mid Content */}
             <div className="">
                 {/* Student Metrics Section */}
@@ -105,7 +105,7 @@ export default function AdminHome() {
             </div>
 
             {/* Right Sidebar */}
-            <RightSidebar />
+            {/* <RightSidebar /> */}
 
             <CreateNoticeButton />
         </div>

@@ -128,7 +128,7 @@ export default function Navbar() {
                         </SheetTrigger>
                         <SheetContent side="right" className="p-4">
                             <Image
-                                src="/images/logo.avif"
+                                src="/images/utkrista-logo.png"
                                 alt="logo"
                                 height={300}
                                 width={300}

@@ -82,7 +82,7 @@ const CourseCarousel = () => {
                             <Link href={"/dashboard/browse/" + course.categoryId}>
                                 <Image
                                     src={course.imageName ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}categories/image/${course.imageName}` : "/images/courses/default.png"}
-                                    alt={course.categoryTitle} height={imageSize.height} width={imageSize.width} className="h-48 object-contain rounded" />
+                                    alt={course.categoryTitle} height={imageSize.height} width={imageSize.width} className="h-48 object-contain rounded mx-auto" />
                                 <p className="text-center py-2 font-medium text-lg line-clamp-1 overflow-hidden text-ellipsis">{course.categoryTitle}</p>
                             </Link>
                         </Card>

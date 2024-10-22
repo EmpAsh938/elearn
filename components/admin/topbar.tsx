@@ -51,6 +51,7 @@ const Topbar = ({ isOpen }: Props) => {
             {/* Search Input */}
             <div className="flex-1 ml-4 md:ml-0">
                 {/* <SearchBar /> */}
+
             </div>
 
             {/* Notification and User Icons */}

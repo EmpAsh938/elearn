@@ -40,7 +40,7 @@ const Sidebar = ({ isOpen }: Props) => {
                             href="/dashboard"
                         >
                             <LucideHome className="inline-block sm:w-6 sm:h-6" />
-                            <span className="hidden md:inline">Dashboard</span>
+                            <span className="hidden md:inline font-medium">Dashboard</span>
                         </Link>
                     </li>
                     <li>
@@ -49,7 +49,7 @@ const Sidebar = ({ isOpen }: Props) => {
                             href="/dashboard/browse"
                         >
                             <LucideBookOpen className="inline-block sm:w-6 sm:h-6" />
-                            <span className="hidden md:inline">Browse Courses</span>
+                            <span className="hidden md:inline font-medium">Browse Courses</span>
                         </Link>
                     </li>
                     <li>
@@ -58,7 +58,7 @@ const Sidebar = ({ isOpen }: Props) => {
                             href="/dashboard/courses"
                         >
                             <LucideBookCopy className="inline-block sm:w-6 sm:h-6" />
-                            <span className="hidden md:inline">My Courses</span>
+                            <span className="hidden md:inline font-medium">My Courses</span>
                         </Link>
                     </li>
                     <li>
@@ -67,7 +67,7 @@ const Sidebar = ({ isOpen }: Props) => {
                             href="/dashboard/exams"
                         >
                             <ClipboardCheck className="inline-block sm:w-6 sm:h-6" />
-                            <span className="hidden md:inline">Exams</span>
+                            <span className="hidden md:inline font-medium">Exams</span>
                         </Link>
                     </li>
                     <li>
@@ -76,7 +76,7 @@ const Sidebar = ({ isOpen }: Props) => {
                             href="/dashboard/live-classes"
                         >
                             <Video className="inline-block sm:w-6 sm:h-6" />
-                            <span className="hidden md:inline">Live Class</span>
+                            <span className="hidden md:inline font-medium">Live Class</span>
                         </Link>
                     </li>
                     <li>
@@ -85,7 +85,7 @@ const Sidebar = ({ isOpen }: Props) => {
                             href="/dashboard/calendar"
                         >
                             <Calendar className="inline-block sm:w-6 sm:h-6" />
-                            <span className="hidden md:inline">Calendar</span>
+                            <span className="hidden md:inline font-medium">Calendar</span>
                         </Link>
                     </li>
                     <li>
@@ -94,7 +94,7 @@ const Sidebar = ({ isOpen }: Props) => {
                             href="/dashboard/faq"
                         >
                             <LucideMessageSquare className="inline-block sm:w-6 sm:h-6" />
-                            <span className="hidden md:inline">FAQs</span>
+                            <span className="hidden md:inline font-medium">FAQs</span>
                         </Link>
                     </li>
                 </ul>

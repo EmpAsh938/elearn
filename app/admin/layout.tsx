@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, Home, Users, Book, Video, Clipboard, Package2, LogOut, BookImage, GraduationCap, BookUser, DollarSign } from 'lucide-react';
+import { Menu, Home, Users, Book, Video, Clipboard, Package2, LogOut, BookImage, GraduationCap, BookUser, DollarSign, Bell, MessageCircle } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Topbar from '@/components/admin/topbar';
@@ -59,16 +59,16 @@ const sidemenuLinks = [
         icon: <Clipboard size={24} />,
         link: "/admin/exams"
     },
-    // {
-    //     title: "Courses",
-    //     icon: <Book size={24} />,
-    //     link: "/admin/course"
-    // },
-    // {
-    //     title: "Recent Activities",
-    //     icon: <Activity size={24} />,
-    //     link: "/dashboard/activities"
-    // },
+    {
+        title: "Notice",
+        icon: <Bell size={24} />,
+        link: "/admin/notice"
+    },
+    {
+        title: "Messages",
+        icon: <MessageCircle size={24} />,
+        link: "/admin/messages"
+    },
     // {
     //     title: "Profile",
     //     icon: <User size={24} />,
@@ -97,7 +97,7 @@ const AdminLayout = ({ children }: LayoutProps) => {
     return (
         <div className="h-screen bg-gray-100">
             <Topbar isOpen={isCollapsed} />
-            <aside className={`fixed h-screen top-0 left-0 ${isCollapsed ? 'w-20' : 'w-64'} bg-darkNavy text-white flex flex-col transition-all duration-300 z-50`}>
+            <aside className={`fixed h-screen top-0 left-0 ${isCollapsed ? 'w-20' : 'w-64'} bg-darkNavy text-white flex flex-col transition-all duration-300 z-50 overflow-y-auto`}>
                 <div className={`p-0 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between p-1'} my-4`}>
                     <h2 className={`text-xl font-bold ${isCollapsed ? 'hidden' : 'block'}`}>Admin Dashboard</h2>
                     <button onClick={() => setIsCollapsed(!isCollapsed)} className="focus:outline-none">
@@ -108,10 +108,10 @@ const AdminLayout = ({ children }: LayoutProps) => {
                     <ul>
                         {sidemenuLinks.map((item, index) => {
                             const isActive = pathname === item.link;
-                            return <li key={index} className={`px-4 hover:bg-green hover:text-textDarkNavy ${isActive ? 'bg-green text-textDarkNavy hover:bg-green' : 'bg-transparent'}`}>
+                            return <li key={index} className={`px-4 text-white hover:bg-green hover:text-textDarkNavy ${isActive ? 'bg-green text-textDarkNavy hover:bg-green' : 'bg-transparent'}`}>
                                 <Link href={item.link} className={`flex py-3 gap-2 w-full ${isCollapsed ? 'justify-center' : 'justify-start'}`}>
                                     {item.icon}
-                                    <p className={`${isCollapsed ? 'hidden' : 'block'}`}>{item.title}</p>
+                                    <p className={`text-current font-medium ${isCollapsed ? 'hidden' : 'block'}`}>{item.title}</p>
                                 </Link>
                             </li>
                         })

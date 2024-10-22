@@ -23,44 +23,56 @@ const ITEMS_PER_PAGE = 5; // Customize items per page
 export default function StudentsPage() {
     const [data, setData] = useState<TUser[]>([]);
     const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
-    const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
-    const [page, setPage] = useState(0); // Pagination state
+    const [searchQuery, setSearchQuery] = useState(""); // Search state
+    const [page, setPage] = useState(0);
     const [loading, setLoading] = useState(true);
 
-    // Memoize the filtered data to avoid recalculating on every render
-    // const filteredData = useMemo(() => {
-    //     return data.filter((student) => {
-    //         const packageMatches = selectedPackage && selectedPackage !== "All" ? student.package === selectedPackage : true;
-    //         const subjectMatches = selectedSubject && selectedSubject !== "All" ? student.enrolledSubjects.includes(selectedSubject) : true;
-    //         return packageMatches && subjectMatches;
-    //     });
-    // }, [data, selectedPackage, selectedSubject]);
+    // Filter data based on searchQuery
+    const filteredData = useMemo(() => {
+        return data.filter(student =>
+            student.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [data, searchQuery]);
 
     // Pagination logic: slice filtered data based on current page and items per page
     const paginatedData = useMemo(() => {
         const start = page * ITEMS_PER_PAGE;
         const end = start + ITEMS_PER_PAGE;
-        // return filteredData.slice(start, end);
-        return data.slice(start, end);
-    }, [data, page]);
+        return filteredData.slice(start, end);
+    }, [filteredData, page]);
 
     // Memoize the table columns definition
     const columns: ColumnDef<TUser>[] = useMemo(() => [
         { accessorKey: "id", header: "ID" },
-        // {
-        //     accessorKey: "imageName",
-        //     header: "Avatar",
-        //     cell: (info) => (
-        //         <Image
-        //             src={info.getValue() as string}
-        //             alt="Student Avatar"
-        //             width={100}
-        //             height={100}
-        //             className="w-10 h-10 rounded-full"
-        //         />
-        //     ),
-        // },
-        { accessorKey: "name", header: "Name" },
+
+        {
+            accessorKey: "imageName",
+            header: "Avatar",
+            cell: (info) => {
+                const imagePath = info.getValue();
+                const imageUrl = imagePath ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/users/image/${info.getValue()}` : '/images/profile/user.jpeg';
+                return (
+                    <Image
+                        src={imageUrl}
+                        alt="Student Avatar"
+                        width={50}
+                        height={50}
+                        className="w-10 h-10 object-cover rounded-full"
+                    />
+                );
+            },
+        },
+
+        {
+            accessorKey: "name", header: "Name", cell: (info) => (
+                <div className="capitalize">{info.getValue() as string}</div>
+            )
+        },
+        {
+            accessorKey: "email", header: "Contact", cell: (info) => (
+                <div>{info.getValue() as string}</div>
+            )
+        },
         {
             accessorKey: "roles", header: "Status", cell: ({ row }) => {
                 const roles = row.original.roles.map(role => role.name).join(", ");
@@ -127,6 +139,17 @@ export default function StudentsPage() {
     return (
         <div className="w-full p-6">
             <h2 className="text-2xl font-medium">Students</h2>
+            {/* Search Input */}
+            <div className="my-4">
+                <input
+                    type="text"
+                    placeholder="Search students..."
+                    className="border p-2 rounded-md w-full"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery on input change
+                />
+            </div>
+
             <div className="flex items-center space-x-4 py-4">
                 {/* Package Filter */}
                 <DropdownMenu>

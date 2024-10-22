@@ -72,7 +72,7 @@ const PaymentHistory = () => {
                 <Table className="min-w-full divide-y divide-gray-200">
                     <TableHeader>
                         <TableRow className="bg-gray-50">
-                            <TableHead className="px-4 py-2">ID</TableHead>
+                            {/* <TableHead className="px-4 py-2">ID</TableHead> */}
                             <TableHead className="px-4 py-2">Student Name</TableHead>
                             <TableHead className="px-4 py-2">Contact</TableHead>
                             <TableHead className="px-4 py-2">Bought Course</TableHead>
@@ -84,7 +84,7 @@ const PaymentHistory = () => {
                     <TableBody className="bg-white divide-y divide-gray-200">
                         {currentPayments.map((payment) => (
                             <TableRow key={payment.paymentId} className="hover:bg-gray-50">
-                                <TableCell className="px-4 py-2">{payment.paymentId}</TableCell>
+                                {/* <TableCell className="px-4 py-2">{payment.paymentId}</TableCell> */}
                                 <TableCell className="px-4 py-2">{payment.user.name}</TableCell>
                                 <TableCell className="px-4 py-2">{payment.user.email}</TableCell>
                                 <TableCell className="px-4 py-2">{payment.categories.map((category, index) => (

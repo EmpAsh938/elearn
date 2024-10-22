@@ -4,13 +4,15 @@ import { useState } from "react";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import './CalendarCustom.css'; // Ensure custom CSS for styling
+import { NepaliCalendar } from "@/components/nepaliCalendar";
+import { Button } from "@/components/ui/button";
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export default function CalendarPage() {
     const [date, setDate] = useState<Value>(new Date());
-    const [isNepaliCalendar, setIsNepaliCalendar] = useState(false);
+    const [isNepaliCalendar, setIsNepaliCalendar] = useState(true);
 
     const currentYear = new Date().getFullYear();
 
@@ -32,8 +34,13 @@ export default function CalendarPage() {
     return (
         <div className="md:ml-52 mt-16 p-6">
             <section>
+                <Button className="mb-4 bg-orange-500 hover:bg-orange-600" onClick={() => setIsNepaliCalendar(!isNepaliCalendar)}>
+                    {`Toggle Calendar - ${isNepaliCalendar ? 'NEP' : 'EN'}`}
+                </Button>
+
                 {isNepaliCalendar ? (
-                    <p>Nepali Calendar</p>
+                    <NepaliCalendar />
+                    // <p></p>
                 ) : (
                     <Calendar
                         onChange={setDate}

@@ -1,3 +1,9 @@
+.react-calendar {
+    width: 100%;
+    border: none;
+    font-size: 24px;
+}
+
 /* Disable month and year selection */
 .react-calendar__navigation__label {
     pointer-events: none;
@@ -41,4 +47,18 @@
     /* Darker blue when hovering */
     color: white;
     /* Change text to white */
+}
+
+/* Highlight the current day (today) */
+.react-calendar__tile--now {
+    color: green !important;
+    /* green text for better contrast */
+}
+
+/* Optional: Style the border or shadow of today's tile */
+.react-calendar__tile--now:hover {
+    color: green !important;
+    /* Ensure the text color remains green */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    /* Add subtle shadow on hover */
 }

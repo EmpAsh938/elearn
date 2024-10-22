@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
+import { NepaliCalendar } from "../nepaliCalendar";
+import { Button } from "../ui/button";
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -13,9 +15,9 @@ const RightSidebar: React.FC = () => {
     const [isNepaliCalendar, setIsNepaliCalendar] = useState(false);
 
     // Function to handle calendar toggle
-    // const toggleCalendarFormat = () => {
-    //     setIsNepaliCalendar(!isNepaliCalendar);
-    // };
+    const toggleCalendarFormat = () => {
+        setIsNepaliCalendar(!isNepaliCalendar);
+    };
 
     const notices = [
         { id: 1, title: "New Course Available", date: "October 10, 2024" },
@@ -40,17 +42,17 @@ const RightSidebar: React.FC = () => {
         <aside className="fixed top-16 right-0 h-screen w-64 bg-white border-l border-gray-200 p-4 hidden lg:flex flex-col justify-between">
             {/* Calendar with Toggle Button */}
             <div className="mb-4">
-                {/* <div className="flex justify-between items-center mb-2">
-                    <button
-                        className="text-blue-500 hover:underline"
+                <div className="flex justify-between items-center mb-2">
+                    <Button
+                        className="text-blue hover:underline"
                         onClick={toggleCalendarFormat}
                     >
                         {isNepaliCalendar ? "Switch to English Calendar" : "Switch to Nepali Calendar"}
-                    </button>
-                </div> */}
+                    </Button>
+                </div>
                 {/* Render either English or Nepali calendar based on toggle */}
                 {isNepaliCalendar ? (
-                    <p>Nepali Calendar</p>
+                    <NepaliCalendar />
                 ) : (
                     <Calendar
                         onChange={setDate}
