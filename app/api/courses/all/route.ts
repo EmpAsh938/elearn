@@ -13,6 +13,7 @@ export async function GET() {
             return NextResponse.json({ error: data.error, status: apiResponse.status });
         }
 
+
         return NextResponse.json({
             message: 'Courses Retreiving successful',
             status: 200,

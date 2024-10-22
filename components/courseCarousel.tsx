@@ -62,7 +62,7 @@ const CourseCarousel = () => {
                 }}
                 className="w-full"
             >
-                {recentCourses.map((course, index) => (
+                {(Array.isArray(recentCourses) && recentCourses.length > 0) ? recentCourses.map((course, index) => (
                     <SwiperSlide key={index}>
                         <Card className="transition-transform transform hover:scale-105">
                             <Link href={"courses/" + course.categoryId}>
@@ -73,7 +73,7 @@ const CourseCarousel = () => {
                             </Link>
                         </Card>
                     </SwiperSlide>
-                ))}
+                )) : null}
 
             </Swiper>
         </div>

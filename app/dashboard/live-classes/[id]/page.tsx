@@ -14,7 +14,7 @@ export default function LiveClassRoom({ params }: { params: { id: string } }) {
     const [isMuted, setIsMuted] = useState(true);
     const [error, setError] = useState('');
 
-    const streamUrl = 'http://localhost/hls/test.m3u8'; // Update to your actual stream URL
+    const streamUrl = 'http://143.244.135.137:8088/hls/test.m3u8'; // Update to your actual stream URL
 
     useEffect(() => {
         const checkStreamAvailability = async () => {

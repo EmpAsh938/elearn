@@ -117,6 +117,7 @@ export default function Signup() {
                     body: JSON.stringify({ mobileNo: phonenumber }),
                 });
                 const result = await request.json();
+                console.log(result);
                 if (!result.otp) throw Error(result.error);
                 toast({ description: "OTP Sent Successfully" });
                 setValidOtp(result.otp); // Store OTP from the server

@@ -46,14 +46,14 @@ export default function Home() {
                         </h1>
                         {/* Scrollable list of courses */}
                         <ul className="space-y-4 pt-10">
-                            {browseCourses.map((course) => (
+                            {(Array.isArray(browseCourses) && browseCourses.length > 0) ? browseCourses.map((course) => (
                                 <li key={course.categoryId}>
                                     <Link href={`/courses/${course.categoryId}`}>
                                         <div className="text-md text-darkBlue hover:underline tracking-wide">{course.categoryTitle}</div>
 
                                     </Link>
                                 </li>
-                            ))}
+                            )) : null}
                         </ul>
                     </div>
 
