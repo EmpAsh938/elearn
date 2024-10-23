@@ -25,9 +25,7 @@ export async function POST(req: NextRequest) {
         const token = data.token;
         const roles = data.user.roles.map((item: { name: string; }) => item.name);
 
-        // console.log(data.user)
-        // save user details in localstorage
-        // localStorage.setItem("user", JSON.stringify(data.user));
+
         createSession(token, roles);
         // Use NextResponse to set the cookie
         return NextResponse.json({

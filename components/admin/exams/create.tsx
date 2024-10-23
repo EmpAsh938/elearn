@@ -88,6 +88,8 @@ export function CreateExamDialog() {
         setDeadline("");
         setSelectedCategoryId(null);
         setImage(null); // clear image after creating
+
+        window.location.href = "/admin/exams";
     };
 
     // Fetch grades (categories) for the grade dropdown

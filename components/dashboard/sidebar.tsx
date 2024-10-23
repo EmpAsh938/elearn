@@ -20,7 +20,7 @@ const Sidebar = ({ isOpen }: Props) => {
             {/* Logo and Utkrista Shiksha in Nepali */}
             <div className="mb-8 flex items-center justify-start">
                 <Image
-                    src="/images/utkrista.png"
+                    src="/images/utkrista-logo.png"
                     alt="Logo"
                     width={600}
                     height={600}

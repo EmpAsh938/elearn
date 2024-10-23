@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
         });
 
         const data = await apiResponse.json();
-        console.log(apiResponse)
+        // console.log(apiResponse)
         if (apiResponse.status !== 201) {
             return NextResponse.json({ error: data.error }, { status: apiResponse.status });
         }

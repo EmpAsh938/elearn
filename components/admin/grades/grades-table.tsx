@@ -85,10 +85,10 @@ export function GradesTable({ grades, loading }: { grades: TCourses[], loading: 
             cell: ({ row }) => <div className="capitalize">{row.getValue("categoryTitle")}</div>,
         },
         {
-            accessorKey: "courseType",
+            accessorKey: "categoryType",
             header: "Course Status",
             cell: ({ row }) => {
-                const courseType = row.getValue<string>("courseType").toLowerCase(); // Automatically infer the type
+                const categoryType = row.getValue<string>("categoryType").toLowerCase(); // Automatically infer the type
 
                 const badgeClass: { [key: string]: string } = {
                     ongoing: "text-green",   // Proper Tailwind green class
@@ -99,9 +99,9 @@ export function GradesTable({ grades, loading }: { grades: TCourses[], loading: 
 
                 return (
                     <span
-                        className={`capitalize px-2 py-1 rounded-full text-sm bg-gray-100 font-medium ${badgeClass[courseType] || 'text-gray-800'}`}
+                        className={`capitalize px-2 py-1 rounded-full text-sm bg-gray-100 font-medium ${badgeClass[categoryType] || 'text-gray-800'}`}
                     >
-                        {courseType}
+                        {categoryType}
                     </span>
                 );
             },

@@ -57,7 +57,7 @@ const Booked = () => {
     // Custom Loading Component
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-50">
+            <div className="">
                 <div className="text-center">
                     <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32 mx-auto mb-4"></div>
                     <p className="text-gray-700 text-lg font-semibold">Loading course details...</p>
@@ -69,7 +69,7 @@ const Booked = () => {
     // Custom Error Component
     if (error) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-red-50">
+            <div className="">
                 <div className="text-center">
                     <p className="text-red-500 text-2xl font-bold mb-4">Oops! Something went wrong.</p>
                     <p className="text-gray-700">{error}</p>
@@ -82,9 +82,9 @@ const Booked = () => {
     }
 
     if (!courses || courses.length === 0) return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="">
             <div className="text-center">
-                <p className="text-gray-700 text-lg font-semibold">Courses could not be found</p>
+                <p className="text-gray-700 text-lg font-semibold">Please purchase or book courses to view here</p>
             </div>
         </div>
     )

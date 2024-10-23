@@ -5,7 +5,8 @@ export type TCourses = {
     mainCategory: string;
     imageName: string;
     price: string;
-    courseType: string;
+    categoryType: string;
+    courseValidDate: any;
 }
 
 export type TPosts = {

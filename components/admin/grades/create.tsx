@@ -26,6 +26,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useEffect, useState } from "react"
 import { TCourses } from "@/app/lib/types"
+import { Label } from "@/components/ui/label";
 
 // Define the course types
 const predefinedType = ["Upcoming", "Pre-booking", "Ongoing"];
@@ -40,6 +41,7 @@ const formSchema = z.object({
         .optional(), // Price is optional and only required for certain types
     tag: z.string().min(1, "Tag is required"),
     type: z.string().min(1, "Type is required"),
+    courseValidDate: z.string().min(1, "Course Valid Date is required"), // New field for course valid date
 });
 
 export function CreateDialog({ grades, loading }: { grades: TCourses[], loading: boolean }) {
@@ -47,6 +49,9 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
     const [tags, setTags] = useState<string[]>([]);
     const [newTag, setNewTag] = useState("");
     const [isSaving, setIsSaving] = useState(false);
+    const [image, setImage] = useState<File | null>(null); // state for image file
+    const [imageUploading, setImageUploading] = useState(false); // loading state for image upload
+
 
     // Initialize form with zod schema validation
     const form = useForm<z.infer<typeof formSchema>>({
@@ -57,6 +62,7 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
             price: "1",
             tag: "",
             type: predefinedType[0],
+            courseValidDate: "", // New field default value
         },
     });
 
@@ -67,10 +73,10 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
 
     // Handle form submission
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const { name, description, price, tag, type } = values;
+        const { name, description, price, tag, type, courseValidDate } = values;
 
         setIsSaving(true);
-
+        let facultyId = '';
         try {
             // Include price only if "type" is "Ongoing" or "Pre-booking"
             const payload = {
@@ -79,39 +85,69 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
                 price: (selectedType === "Ongoing" || selectedType === "Pre-booking") ? price : undefined,
                 tag,
                 type,
+                courseValidDate, // Include courseValidDate in payload
+
             };
 
             const request = await fetch('/api/faculty', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
                 body: JSON.stringify(payload)
             });
 
             const response = await request.json();
-            console.log(response); // Add logging to inspect response
+            // console.log(response);
 
             if (response.status !== 201) throw new Error(response.error || "Unexpected error");
 
-            toast({ description: "Course Created Successfully" });
+            facultyId = response.body.categoryId;
+
             form.reset(); // Reset form after successful submission
         } catch (error: any) {
             console.error(error); // Log full error details
-            toast({
+            setIsSaving(false);
+            return toast({
                 variant: "destructive",
                 title: "Creating Course Failed",
                 description: error.message || "Something went wrong",
             });
-        } finally {
-            setIsSaving(false);
         }
+
+        // Upload image after exam creation
+        if (facultyId && image) {
+            setImageUploading(true); // Start image upload loading
+            const formData = new FormData();
+            formData.append("file", image); // Append the file to FormData
+            formData.append("categoryId", facultyId); // Append the exam ID to FormData
+
+            try {
+                const imageResponse = await fetch('/api/upload/courses', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const imageData = await imageResponse.json();
+
+                if (imageResponse.status !== 200) {
+                    throw new Error(imageData.error || "Error uploading image");
+                }
+                toast({ description: 'Package created successfully!' });
+
+            } catch (error: any) {
+                toast({ variant: 'destructive', description: "Package was created but failed to upload image: " + error.toString() });
+            } finally {
+                setImage(null);
+                setImageUploading(false); // Stop image upload loading
+            }
+        }
+
+        window.location.href = "/admin/packages";
     }
 
     // Function to handle adding new tags
     function handleAddTag() {
         if (newTag && !tags.includes(newTag)) {
             setTags([...tags, newTag]);
+            form.setValue("tag", newTag);
             setNewTag("");
         }
     }
@@ -127,7 +163,7 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
             <SheetTrigger asChild>
                 <Button className="bg-blue">Create Package</Button>
             </SheetTrigger>
-            <SheetContent>
+            <SheetContent className="overflow-y-auto max-h-screen">
                 <SheetHeader>
                     <SheetTitle>Create Package</SheetTitle>
                     <SheetDescription>
@@ -165,6 +201,23 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
                                 </FormItem>
                             )}
                         />
+
+                        {/* Image Upload */}
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="image" className="text-right">
+                                Thumbnail
+                            </Label>
+                            <Input
+                                id="image"
+                                type="file"
+                                accept="image/jpeg, image/jpg"
+                                onChange={(e) => {
+                                    const file = e.target.files ? e.target.files[0] : null;
+                                    setImage(file);
+                                }}
+                                className="col-span-3"
+                            />
+                        </div>
 
                         {/* Type Field */}
                         <FormField
@@ -234,9 +287,24 @@ export function CreateDialog({ grades, loading }: { grades: TCourses[], loading:
                             )}
                         />
 
+                        {/* Course Valid Date Field */}
+                        <FormField
+                            control={form.control}
+                            name="courseValidDate"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Course Valid Date</FormLabel>
+                                    <FormControl>
+                                        <Input type="datetime-local" placeholder="Select Valid Date" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
                         {/* Submit Button */}
                         <SheetFooter>
-                            <Button disabled={isSaving} type="submit">{isSaving ? 'Saving...' : 'Save changes'}</Button>
+                            <Button disabled={isSaving || imageUploading} type="submit">{isSaving || imageUploading ? 'Saving...' : 'Save changes'}</Button>
                         </SheetFooter>
                     </form>
                 </Form>

@@ -154,7 +154,7 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
                 {/* Notes Tab */}
                 <TabsContent value="notes">
                     {/* <h2 className="text-2xl font-semibold mb-4">Course Notes</h2> */}
-                    {courseData.courseType.toLowerCase() !== "ongoing" ? <p>Notes available only for ongoing courses</p> : notePosts.length > 0 ? (
+                    {courseData.categoryType.toLowerCase() !== "ongoing" ? <p>Notes available only for ongoing courses</p> : notePosts.length > 0 ? (
                         notePosts.map((note, index) => (
                             <div key={index} className="mb-4">
                                 <h3 className="text-lg font-medium">{note.title}</h3>
@@ -202,7 +202,7 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
                 {/* Videos Tab */}
                 <TabsContent value="videos">
                     {/* <h2 className="text-2xl font-semibold mb-4">Course Videos</h2> */}
-                    {courseData.courseType.toLowerCase() !== "ongoing" ? <p>Video available only for ongoing courses</p> : videoPosts.length > 0 ? (
+                    {courseData.categoryType.toLowerCase() !== "ongoing" ? <p>Video available only for ongoing courses</p> : videoPosts.length > 0 ? (
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             {/* Main Video Player */}
                             <div className="lg:col-span-2">

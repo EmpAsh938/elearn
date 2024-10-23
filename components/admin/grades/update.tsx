@@ -5,6 +5,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { TCourses } from "@/app/lib/types";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/hooks/use-toast";
 
 type Props = {
     faculty: TCourses;
@@ -18,7 +19,7 @@ export function UpdateModal({ faculty, open, onClose }: Props) {
     const [title, setTitle] = useState(faculty?.categoryTitle || "");
     const [description, setDescription] = useState(faculty?.categoryDescription || "");
     const [file, setFile] = useState<File | null>(null); // State for the uploaded file
-    const [type, setType] = useState(faculty.courseType || "Upcoming");
+    const [type, setType] = useState(faculty.categoryType || "Upcoming");
     const [price, setPrice] = useState(faculty.price || "");
     const [isSaving, setIsSaving] = useState(false); // New state to handle multiple saves
 
@@ -64,30 +65,30 @@ export function UpdateModal({ faculty, open, onClose }: Props) {
             title: title || faculty.categoryTitle,
             description: description || faculty.categoryDescription,
             price: price || faculty.price,
-            courseType: type || faculty.courseType,
+            categoryType: type || faculty.categoryType,
             mainCategory: faculty.mainCategory,
-            imageName: imageUrl || faculty.imageName
+            imageName: imageUrl || faculty.imageName,
+            courseValidDate: faculty.courseValidDate,
         };
 
         try {
             const updateResponse = await fetch('/api/faculty', {
                 method: 'PUT', // Use PUT for updating
                 body: JSON.stringify(updatedData), // Send updated data as JSON
-                headers: {
-                    'Content-Type': 'application/json', // Add content-type header
-                },
             });
 
             const updateData = await updateResponse.json();
 
-            if (updateResponse.status !== 200) {
+
+            if (updateData.status !== 200) {
                 throw new Error(updateData.error || "Error updating package");
             }
 
             onClose(); // Close the modal after saving
             window.location.href = "/admin/packages";
 
-        } catch (error) {
+        } catch (error: any) {
+            toast({ variant: 'destructive', description: error.toString() })
             console.error("Failed to update package:", error);
         } finally {
             setIsSaving(false); // Reset saving state after completion

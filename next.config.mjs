@@ -5,7 +5,12 @@ const nextConfig = {
         return config;
     },
     images: {
-        domains: ['elearningplatform-production.up.railway.app'],
+        remotePatterns: [
+            {
+                protocol: 'http',
+                hostname: "**"
+            }
+        ]
     },
 };
 

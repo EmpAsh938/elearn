@@ -57,15 +57,15 @@ const CoursesList = ({ courses }: { courses: TCourses[] }) => {
 
                         {/* Price and Enroll Button in a row */}
                         <div className="flex justify-between items-center mt-4">
-                            {(!course.courseType || course.courseType.toLowerCase() == "upcoming") ? null : <h2 className="text-2xl font-semibold mt-4">NRs.{course.price}</h2>}
+                            {(!course.categoryType || course.categoryType.toLowerCase() == "upcoming") ? null : <h2 className="text-2xl font-semibold mt-4">NRs.{course.price}</h2>}
                             <Link href={"browse/" + course.categoryId} className="bg-blue text-white hover:bg-blue px-4 py-2 rounded">
-                                {/* {courseButton(course.courseType)} */}
+                                {/* {courseButton(course.categoryType)} */}
                                 Explore
                             </Link>
                         </div>
 
                         {/* Add to Cart Button for Ongoing Courses */}
-                        {course.courseType && course.courseType.toLowerCase() === "ongoing" && (
+                        {course.categoryType && course.categoryType.toLowerCase() === "ongoing" && (
                             <Button
                                 onClick={() => addToCart(course)}
                                 className="absolute top-0 right-0 w-fit h-fit bg-green text-white px-4 py-2 rounded hover:bg-green"
@@ -74,7 +74,7 @@ const CoursesList = ({ courses }: { courses: TCourses[] }) => {
                             </Button>
                         )}
 
-                        <Badge variant="default" className={(!course.courseType || course.courseType.toLowerCase() == "upcoming") ? "bg-green capitalize" : "bg-blue capitalize"}>{course.courseType || "Upcoming"}</Badge>
+                        <Badge variant="default" className={(!course.categoryType || course.categoryType.toLowerCase() == "upcoming") ? "bg-green capitalize" : "bg-blue capitalize"}>{course.categoryType || "Upcoming"}</Badge>
                     </div>
                 </div>
             ))}

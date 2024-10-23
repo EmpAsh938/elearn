@@ -81,6 +81,8 @@ export function CreateDialog() {
                 description: error.toString(),
             });
         }
+
+        window.location.href = "/admin/live-classes";
     }
 
     // Fetch grades (categories) for the grade dropdown

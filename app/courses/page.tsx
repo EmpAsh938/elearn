@@ -111,7 +111,7 @@ export default function Courses() {
                                             {pkg.categoryDescription}
                                         </p>
 
-                                        <Badge variant="default" className={(!pkg.courseType || pkg.courseType.toLowerCase() == "upcoming") ? "bg-green capitalize" : "bg-blue capitalize"}>{pkg.courseType || "Upcoming"}</Badge>
+                                        <Badge variant="default" className={(!pkg.categoryType || pkg.categoryType.toLowerCase() == "upcoming") ? "bg-green capitalize" : "bg-blue capitalize"}>{pkg.categoryType || "Upcoming"}</Badge>
                                     </div>
 
                                 </div>

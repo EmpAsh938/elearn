@@ -89,7 +89,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
         );
     }
 
-    const isUpcoming = courseData?.courseType.toLowerCase() === 'upcoming' || courseData?.courseType === '' || courseData?.courseType === null;
+    const isUpcoming = courseData?.categoryType.toLowerCase() === 'upcoming' || courseData?.categoryType === '' || courseData?.categoryType === null;
 
     return (
         <div className="overflow-x-hidden">
@@ -101,7 +101,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                         {/* Header */}
                         <div className="flex items-center justify-between">
                             <h1 className="text-2xl md:text-3xl font-bold">{courseData.categoryTitle}</h1>
-                            <Badge variant="default" className={isUpcoming ? "bg-green capitalize" : "bg-blue capitalize"}>{courseData.courseType || "Upcoming"}</Badge>
+                            <Badge variant="default" className={isUpcoming ? "bg-green capitalize" : "bg-blue capitalize"}>{courseData.categoryType || "Upcoming"}</Badge>
                             <span className="px-3 py-1 bg-red-600 text-white text-sm rounded">Best Seller</span>
                             <button className="ml-2 text-gray-500 hover:text-gray-700">
                                 &#128279; {/* Icon representing share */}

@@ -61,7 +61,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
 
     // Function to handle booking
     const handleBookNow = async (categoryId: string) => {
-        if (courseData?.courseType.toLowerCase() === 'upcoming') return;
+        if (courseData?.categoryType.toLowerCase() === 'upcoming') return;
         if (!user || alreadyBooked) return;
 
         const userConfirmed = window.confirm("Are you sure you want to book this course?");
@@ -145,7 +145,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
         );
     }
 
-    const isUpcoming = courseData?.courseType.toLowerCase() === 'upcoming' || courseData?.courseType === '' || courseData?.courseType === null;
+    const isUpcoming = courseData?.categoryType.toLowerCase() === 'upcoming' || courseData?.categoryType === '' || courseData?.categoryType === null;
 
     return (
         <div className="md:ml-52 mt-16 p-6 flex flex-col lg:flex-row gap-6">
@@ -157,7 +157,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                         <div className="flex items-center justify-between">
                             <h1 className="text-xl md:text-3xl font-bold">{courseData.categoryTitle}</h1>
 
-                            <Badge variant="default" className={isUpcoming ? "bg-green capitalize" : "bg-blue capitalize"}>{courseData.courseType || "Upcoming"}</Badge>
+                            <Badge variant="default" className={isUpcoming ? "bg-green capitalize" : "bg-blue capitalize"}>{courseData.categoryType || "Upcoming"}</Badge>
                             <button className="ml-2 text-gray-500 hover:text-gray-700">
                                 &#128279; {/* Icon representing share */}
                             </button>
@@ -284,7 +284,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                             </ul>
 
                             {/* Add to Cart Button for Ongoing Courses */}
-                            {courseData.courseType && courseData.courseType.toLowerCase() === "ongoing" && (
+                            {courseData.categoryType && courseData.categoryType.toLowerCase() === "ongoing" && (
                                 <Button
                                     onClick={() => addToCart(courseData)}
                                     className="absolute top-0 right-0 w-fit h-fit bg-green text-white px-4 py-2 rounded hover:bg-green"
@@ -293,7 +293,7 @@ const CourseDetails = ({ params }: { params: { id: string } }) => {
                                 </Button>
                             )}
 
-                            {courseData.courseType.toLowerCase() === "ongoing" ? null : <Button
+                            {courseData.categoryType.toLowerCase() === "ongoing" ? null : <Button
                                 onClick={() => handleBookNow(courseData.categoryId)}
                                 className={`mt-6 w-full ${booking ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue hover:bg-blue-700'} text-white`}
                                 disabled={booking || alreadyBooked || isUpcoming}
